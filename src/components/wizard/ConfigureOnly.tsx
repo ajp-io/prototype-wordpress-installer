@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import StepNavigation from './StepNavigation';
 import WelcomeStep from './WelcomeStep';
-import ConfigurationStep from './ConfigurationStep';
+import ConfigurationStep from './configuration/ConfigurationStep';
 import { WizardStep } from '../../types';
 import { WordPressLogo } from '../common/Logo';
 import { useWizardMode } from '../../contexts/WizardModeContext';
