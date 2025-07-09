@@ -3,7 +3,7 @@ import Input from '../../../common/Input';
 import Button from '../../../common/Button';
 import { ClusterConfig } from '../../../../contexts/ConfigContext';
 import { ValidationErrors } from '../utils/validationUtils';
-import { Upload, FileText, CheckCircle } from 'lucide-react';
+import { Upload, FileText, CheckCircle, X } from 'lucide-react';
 
 interface AdminConfigTabProps {
   config: ClusterConfig;
@@ -11,6 +11,7 @@ interface AdminConfigTabProps {
   skipValidation: boolean;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFileRemove: () => void;
 }
 
 const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
@@ -18,10 +19,22 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
   errors,
   skipValidation,
   onInputChange,
-  onFileChange
+  onFileChange,
+  onFileRemove
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const handleFileSelect = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileRemove = () => {
+    // Clear the file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+    onFileRemove();
+  };
   return (
     <div className="space-y-6">
       <Input
@@ -74,16 +87,23 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
           />
           <Button
             variant="outline"
-            onClick={() => fileInputRef.current?.click()}
+            onClick={handleFileSelect}
             icon={<Upload className="w-4 h-4" />}
           >
             {config.licenseFileName ? 'Change License Key' : 'Upload License Key'}
           </Button>
           {config.licenseFileName && (
-            <div className="flex items-center space-x-2 px-3 py-2 bg-green-50 border border-green-200 rounded-md">
+            <div className="flex items-center space-x-2 px-3 py-2 bg-green-50 border border-green-200 rounded-md group">
               <CheckCircle className="w-4 h-4 text-green-500" />
               <FileText className="w-4 h-4 text-green-600" />
               <span className="text-sm text-green-700 font-medium">{config.licenseFileName}</span>
+              <button
+                onClick={handleFileRemove}
+                className="ml-2 p-1 rounded-full hover:bg-green-100 transition-colors opacity-0 group-hover:opacity-100"
+                title="Remove file"
+              >
+                <X className="w-3 h-3 text-green-600 hover:text-green-800" />
+              </button>
             </div>
           )}
         </div>

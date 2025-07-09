@@ -32,6 +32,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack })
     handleCheckboxChange,
     handleRadioChange,
     handleFileChange,
+    handleFileRemove,
     handleNext,
     handleSaveConfig
   } = useConfigForm({ onNext, validateAndSetErrors, hasValidationErrors, setActiveTab });
@@ -70,6 +71,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack })
             {...commonProps}
             onInputChange={handleInputChange}
             onFileChange={handleFileChange}
+            onFileRemove={handleFileRemove}
           />
         );
       case 'database':

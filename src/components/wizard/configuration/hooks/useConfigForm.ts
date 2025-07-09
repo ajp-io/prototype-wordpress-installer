@@ -50,6 +50,12 @@ export const useConfigForm = ({ onNext, validateAndSetErrors, hasValidationError
     }
   };
 
+  const handleFileRemove = () => {
+    updateConfig({ 
+      licenseKey: undefined,
+      licenseFileName: undefined
+    });
+  };
   const handleNext = () => {
     if (prototypeSettings.skipValidation) {
       onNext();
@@ -86,6 +92,7 @@ export const useConfigForm = ({ onNext, validateAndSetErrors, hasValidationError
     handleCheckboxChange,
     handleRadioChange,
     handleFileChange,
+    handleFileRemove,
     handleNext,
     handleSaveConfig
   };
