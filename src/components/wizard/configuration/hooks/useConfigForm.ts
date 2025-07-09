@@ -41,7 +41,10 @@ export const useConfigForm = ({ onNext, validateAndSetErrors, hasValidationError
       const reader = new FileReader();
       reader.onload = (event) => {
         const content = event.target?.result;
-        updateConfig({ licenseKey: content as string });
+        updateConfig({ 
+          licenseKey: content as string,
+          licenseFileName: file.name
+        });
       };
       reader.readAsText(file);
     }

@@ -34,6 +34,7 @@ export interface ClusterConfig {
   environment: string;
   deploymentMode: string;
   licenseKey?: string;
+  licenseFileName?: string;
 }
 
 interface PrototypeSettings {
