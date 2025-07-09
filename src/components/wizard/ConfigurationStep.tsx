@@ -5,7 +5,7 @@ import Input from '../common/Input';
 import Select from '../common/Select';
 import { useConfig } from '../../contexts/ConfigContext';
 import { useWizardMode } from '../../contexts/WizardModeContext';
-import { ChevronLeft, ChevronRight, Upload, Save, Terminal, Copy, ClipboardCheck } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Upload, Save, Terminal, Copy, ClipboardCheck, CheckCircle, X } from 'lucide-react';
 
 interface ConfigurationStepProps {
   onNext: () => void;
@@ -35,6 +35,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack })
   const [copied, setCopied] = useState(false);
   const [allTabsValidated, setAllTabsValidated] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadedFileName, setUploadedFileName] = useState<string>('');
   const themeColor = prototypeSettings.themeColor;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -69,6 +70,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack })
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setUploadedFileName(file.name);
       const reader = new FileReader();
       reader.onload = (event) => {
         const content = event.target?.result;
@@ -78,6 +80,8 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack })
         }
       };
       reader.readAsText(file);
+    } else {
+      setUploadedFileName('');
     }
   };
 
@@ -456,7 +460,54 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack })
           License Key File
           {!prototypeSettings.skipValidation && <span className="text-red-500 ml-1">*</span>}
         </label>
-        <div className="mt-1 flex items-center">
+        <div className="mt-1 space-y-3">
+          <div className="flex items-center">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept=".key,.txt"
+              className="hidden"
+            />
+            <Button
+              variant="outline"
+              onClick={() => fileInputRef.current?.click()}
+              icon={<Upload className="w-4 h-4" />}
+            >
+              {uploadedFileName ? 'Change License Key' : 'Upload License Key'}
+            </Button>
+          </div>
+          
+          {uploadedFileName && (
+            <div className="flex items-center space-x-2 p-3 bg-green-50 border border-green-200 rounded-md">
+              <div className="flex-shrink-0">
+                <CheckCircle className="w-5 h-5 text-green-500" />
+              </div>
+              <div className="flex-grow min-w-0">
+                <p className="text-sm font-medium text-green-800">File uploaded successfully</p>
+                <p className="text-sm text-green-600 truncate">{uploadedFileName}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setUploadedFileName('');
+                  updateConfig({ licenseKey: undefined });
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = '';
+                  }
+                }}
+                className="flex-shrink-0 text-green-600 hover:text-green-800 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+        </div>
+        {errors.licenseKey && (
+          <p className="text-sm text-red-500">{errors.licenseKey}</p>
+        )}
+        <p className="text-sm text-gray-500">Upload your WordPress Enterprise license key</p>
+      </div>
           <input
             type="file"
             ref={fileInputRef}
