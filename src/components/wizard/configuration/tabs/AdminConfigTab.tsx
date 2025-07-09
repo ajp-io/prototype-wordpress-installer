@@ -90,7 +90,7 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
             onClick={handleFileSelect}
             icon={<Upload className="w-4 h-4" />}
           >
-            {config.licenseFileName ? 'Change' : 'Upload'}
+            Upload License Key
           </Button>
           {config.licenseFileName && (
             <div className="flex items-center space-x-2 px-3 py-2 bg-green-50 border border-green-200 rounded-md group">
