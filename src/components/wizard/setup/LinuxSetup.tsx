@@ -134,16 +134,14 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
           <Select
             id="networkInterface"
             label="Network Interface"
-            value={config.networkInterface || ''}
+            value={config.networkInterface || 'eth0'}
             onChange={onSelectChange}
             options={[
-              { value: '', label: 'Select a network interface' },
               ...(prototypeSettings.availableNetworkInterfaces || []).map(iface => ({
                 value: iface.name,
                 label: iface.name
               }))
             ]}
-           defaultValue="eth0"
             helpText="Network interface to use for WordPress"
           />
           

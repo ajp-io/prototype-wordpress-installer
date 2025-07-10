@@ -24,13 +24,12 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
       <Select
         id="databaseType"
         label="Database Type"
-        value={config.databaseType}
+        value={config.databaseType || 'internal'}
         onChange={onSelectChange}
         options={[
           { value: 'internal', label: 'Internal (PostgreSQL)' },
           { value: 'external', label: 'External Database' },
         ]}
-        defaultValue="internal"
         required={!skipValidation}
         helpText="Choose between managed internal database or connect to your existing database"
       />

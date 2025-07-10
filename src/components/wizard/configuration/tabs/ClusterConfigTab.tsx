@@ -55,13 +55,11 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
       <Select
         id="environment"
         label="Environment"
-        value={config.environment}
+        value={config.environment || 'production'}
         onChange={onSelectChange}
         required={!skipValidation}
         error={errors.environment}
-        defaultValue="production"
         options={[
-          { value: '', label: 'Select an option' },
           { value: 'development', label: 'Development' },
           { value: 'staging', label: 'Staging' },
           { value: 'production', label: 'Production' },
@@ -81,7 +79,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
               id="mode-standard"
               name="deploymentMode"
               value="standard"
-              checked={config.deploymentMode === 'standard'}
+              checked={(config.deploymentMode || 'standard') === 'standard'}
               onChange={onRadioChange}
               className="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-offset-2"
               style={{
@@ -99,7 +97,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
               id="mode-ha"
               name="deploymentMode"
               value="ha"
-              checked={config.deploymentMode === 'ha'}
+              checked={(config.deploymentMode || 'standard') === 'ha'}
               onChange={onRadioChange}
               className="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-offset-2"
               style={{
@@ -116,9 +114,6 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
           <p className="text-sm text-red-500">{errors.deploymentMode}</p>
         )}
         <p className="text-sm text-gray-500">Choose your deployment configuration</p>
-        <p className="mt-1 text-sm text-gray-500">
-          Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">standard</code>
-        </p>
       </div>
 
       <div className="space-y-1">

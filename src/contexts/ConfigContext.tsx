@@ -79,12 +79,12 @@ const defaultConfig: ClusterConfig = {
   adminUsername: 'wordpressadmin',
   adminPassword: '',
   adminEmail: '',
-  databaseType: 'internal',
+  databaseType: 'internal' as 'internal' | 'external',
   usePrivateRegistry: false,
   adminConsolePort: 8080,
   description: '',
-  environment: '',
-  deploymentMode: '',
+  environment: 'production',
+  deploymentMode: 'standard',
 };
 
 const defaultPrototypeSettings: PrototypeSettings = {
