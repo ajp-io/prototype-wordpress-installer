@@ -52,6 +52,17 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         defaultValue="my-wordpress"
       />
 
+      <Input
+        id="storageClass"
+        label="Storage Class"
+        value={config.storageClass}
+        onChange={onInputChange}
+        placeholder="Enter storage class name"
+        required={!skipValidation}
+        error={errors.storageClass}
+        defaultValue="standard"
+      />
+
       <Select
         id="environment"
         label="Environment"
