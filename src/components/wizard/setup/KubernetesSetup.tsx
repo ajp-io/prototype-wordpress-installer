@@ -42,8 +42,8 @@ const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
       value={config.adminConsolePort?.toString() || '8080'}
       onChange={onInputChange}
       placeholder="8080"
+      helpText="Port for the WordPress admin console"
       defaultValue="8080"
-      helpText="Port for the WordPress admin console (default: 8080)"
     />
 
     <Input
@@ -52,8 +52,8 @@ const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
       value={config.httpProxy || ''}
       onChange={onInputChange}
       placeholder="http://proxy.example.com:3128"
-      defaultValue="(none)"
       helpText="HTTP proxy server URL (optional)"
+      defaultValue="(none)"
     />
 
     <Input
@@ -62,8 +62,8 @@ const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
       value={config.httpsProxy || ''}
       onChange={onInputChange}
       placeholder="https://proxy.example.com:3128"
-      defaultValue="(none)"
       helpText="HTTPS proxy server URL (optional)"
+      defaultValue="(none)"
     />
 
     <Input
@@ -72,8 +72,8 @@ const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
       value={config.noProxy || ''}
       onChange={onInputChange}
       placeholder="localhost,127.0.0.1,.example.com"
-      defaultValue="localhost,127.0.0.1"
       helpText="Comma-separated list of hosts to bypass the proxy"
+      defaultValue="localhost,127.0.0.1"
     />
 
     <RegistryChoice

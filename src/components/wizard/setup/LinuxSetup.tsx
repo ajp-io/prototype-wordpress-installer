@@ -60,8 +60,8 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
         value={config.dataDirectory || ''}
         onChange={onInputChange}
         placeholder="/var/lib/wordpress"
+        helpText="Directory where WordPress will store its data"
         defaultValue="/var/lib/wordpress"
-        helpText="Directory where WordPress will store its data (defaults to /var/lib/wordpress)"
       />
     </div>
 
@@ -74,8 +74,8 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
           value={config.httpProxy || ''}
           onChange={onInputChange}
           placeholder="http://proxy.example.com:3128"
-          defaultValue="(none)"
           helpText="HTTP proxy server URL"
+          defaultValue="(none)"
         />
 
         <Input
@@ -84,8 +84,8 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
           value={config.httpsProxy || ''}
           onChange={onInputChange}
           placeholder="https://proxy.example.com:3128"
-          defaultValue="(none)"
           helpText="HTTPS proxy server URL"
+          defaultValue="(none)"
         />
 
         <Input
@@ -94,8 +94,8 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
           value={config.noProxy || ''}
           onChange={onInputChange}
           placeholder="localhost,127.0.0.1,.example.com"
-          defaultValue="localhost,127.0.0.1"
           helpText="Comma-separated list of hosts to bypass the proxy"
+          defaultValue="localhost,127.0.0.1"
         />
       </div>
     </div>
@@ -143,6 +143,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
               }))
             ]}
             helpText="Network interface to use for WordPress"
+            defaultValue="eth0"
           />
           
           <Input
@@ -151,8 +152,8 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
             value={config.networkCIDR || ''}
             onChange={onInputChange}
             placeholder="10.244.0.0/16"
-           defaultValue="10.244.0.0/16"
-            helpText="CIDR notation for the reserved network range (defaults to 10.244.0.0/16; must be /16 or larger)"
+            helpText="CIDR notation for the reserved network range (must be /16 or larger)"
+            defaultValue="10.244.0.0/16"
           />
         </div>
       )}
