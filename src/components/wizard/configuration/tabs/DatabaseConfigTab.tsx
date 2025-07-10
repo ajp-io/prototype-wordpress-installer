@@ -30,6 +30,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
           { value: 'internal', label: 'Internal (PostgreSQL)' },
           { value: 'external', label: 'External Database' },
         ]}
+        defaultValue="internal"
         required={!skipValidation}
         helpText="Choose between managed internal database or connect to your existing database"
       />
@@ -46,6 +47,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             value={config.databaseConfig?.host || ''}
             onChange={onInputChange}
             placeholder="db.example.com"
+            defaultValue="localhost"
             required={!skipValidation}
             error={errors['databaseConfig.host']}
           />
@@ -57,6 +59,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             value={config.databaseConfig?.port?.toString() || '5432'}
             onChange={onInputChange}
             placeholder="5432"
+            defaultValue="5432"
             required={!skipValidation}
           />
 
@@ -66,6 +69,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             value={config.databaseConfig?.username || ''}
             onChange={onInputChange}
             placeholder="postgres"
+            defaultValue="postgres"
             required={!skipValidation}
             error={errors['databaseConfig.username']}
           />
@@ -77,6 +81,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             value={config.databaseConfig?.password || ''}
             onChange={onInputChange}
             placeholder="••••••••••••"
+            defaultValue="(required)"
             required={!skipValidation}
             error={errors['databaseConfig.password']}
           />
@@ -87,6 +92,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             value={config.databaseConfig?.database || ''}
             onChange={onInputChange}
             placeholder="wordpress"
+            defaultValue="wordpress"
             required={!skipValidation}
             error={errors['databaseConfig.database']}
           />

@@ -60,6 +60,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
         value={config.dataDirectory || ''}
         onChange={onInputChange}
         placeholder="/var/lib/wordpress"
+        defaultValue="/var/lib/wordpress"
         helpText="Directory where WordPress will store its data (defaults to /var/lib/wordpress)"
       />
     </div>
@@ -73,6 +74,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
           value={config.httpProxy || ''}
           onChange={onInputChange}
           placeholder="http://proxy.example.com:3128"
+          defaultValue="(none)"
           helpText="HTTP proxy server URL"
         />
 
@@ -82,6 +84,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
           value={config.httpsProxy || ''}
           onChange={onInputChange}
           placeholder="https://proxy.example.com:3128"
+          defaultValue="(none)"
           helpText="HTTPS proxy server URL"
         />
 
@@ -91,6 +94,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
           value={config.noProxy || ''}
           onChange={onInputChange}
           placeholder="localhost,127.0.0.1,.example.com"
+          defaultValue="localhost,127.0.0.1"
           helpText="Comma-separated list of hosts to bypass the proxy"
         />
       </div>
@@ -139,6 +143,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
                 label: iface.name
               }))
             ]}
+           defaultValue="eth0"
             helpText="Network interface to use for WordPress"
           />
           
@@ -148,6 +153,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
             value={config.networkCIDR || ''}
             onChange={onInputChange}
             placeholder="10.244.0.0/16"
+           defaultValue="10.244.0.0/16"
             helpText="CIDR notation for the reserved network range (defaults to 10.244.0.0/16; must be /16 or larger)"
           />
         </div>

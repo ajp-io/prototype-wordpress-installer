@@ -17,6 +17,7 @@ interface SelectProps {
   disabled?: boolean;
   error?: string;
   helpText?: string;
+  defaultValue?: string;
   className?: string;
   labelClassName?: string;
 }
@@ -32,6 +33,7 @@ const Select: React.FC<SelectProps> = ({
   disabled = false,
   error,
   helpText,
+  defaultValue,
   className = '',
   labelClassName = '',
 }) => {
@@ -66,6 +68,11 @@ const Select: React.FC<SelectProps> = ({
           </option>
         ))}
       </select>
+      {defaultValue && (
+        <p className="mt-1 text-sm text-gray-500">
+          Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">{defaultValue}</code>
+        </p>
+      )}
       {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
       {helpText && !error && <p className="mt-1 text-sm text-gray-500">{helpText}</p>}
     </div>

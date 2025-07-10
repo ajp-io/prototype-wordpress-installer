@@ -59,6 +59,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         onChange={onSelectChange}
         required={!skipValidation}
         error={errors.environment}
+        defaultValue="production"
         options={[
           { value: '', label: 'Select an option' },
           { value: 'development', label: 'Development' },
@@ -114,6 +115,9 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         {errors.deploymentMode && (
           <p className="text-sm text-red-500">{errors.deploymentMode}</p>
         )}
+        <p className="mt-1 text-sm text-gray-500">
+          Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">standard</code>
+        </p>
         <p className="text-sm text-gray-500">Choose your deployment configuration</p>
       </div>
 
