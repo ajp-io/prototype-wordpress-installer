@@ -77,13 +77,13 @@ const Input: React.FC<InputProps> = ({
           readOnly={readOnly}
         />
       </div>
+      {helpText && <p className="mt-1 text-sm text-gray-500">{helpText}</p>}
       {defaultValue && (
         <p className="mt-1 text-sm text-gray-500">
           Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">{defaultValue}</code>
         </p>
       )}
       {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
-      {helpText && <p className="mt-1 text-sm text-gray-500">{helpText}</p>}
     </div>
   );
 };
