@@ -28,10 +28,10 @@ const NetworkConfigTab: React.FC<NetworkConfigTabProps> = ({
         value={config.domain}
         onChange={onInputChange}
         placeholder="wordpress.example.com"
-        defaultValue="localhost"
         required={!skipValidation}
         error={errors.domain}
         helpText="Domain name for accessing WordPress"
+        defaultValue="localhost"
       />
 
       <Input
@@ -40,9 +40,9 @@ const NetworkConfigTab: React.FC<NetworkConfigTabProps> = ({
         value={config.httpProxy || ''}
         onChange={onInputChange}
         placeholder="http://proxy.example.com:3128"
-        defaultValue="(none)"
         recommended={true}
         helpText="HTTP proxy server URL (optional)"
+        defaultValue="(none)"
       />
 
       <Input
@@ -51,9 +51,9 @@ const NetworkConfigTab: React.FC<NetworkConfigTabProps> = ({
         value={config.httpsProxy || ''}
         onChange={onInputChange}
         placeholder="https://proxy.example.com:3128"
-        defaultValue="(none)"
         recommended={true}
         helpText="HTTPS proxy server URL (optional)"
+        defaultValue="(none)"
       />
 
       <div className="flex items-center space-x-3">

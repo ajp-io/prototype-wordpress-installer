@@ -43,10 +43,10 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
         value={config.adminUsername}
         onChange={onInputChange}
         placeholder="wordpressadmin"
-        defaultValue="wordpressadmin"
         required={!skipValidation}
         error={errors.adminUsername}
         helpText="Username for the administrator account"
+        defaultValue="wordpressadmin"
       />
 
       <Input
@@ -56,10 +56,10 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
         value={config.adminEmail}
         onChange={onInputChange}
         placeholder="admin@example.com"
-        defaultValue="admin@localhost"
         required={!skipValidation}
         error={errors.adminEmail}
         helpText="Email address for the administrator"
+        defaultValue="admin@localhost"
       />
 
       <Input
@@ -69,10 +69,10 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
         value={config.adminPassword}
         onChange={onInputChange}
         placeholder="••••••••••••"
-        defaultValue="(randomly generated)"
         required={!skipValidation}
         error={errors.adminPassword}
         helpText="Password must be at least 8 characters"
+        defaultValue="(randomly generated)"
       />
 
       <div className="space-y-1">

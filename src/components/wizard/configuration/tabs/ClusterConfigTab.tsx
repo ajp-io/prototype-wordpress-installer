@@ -46,10 +46,10 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         value={config.clusterName}
         onChange={onInputChange}
         placeholder="Enter cluster name"
-        defaultValue="my-wordpress"
         required={!skipValidation}
         error={errors.clusterName}
         helpText="A unique name for your WordPress Enterprise installation"
+        defaultValue="my-wordpress"
       />
 
       <Select
@@ -65,6 +65,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
           { value: 'production', label: 'Production' },
         ]}
         helpText="Select the deployment environment"
+        defaultValue="production"
       />
 
       <div className="space-y-2">
@@ -113,7 +114,9 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         {errors.deploymentMode && (
           <p className="text-sm text-red-500">{errors.deploymentMode}</p>
         )}
-        <p className="text-sm text-gray-500">Choose your deployment configuration</p>
+        <p className="text-sm text-gray-500">
+          Choose your deployment configuration (Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">standard</code>)
+        </p>
       </div>
 
       <div className="space-y-1">
@@ -138,9 +141,8 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         {errors.description && (
           <p className="mt-1 text-sm text-red-500">{errors.description}</p>
         )}
-        <p className="text-sm text-gray-500">Describe the purpose of this WordPress Enterprise installation</p>
         <p className="mt-1 text-sm text-gray-500">
-          Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">WordPress Enterprise installation for {config.environment || 'production'} environment</code>
+          Describe the purpose of this WordPress Enterprise installation (Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">WordPress Enterprise installation for {config.environment || 'production'} environment</code>)
         </p>
       </div>
     </div>

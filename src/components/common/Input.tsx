@@ -15,7 +15,7 @@ interface InputProps {
   readOnly?: boolean;
   error?: string;
   helpText?: string;
-  defaultValue?: string;
+  defaultValue?: string | null;
   className?: string;
   labelClassName?: string;
   icon?: React.ReactNode;
@@ -77,10 +77,15 @@ const Input: React.FC<InputProps> = ({
           readOnly={readOnly}
         />
       </div>
-      {helpText && <p className="mt-1 text-sm text-gray-500">{helpText}</p>}
-      {defaultValue && (
+      {(helpText || defaultValue) && (
         <p className="mt-1 text-sm text-gray-500">
-          Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">{defaultValue}</code>
+          {helpText}
+          {helpText && defaultValue && ' '}
+          {defaultValue && (
+            <span>
+              (Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">{defaultValue}</code>)
+            </span>
+          )}
         </p>
       )}
       {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
