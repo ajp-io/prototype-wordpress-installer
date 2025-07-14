@@ -140,7 +140,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
           value={config.description}
           onChange={onInputChange}
           rows={4}
-          className={`w-96 px-3 py-2 border ${
+          className={`w-full max-w-2xl px-3 py-2 border ${
             errors.description ? 'border-red-500' : 'border-gray-300'
           } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2`}
           style={{
