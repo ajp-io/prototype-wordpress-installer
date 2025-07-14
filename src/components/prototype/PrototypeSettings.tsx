@@ -115,7 +115,7 @@ const PrototypeSettings: React.FC = () => {
                   id="themeColor"
                   value={prototypeSettings.themeColor}
                   onChange={handleThemeColorChange}
-                  placeholder="#609926"
+                  placeholder="#21759B"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#609926]"
                   pattern="^#[0-9A-Fa-f]{6}$"
                 />
