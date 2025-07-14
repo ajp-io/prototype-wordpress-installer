@@ -75,7 +75,6 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
           onChange={onInputChange}
           placeholder="http://proxy.example.com:3128"
           helpText="HTTP proxy server URL"
-          defaultValue="(none)"
         />
 
         <Input
@@ -85,7 +84,6 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
           onChange={onInputChange}
           placeholder="https://proxy.example.com:3128"
           helpText="HTTPS proxy server URL"
-          defaultValue="(none)"
         />
 
         <Input

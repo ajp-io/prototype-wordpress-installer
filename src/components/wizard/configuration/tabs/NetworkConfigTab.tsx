@@ -42,7 +42,6 @@ const NetworkConfigTab: React.FC<NetworkConfigTabProps> = ({
         placeholder="http://proxy.example.com:3128"
         recommended={true}
         helpText="HTTP proxy server URL (optional)"
-        defaultValue="(none)"
       />
 
       <Input
@@ -53,7 +52,6 @@ const NetworkConfigTab: React.FC<NetworkConfigTabProps> = ({
         placeholder="https://proxy.example.com:3128"
         recommended={true}
         helpText="HTTPS proxy server URL (optional)"
-        defaultValue="(none)"
       />
 
       <div className="flex items-center space-x-3">

@@ -47,7 +47,6 @@ const RegistrySettings: React.FC<RegistrySettingsProps> = ({
       placeholder="username"
       required
       helpText="Username for registry authentication"
-      defaultValue="(required)"
       error={authError ? ' ' : undefined}
     />
 
@@ -60,7 +59,6 @@ const RegistrySettings: React.FC<RegistrySettingsProps> = ({
       placeholder="••••••••••••"
       required
       helpText="Password or access token for registry authentication"
-      defaultValue="(required)"
       error={authError ? ' ' : undefined}
     />
 

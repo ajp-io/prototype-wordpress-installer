@@ -53,7 +53,6 @@ const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
       onChange={onInputChange}
       placeholder="http://proxy.example.com:3128"
       helpText="HTTP proxy server URL (optional)"
-      defaultValue="(none)"
     />
 
     <Input
@@ -63,7 +62,6 @@ const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
       onChange={onInputChange}
       placeholder="https://proxy.example.com:3128"
       helpText="HTTPS proxy server URL (optional)"
-      defaultValue="(none)"
     />
 
     <Input

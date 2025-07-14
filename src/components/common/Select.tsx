@@ -71,8 +71,8 @@ const Select: React.FC<SelectProps> = ({
       {(helpText || defaultValue) && !error && (
         <p className="mt-1 text-sm text-gray-500">
           {helpText}
-          {helpText && defaultValue && ' '}
-          {defaultValue && (
+          {helpText && defaultValue && defaultValue !== '(none)' && defaultValue !== '(required)' && ' '}
+          {defaultValue && defaultValue !== '(none)' && defaultValue !== '(required)' && (
             <span>
               (Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">{defaultValue}</code>)
             </span>
