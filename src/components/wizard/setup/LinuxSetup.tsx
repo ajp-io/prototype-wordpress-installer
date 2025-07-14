@@ -160,7 +160,6 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
       )}
     </div>
   </div>
-)
 );
 
 export default LinuxSetup;
