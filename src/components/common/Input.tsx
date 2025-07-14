@@ -1,5 +1,4 @@
 import React from 'react';
-import { Eye, EyeOff } from 'lucide-react';
 import { useConfig } from '../../contexts/ConfigContext';
 
 interface InputProps {
@@ -43,10 +42,6 @@ const Input: React.FC<InputProps> = ({
 }) => {
   const { prototypeSettings } = useConfig();
   const themeColor = prototypeSettings.themeColor;
-  const [showPassword, setShowPassword] = React.useState(false);
-  
-  const isPasswordField = type === 'password';
-  const inputType = isPasswordField && showPassword ? 'text' : type;
 
   return (
     <div className="mb-4">
@@ -63,14 +58,14 @@ const Input: React.FC<InputProps> = ({
         )}
         <input
           id={id}
-          type={inputType}
+          type={type}
           value={value}
           onChange={onChange}
           onKeyDown={onKeyDown}
           placeholder={placeholder}
           disabled={disabled}
           required={required}
-          className={`${className || 'w-80'} px-3 py-2 ${icon ? 'pl-10' : ''} ${isPasswordField ? 'pr-10' : ''} border ${
+          className={`${className || 'w-80'} px-3 py-2 ${icon ? 'pl-10' : ''} border ${
             error ? 'border-red-500' : 'border-gray-300'
           } rounded-md shadow-sm ${
             readOnly ? 'bg-gray-50 text-gray-700 cursor-default' : 
@@ -81,20 +76,6 @@ const Input: React.FC<InputProps> = ({
           } as React.CSSProperties}
           readOnly={readOnly}
         />
-        {isPasswordField && (
-          <button
-            type="button"
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
-            onClick={() => setShowPassword(!showPassword)}
-            tabIndex={-1}
-          >
-            {showPassword ? (
-              <EyeOff className="w-5 h-5" />
-            ) : (
-              <Eye className="w-5 h-5" />
-            )}
-          </button>
-        )}
       </div>
       {(helpText || (defaultValue && defaultValue !== '(none)' && defaultValue !== '(required)')) && (
         <p className="mt-1 text-sm text-gray-500">
