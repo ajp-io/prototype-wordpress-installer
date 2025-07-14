@@ -32,7 +32,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
         ]}
         required={!skipValidation}
         helpText="Choose between managed internal database or connect to your existing database"
-        className="w-64"
+        defaultValue="internal"
       />
 
       {config.databaseType === 'external' && (
@@ -61,7 +61,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             onChange={onInputChange}
             placeholder="5432"
             required={!skipValidation}
-            className="w-32"
+            helpText="Database server port"
             defaultValue="5432"
           />
 
@@ -72,8 +72,8 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             onChange={onInputChange}
             placeholder="postgres"
             required={!skipValidation}
+            error={errors['databaseConfig.username']}
             helpText="Database username for authentication"
-            className="w-64"
             defaultValue="postgres"
           />
 
@@ -84,9 +84,9 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             value={config.databaseConfig?.password || ''}
             onChange={onInputChange}
             placeholder="••••••••••••"
+            required={!skipValidation}
             error={errors['databaseConfig.password']}
             helpText="Database password for authentication"
-            className="w-80"
             defaultValue="(required)"
           />
 
@@ -95,10 +95,10 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             label="Database Name"
             value={config.databaseConfig?.database || ''}
             onChange={onInputChange}
+            placeholder="wordpress"
             required={!skipValidation}
             error={errors['databaseConfig.database']}
             helpText="Name of the database to use"
-            className="w-64"
             defaultValue="wordpress"
           />
         </>

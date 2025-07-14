@@ -65,12 +65,12 @@ const Input: React.FC<InputProps> = ({
           placeholder={placeholder}
           disabled={disabled}
           required={required}
-          className={`w-80 px-3 py-2 ${icon ? 'pl-10' : ''} border ${
+          className={`w-full px-3 py-2 ${icon ? 'pl-10' : ''} border ${
             error ? 'border-red-500' : 'border-gray-300'
           } rounded-md shadow-sm ${
             readOnly ? 'bg-gray-50 text-gray-700 cursor-default' : 
             disabled ? 'bg-gray-100 text-gray-500' : 'bg-white focus:outline-none focus:ring-2 focus:ring-offset-2'
-          } ${className}`.replace('w-80', className.includes('w-') ? '' : 'w-80')}
+          } ${className}`}
           style={{
             '--tw-ring-color': readOnly ? 'transparent' : themeColor,
           } as React.CSSProperties}

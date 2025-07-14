@@ -35,7 +35,7 @@ const RegistrySettings: React.FC<RegistrySettingsProps> = ({
       placeholder="registry.example.com"
       required
       helpText="The URL of your private container registry"
-      className="w-80"
+      defaultValue="registry.example.com"
       error={authError ? ' ' : undefined}
     />
 
@@ -46,8 +46,8 @@ const RegistrySettings: React.FC<RegistrySettingsProps> = ({
       onChange={onInputChange}
       placeholder="username"
       required
+      helpText="Username for registry authentication"
       defaultValue="(required)"
-      className="w-64"
       error={authError ? ' ' : undefined}
     />
 
@@ -58,9 +58,9 @@ const RegistrySettings: React.FC<RegistrySettingsProps> = ({
       value={registryPassword}
       onChange={onInputChange}
       placeholder="••••••••••••"
+      required
       helpText="Password or access token for registry authentication"
       defaultValue="(required)"
-      className="w-80"
       error={authError ? ' ' : undefined}
     />
 

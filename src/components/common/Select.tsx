@@ -53,11 +53,11 @@ const Select: React.FC<SelectProps> = ({
         onChange={onChange}
         disabled={disabled}
         required={required}
-        className={`w-64 px-3 py-2 border ${
+        className={`w-full px-3 py-2 border ${
           error ? 'border-red-500' : 'border-gray-300'
         } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${
           disabled ? 'bg-gray-100 text-gray-500' : 'bg-white'
-        } ${className}`.replace('w-64', className.includes('w-') ? '' : 'w-64')}
+        } ${className}`}
         style={{
           '--tw-ring-color': themeColor,
         } as React.CSSProperties}
