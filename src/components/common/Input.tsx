@@ -59,7 +59,7 @@ const Input: React.FC<InputProps> = ({
         {required && <span className="text-red-500 ml-1">*</span>}
         {recommended && !required && <span className="ml-1 font-normal" style={{ color: themeColor }}>(Recommended)</span>}
       </label>
-      <div className="relative">
+      <div className={`relative ${className || 'w-80'}`}>
         {icon && (
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
             {icon}
@@ -74,7 +74,7 @@ const Input: React.FC<InputProps> = ({
           placeholder={placeholder}
           disabled={disabled}
           required={required}
-          className={`${className || 'w-80'} px-3 py-2 ${icon ? 'pl-10' : ''} ${isPasswordField ? 'pr-10' : ''} border ${
+          className={`w-full px-3 py-2 ${icon ? 'pl-10' : ''} ${isPasswordField ? 'pr-10' : ''} border ${
             error ? 'border-red-500' : 'border-gray-300'
           } rounded-md shadow-sm ${
             readOnly ? 'bg-gray-50 text-gray-700 cursor-default' : 
