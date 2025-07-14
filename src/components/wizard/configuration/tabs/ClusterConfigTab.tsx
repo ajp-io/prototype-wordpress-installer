@@ -46,7 +46,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         value={config.clusterName}
         onChange={onInputChange}
         placeholder="Enter cluster name"
-        required={!skipValidation}
+        required={true}
         error={errors.clusterName}
         helpText="A unique name for your WordPress Enterprise installation"
         defaultValue="my-wordpress"
@@ -58,7 +58,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         value={config.storageClass}
         onChange={onInputChange}
         placeholder="Enter storage class name"
-        required={!skipValidation}
+        required={true}
         error={errors.storageClass}
         defaultValue="standard"
       />
@@ -68,7 +68,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         label="Environment"
         value={config.environment || 'production'}
         onChange={onSelectChange}
-        required={!skipValidation}
+        required={true}
         error={errors.environment}
         options={[
           { value: 'development', label: 'Development' },
@@ -148,13 +148,11 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
             '--tw-ring-offset-color': themeColor,
           } as React.CSSProperties}
           placeholder="Describe the purpose of this WordPress Enterprise installation"
+          required
         />
         {errors.description && (
           <p className="mt-1 text-sm text-red-500">{errors.description}</p>
         )}
-        <p className="mt-1 text-sm text-gray-500">
-          Describe the purpose of this WordPress Enterprise installation (Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">WordPress Enterprise installation for {config.environment || 'production'} environment</code>)
-        </p>
       </div>
     </div>
   );
