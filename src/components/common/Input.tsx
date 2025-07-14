@@ -84,7 +84,7 @@ const Input: React.FC<InputProps> = ({
         {isPasswordField && (
           <button
             type="button"
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+            className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
             onClick={() => setShowPassword(!showPassword)}
             tabIndex={-1}
           >
