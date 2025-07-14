@@ -92,6 +92,7 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
             variant="outline"
             onClick={handleFileSelect}
             icon={<Upload className="w-4 h-4" />}
+            className="w-80"
           >
             Upload File
           </Button>
