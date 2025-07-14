@@ -77,19 +77,7 @@ const Input: React.FC<InputProps> = ({
           readOnly={readOnly}
         />
       </div>
-      {(helpText || defaultValue) && (
-        <p className="mt-1 text-sm text-gray-500">
-          {helpText && defaultValue && defaultValue !== '(none)' && defaultValue !== '(required)' 
-            ? `${helpText} (Default: ${defaultValue})`
-            : helpText 
-              ? helpText
-              : defaultValue && defaultValue !== '(none)' && defaultValue !== '(required)'
-                ? `(Default: ${defaultValue})`
-                : null}
-        </p>
-      )}
-      {/* Only show if we have content to display */}
-      {((helpText || (defaultValue && defaultValue !== '(none)' && defaultValue !== '(required)')) && (
+      {(helpText || (defaultValue && defaultValue !== '(none)' && defaultValue !== '(required)')) && (
         <p className="mt-1 text-sm text-gray-500">
           {helpText && defaultValue && defaultValue !== '(none)' && defaultValue !== '(required)' ? (
             <span>
@@ -103,7 +91,7 @@ const Input: React.FC<InputProps> = ({
             </span>
           ) : null}
         </p>
-      ))}
+      )}
       {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>
   );

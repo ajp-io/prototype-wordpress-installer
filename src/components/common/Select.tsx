@@ -68,7 +68,7 @@ const Select: React.FC<SelectProps> = ({
           </option>
         ))}
       </select>
-      {(helpText || defaultValue) && !error && (
+      {(helpText || (defaultValue && defaultValue !== '(none)' && defaultValue !== '(required)')) && !error && (
         <p className="mt-1 text-sm text-gray-500">
           {helpText && defaultValue && defaultValue !== '(none)' && defaultValue !== '(required)' ? (
             <span>
