@@ -53,7 +53,7 @@ const Select: React.FC<SelectProps> = ({
         onChange={onChange}
         disabled={disabled}
         required={required}
-        className={`w-64 px-3 py-2 pr-8 border ${
+        className={`w-64 px-3 py-2 border ${
           error ? 'border-red-500' : 'border-gray-300'
         } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${
           disabled ? 'bg-gray-100 text-gray-500' : 'bg-white'
