@@ -113,6 +113,10 @@ const PrototypeSettings: React.FC = () => {
                 <input
                   type="text"
                   id="themeColor"
+                  value={prototypeSettings.themeColor}
+                  onChange={handleThemeColorChange}
+                  placeholder="#316DE6"
+                  className="w-64 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
                   style={{
                     '--tw-ring-color': prototypeSettings.themeColor
                   } as React.CSSProperties}
