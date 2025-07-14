@@ -70,7 +70,7 @@ const Input: React.FC<InputProps> = ({
           placeholder={placeholder}
           disabled={disabled}
           required={required}
-          className={`${className || 'w-80'} px-3 py-2 ${icon ? 'pl-10' : ''} ${isPasswordField ? 'pr-10' : ''} border ${
+          className={`${className || 'w-80'} px-3 py-2 ${icon ? 'pl-10' : ''} ${isPasswordField ? 'pr-10' : 'pr-3'} border ${
             error ? 'border-red-500' : 'border-gray-300'
           } rounded-md shadow-sm ${
             readOnly ? 'bg-gray-50 text-gray-700 cursor-default' : 
@@ -84,7 +84,7 @@ const Input: React.FC<InputProps> = ({
         {isPasswordField && (
           <button
             type="button"
-            className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
             onClick={() => setShowPassword(!showPassword)}
             tabIndex={-1}
           >
