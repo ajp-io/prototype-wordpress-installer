@@ -38,6 +38,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         onChange={onInputChange}
         readOnly={true}
         helpText="Auto-generated unique identifier for this installation"
+        className="w-80"
       />
 
       <Input
@@ -49,6 +50,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         required={!skipValidation}
         error={errors.clusterName}
         helpText="A unique name for your WordPress Enterprise installation"
+        className="w-80"
         defaultValue="my-wordpress"
       />
 
@@ -61,6 +63,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         required={!skipValidation}
         error={errors.storageClass}
         defaultValue="standard"
+        className="w-64"
       />
 
       <Select
@@ -76,6 +79,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
           { value: 'production', label: 'Production' },
         ]}
         helpText="Select the deployment environment"
+        className="w-48"
         defaultValue="production"
       />
 
@@ -140,7 +144,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
           value={config.description}
           onChange={onInputChange}
           rows={4}
-          className={`w-full px-3 py-2 border ${
+          className={`max-w-2xl w-full px-3 py-2 border ${
             errors.description ? 'border-red-500' : 'border-gray-300'
           } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2`}
           style={{
