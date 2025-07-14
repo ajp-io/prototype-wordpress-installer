@@ -87,6 +87,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
           helpText="HTTPS proxy server URL"
           className="w-96"
           defaultValue="(none)"
+        />
 
         <Input
           id="noProxy"
