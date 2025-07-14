@@ -45,26 +45,38 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         label="Cluster Name"
         value={config.clusterName}
         onChange={onInputChange}
-        placeholder="my-wordpress"
-        required={!skipValidation}
+        placeholder="Enter cluster name"
+        required={true}
         error={errors.clusterName}
         helpText="A unique name for your WordPress Enterprise installation"
+        defaultValue="my-wordpress"
+      />
+
+      <Input
+        id="storageClass"
+        label="Storage Class"
+        value={config.storageClass}
+        onChange={onInputChange}
+        placeholder="Enter storage class name"
+        required={true}
+        error={errors.storageClass}
+        defaultValue="standard"
       />
 
       <Select
         id="environment"
         label="Environment"
-        value={config.environment}
+        value={config.environment || 'production'}
         onChange={onSelectChange}
-        required={!skipValidation}
+        required={true}
         error={errors.environment}
         options={[
-          { value: '', label: 'Select an option' },
           { value: 'development', label: 'Development' },
           { value: 'staging', label: 'Staging' },
           { value: 'production', label: 'Production' },
         ]}
         helpText="Select the deployment environment"
+        defaultValue="production"
       />
 
       <div className="space-y-2">
@@ -79,7 +91,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
               id="mode-standard"
               name="deploymentMode"
               value="standard"
-              checked={config.deploymentMode === 'standard'}
+              checked={(config.deploymentMode || 'standard') === 'standard'}
               onChange={onRadioChange}
               className="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-offset-2"
               style={{
@@ -97,7 +109,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
               id="mode-ha"
               name="deploymentMode"
               value="ha"
-              checked={config.deploymentMode === 'ha'}
+              checked={(config.deploymentMode || 'standard') === 'ha'}
               onChange={onRadioChange}
               className="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-offset-2"
               style={{
@@ -113,7 +125,9 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         {errors.deploymentMode && (
           <p className="text-sm text-red-500">{errors.deploymentMode}</p>
         )}
-        <p className="text-sm text-gray-500">Choose your deployment configuration</p>
+        <p className="text-sm text-gray-500">
+          Choose your deployment configuration (Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">standard</code>)
+        </p>
       </div>
 
       <div className="space-y-1">
@@ -126,7 +140,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
           value={config.description}
           onChange={onInputChange}
           rows={4}
-          className={`w-full px-3 py-2 border ${
+          className={`w-full max-w-2xl px-3 py-2 border ${
             errors.description ? 'border-red-500' : 'border-gray-300'
           } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2`}
           style={{
@@ -134,11 +148,11 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
             '--tw-ring-offset-color': themeColor,
           } as React.CSSProperties}
           placeholder="Describe the purpose of this WordPress Enterprise installation"
+          required
         />
         {errors.description && (
           <p className="mt-1 text-sm text-red-500">{errors.description}</p>
         )}
-        <p className="text-sm text-gray-500">Describe the purpose of this WordPress Enterprise installation</p>
       </div>
     </div>
   );

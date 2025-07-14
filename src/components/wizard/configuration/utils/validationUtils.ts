@@ -23,7 +23,6 @@ export const validateClusterTab = (config: ClusterConfig, skipValidation: boolea
   const errors: ValidationErrors = {};
   
   if (!config.clusterName) errors.clusterName = 'Cluster name is required';
-  if (!config.namespace) errors.namespace = 'Namespace is required';
   if (!config.storageClass) errors.storageClass = 'Storage class is required';
   if (!config.description) errors.description = 'Description is required';
   if (!config.deploymentMode) errors.deploymentMode = 'Deployment mode is required';

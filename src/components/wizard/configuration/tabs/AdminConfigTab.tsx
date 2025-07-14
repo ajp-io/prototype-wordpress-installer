@@ -43,9 +43,10 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
         value={config.adminUsername}
         onChange={onInputChange}
         placeholder="wordpressadmin"
-        required={!skipValidation}
+        required={true}
         error={errors.adminUsername}
         helpText="Username for the administrator account"
+        defaultValue="wordpressadmin"
       />
 
       <Input
@@ -55,9 +56,10 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
         value={config.adminEmail}
         onChange={onInputChange}
         placeholder="admin@example.com"
-        required={!skipValidation}
+        required={true}
         error={errors.adminEmail}
         helpText="Email address for the administrator"
+        defaultValue="admin@localhost"
       />
 
       <Input
@@ -67,15 +69,16 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
         value={config.adminPassword}
         onChange={onInputChange}
         placeholder="••••••••••••"
-        required={!skipValidation}
+        required={true}
         error={errors.adminPassword}
         helpText="Password must be at least 8 characters"
+        defaultValue="(randomly generated)"
       />
 
       <div className="space-y-1">
         <label className="block text-sm font-medium text-gray-700">
           License Key File
-          {!skipValidation && <span className="text-red-500 ml-1">*</span>}
+          <span className="text-red-500 ml-1">*</span>
         </label>
         <div className="mt-1 flex items-center">
           <input
@@ -89,6 +92,7 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
             variant="outline"
             onClick={handleFileSelect}
             icon={<Upload className="w-4 h-4" />}
+            className="w-80"
           >
             Upload File
           </Button>

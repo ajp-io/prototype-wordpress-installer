@@ -24,7 +24,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
       <Select
         id="databaseType"
         label="Database Type"
-        value={config.databaseType}
+        value={config.databaseType || 'internal'}
         onChange={onSelectChange}
         options={[
           { value: 'internal', label: 'Internal (PostgreSQL)' },
@@ -32,6 +32,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
         ]}
         required={!skipValidation}
         helpText="Choose between managed internal database or connect to your existing database"
+        defaultValue="internal"
       />
 
       {config.databaseType === 'external' && (
@@ -46,8 +47,10 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             value={config.databaseConfig?.host || ''}
             onChange={onInputChange}
             placeholder="db.example.com"
-            required={!skipValidation}
+            required={true}
             error={errors['databaseConfig.host']}
+            helpText="Database server hostname or IP address"
+            defaultValue="localhost"
           />
 
           <Input
@@ -57,7 +60,9 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             value={config.databaseConfig?.port?.toString() || '5432'}
             onChange={onInputChange}
             placeholder="5432"
-            required={!skipValidation}
+            required={true}
+            helpText="Database server port"
+            defaultValue="5432"
           />
 
           <Input
@@ -66,8 +71,10 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             value={config.databaseConfig?.username || ''}
             onChange={onInputChange}
             placeholder="postgres"
-            required={!skipValidation}
+            required={true}
             error={errors['databaseConfig.username']}
+            helpText="Database username for authentication"
+            defaultValue="postgres"
           />
 
           <Input
@@ -77,8 +84,10 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             value={config.databaseConfig?.password || ''}
             onChange={onInputChange}
             placeholder="••••••••••••"
-            required={!skipValidation}
+            required={true}
             error={errors['databaseConfig.password']}
+            helpText="Database password for authentication"
+            defaultValue="(required)"
           />
 
           <Input
@@ -87,8 +96,10 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             value={config.databaseConfig?.database || ''}
             onChange={onInputChange}
             placeholder="wordpress"
-            required={!skipValidation}
+            required={true}
             error={errors['databaseConfig.database']}
+            helpText="Name of the database to use"
+            defaultValue="wordpress"
           />
         </>
       )}
