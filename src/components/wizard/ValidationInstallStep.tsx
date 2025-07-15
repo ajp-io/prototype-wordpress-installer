@@ -203,7 +203,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
             <div className="space-y-4">
               <div className="p-4 bg-red-50 rounded-lg border border-red-200">
                 <p className="text-sm text-red-700">
-                  Environment validation failed. Please resolve the issues before proceeding with the installation.
+                  Preflight checks failed. Please resolve the issues before proceeding with the installation.
                 </p>
               </div>
               
