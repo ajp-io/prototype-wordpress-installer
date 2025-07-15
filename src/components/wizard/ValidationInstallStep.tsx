@@ -97,10 +97,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
       setHasValidationFailures(hasFailures);
       setValidationComplete(true);
       
-      // Only auto-proceed if all checks passed AND there are no failures
-      if (allPassed && !hasFailures) {
-        setPhase('installing');
-      }
+      // No longer auto-proceed - user must click Next even when checks pass
     } catch (error) {
       console.error('Validation error:', error);
       setValidationComplete(true);
