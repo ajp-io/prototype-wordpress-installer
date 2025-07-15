@@ -5,7 +5,7 @@ import Modal from '../common/Modal';
 import { useConfig } from '../../contexts/ConfigContext';
 import { useWizardMode } from '../../contexts/WizardModeContext';
 import { ValidationStatus, InstallationStatus } from '../../types';
-import { ChevronRight, AlertTriangle } from 'lucide-react';
+import { ChevronRight, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import { setupInfrastructure } from '../../utils/infrastructure';
 import { validateEnvironment } from '../../utils/validation';
 import { installWordPress } from '../../utils/wordpress';
@@ -97,10 +97,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
       setHasValidationFailures(hasFailures);
       setValidationComplete(true);
       
-      // Only auto-proceed if all checks passed AND there are no failures
-      if (allPassed && !hasFailures) {
-        setPhase('installing');
-      }
+      // No longer auto-proceed - user must click Next even when checks pass
     } catch (error) {
       console.error('Validation error:', error);
       setValidationComplete(true);
@@ -136,14 +133,14 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
 
   const handleNextClick = () => {
     if (phase === 'validating') {
-      // If we have validation failures and the skip setting is enabled, show modal
-      if (hasValidationFailures && prototypeSettings.skipHostPreflights) {
+      // If we have validation failures and the block setting is NOT enabled, show modal
+      if (hasValidationFailures && !prototypeSettings.blockOnAppPreflights) {
         setShowPreflightModal(true);
       } else if (!hasValidationFailures) {
         // No failures, proceed normally
         setPhase('installing');
       }
-      // If there are failures and skip is not enabled, button should be disabled (handled in canProceed)
+      // If there are failures and block is enabled, button should be disabled (handled in canProceed)
     } else if (phase === 'installing' && wordpressInstallComplete) {
       onNext();
     }
@@ -189,44 +186,67 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
 
   const renderValidationPhase = () => (
     <div className="space-y-6">
-      <div className="space-y-2 divide-y divide-gray-200">
-        {[
-          { key: 'kubernetes', name: 'Kubernetes Availability', status: validationStatus.kubernetes },
-          { key: 'helm', name: 'Helm Installation', status: validationStatus.helm },
-          { key: 'storage', name: 'Storage Classes', status: validationStatus.storage },
-          { key: 'networking', name: 'Networking & Ingress', status: validationStatus.networking },
-          { key: 'permissions', name: 'RBAC & Permissions', status: validationStatus.permissions }
-        ].map(({ key, name, status }) => (
-          <div key={key} className="flex items-center space-x-4 py-3">
-            <div className="flex-shrink-0 text-gray-400">
-              <ChevronRight className="w-5 h-5" />
-            </div>
-            <div className="flex-grow">
-              <h4 className="text-sm font-medium text-gray-900">{name}</h4>
-              {status && (
-                <p className={`text-sm ${status.success ? 'text-green-600' : 'text-red-600'}`}>
-                  {status.message}
+      {!validationComplete ? (
+        <div className="flex flex-col items-center py-8">
+          <div className="w-12 h-12 border-4 border-t-blue-500 border-gray-200 rounded-full animate-spin mb-4"></div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Running Preflight Checks</h3>
+          <p className="text-sm text-gray-600 text-center max-w-md">
+            Validating your environment to ensure it meets all requirements for WordPress Enterprise installation.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {hasValidationFailures ? (
+            <div className="space-y-4">
+              <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                <p className="text-sm text-red-700">
+                  Preflight checks failed. Please resolve the issues before proceeding with the installation.
                 </p>
-              )}
-            </div>
-            <div className="text-sm font-medium">
-              <div className="flex items-center">
-                {!status ? (
-                  <div className="w-5 h-5 border-2 border-t-blue-500 rounded-full animate-spin" />
-                ) : status.success ? (
-                  <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
-                    <ChevronRight className="w-4 h-4 text-white" />
-                  </div>
-                ) : (
-                  <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
-                    <ChevronRight className="w-4 h-4 text-white" />
-                  </div>
-                )}
+              </div>
+              
+              <div className="space-y-3">
+                {Object.entries(validationStatus)
+                  .filter(([_, result]) => result && !result.success)
+                  .map(([key, result]) => {
+                    const checkNames = {
+                      kubernetes: 'Kubernetes Availability',
+                      helm: 'Helm Installation',
+                      storage: 'Storage Classes & PV Provisioning',
+                      networking: 'Networking & Ingress',
+                      permissions: 'RBAC & Permissions'
+                    };
+                    
+                    return (
+                      <div key={key} className="flex items-start">
+                        <XCircle className="w-5 h-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" />
+                        <div>
+                          <h4 className="text-sm font-medium text-red-800">
+                            {checkNames[key as keyof typeof checkNames] || key}
+                          </h4>
+                          <p className="mt-1 text-sm text-red-700">{result?.message}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ) : (
+            <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <CheckCircle className="h-5 w-5 text-green-400" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-green-800">Preflight Checks Passed</h3>
+                  <p className="mt-1 text-sm text-green-700">
+                    All preflight checks passed successfully. Your environment is ready for WordPress Enterprise installation.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 
@@ -268,8 +288,8 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
       // If there are no failures, can always proceed
       if (!hasValidationFailures) return true;
       
-      // If there are failures, can only proceed if skip setting is enabled
-      return prototypeSettings.skipHostPreflights;
+      // If there are failures, can only proceed if block setting is NOT enabled
+      return !prototypeSettings.blockOnAppPreflights;
     }
     if (phase === 'installing') {
       return wordpressInstallComplete;
@@ -281,7 +301,9 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
     if (phase === 'installing') {
       return 'Next: Finish';
     }
-    return 'Next: Start Installation';
+    return prototypeSettings.clusterMode === 'embedded' 
+      ? 'Next: Continue Installation'
+      : 'Next: Start Installation';
   };
 
   const getPhaseDescription = () => {
@@ -347,7 +369,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
           </div>
           <div>
             <p className="text-sm text-gray-700">
-              Some validation checks have failed. Are you sure you want to continue with the installation? 
+              Some preflight checks have failed. Are you sure you want to continue with the installation? 
               This may cause installation issues.
             </p>
           </div>

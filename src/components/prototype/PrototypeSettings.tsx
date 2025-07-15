@@ -55,6 +55,9 @@ const PrototypeSettings: React.FC = () => {
     updatePrototypeSettings({ skipHostPreflights: e.target.checked });
   };
 
+  const handleBlockOnAppPreflightsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updatePrototypeSettings({ blockOnAppPreflights: e.target.checked });
+  };
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -225,6 +228,22 @@ const PrototypeSettings: React.FC = () => {
                   </label>
                 </div>
                 
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="blockOnAppPreflights"
+                    checked={prototypeSettings.blockOnAppPreflights}
+                    onChange={handleBlockOnAppPreflightsChange}
+                    className="h-4 w-4 border-gray-300 rounded focus:ring-2 focus:ring-offset-2"
+                    style={{
+                      accentColor: prototypeSettings.themeColor,
+                      '--tw-ring-color': prototypeSettings.themeColor
+                    } as React.CSSProperties}
+                  />
+                  <label htmlFor="blockOnAppPreflights" className="text-sm text-gray-700">
+                    Don't allow proceeding if app preflight checks fail
+                  </label>
+                </div>
                 <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"

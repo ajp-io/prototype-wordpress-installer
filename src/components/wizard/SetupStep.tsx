@@ -182,14 +182,13 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
         return isPushing ? 'Pushing Images...' : 'Push Images';
       }
       if (prototypeSettings.clusterMode === 'embedded') {
-        return prototypeSettings.enableMultiNode 
-          ? 'Next: Set Up Hosts' 
-          : 'Next: Set Up Host';
+        return 'Next: Set Up Hosts';
+      } else {
+        return 'Next: Preflight Checks';
       }
-      return text.nextButtonText;
     }
     
-    return 'Next: Start Installation';
+    return 'Next: Install Infrastructure';
   };
 
   const getButtonIcon = () => {
