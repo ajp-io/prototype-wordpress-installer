@@ -55,8 +55,8 @@ const PrototypeSettings: React.FC = () => {
     updatePrototypeSettings({ skipHostPreflights: e.target.checked });
   };
 
-  const handleSkipAppPreflightsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updatePrototypeSettings({ skipAppPreflights: e.target.checked });
+  const handleBlockOnAppPreflightsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updatePrototypeSettings({ blockOnAppPreflights: e.target.checked });
   };
   return (
     <div className="min-h-screen bg-gray-50">
@@ -231,17 +231,17 @@ const PrototypeSettings: React.FC = () => {
                 <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
-                    id="skipAppPreflights"
-                    checked={prototypeSettings.skipAppPreflights}
-                    onChange={handleSkipAppPreflightsChange}
+                    id="blockOnAppPreflights"
+                    checked={prototypeSettings.blockOnAppPreflights}
+                    onChange={handleBlockOnAppPreflightsChange}
                     className="h-4 w-4 border-gray-300 rounded focus:ring-2 focus:ring-offset-2"
                     style={{
                       accentColor: prototypeSettings.themeColor,
                       '--tw-ring-color': prototypeSettings.themeColor
                     } as React.CSSProperties}
                   />
-                  <label htmlFor="skipAppPreflights" className="text-sm text-gray-700">
-                    Allow proceeding even if app preflight checks fail
+                  <label htmlFor="blockOnAppPreflights" className="text-sm text-gray-700">
+                    Don't allow proceeding if app preflight checks fail
                   </label>
                 </div>
                 <div className="flex items-center space-x-3">
