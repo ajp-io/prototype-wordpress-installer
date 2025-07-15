@@ -192,7 +192,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
       {!validationComplete ? (
         <div className="flex flex-col items-center py-8">
           <div className="w-12 h-12 border-4 border-t-blue-500 border-gray-200 rounded-full animate-spin mb-4"></div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Running Environment Checks</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Running Preflight Checks</h3>
           <p className="text-sm text-gray-600 text-center max-w-md">
             Validating your environment to ensure it meets all requirements for WordPress Enterprise installation.
           </p>
