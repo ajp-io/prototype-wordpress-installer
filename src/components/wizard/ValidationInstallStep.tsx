@@ -5,7 +5,7 @@ import Modal from '../common/Modal';
 import { useConfig } from '../../contexts/ConfigContext';
 import { useWizardMode } from '../../contexts/WizardModeContext';
 import { ValidationStatus, InstallationStatus } from '../../types';
-import { ChevronRight, AlertTriangle } from 'lucide-react';
+import { ChevronRight, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
 import { setupInfrastructure } from '../../utils/infrastructure';
 import { validateEnvironment } from '../../utils/validation';
 import { installWordPress } from '../../utils/wordpress';
@@ -189,44 +189,57 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
 
   const renderValidationPhase = () => (
     <div className="space-y-6">
-      <div className="space-y-2 divide-y divide-gray-200">
-        {[
-          { key: 'kubernetes', name: 'Kubernetes Availability', status: validationStatus.kubernetes },
-          { key: 'helm', name: 'Helm Installation', status: validationStatus.helm },
-          { key: 'storage', name: 'Storage Classes', status: validationStatus.storage },
-          { key: 'networking', name: 'Networking & Ingress', status: validationStatus.networking },
-          { key: 'permissions', name: 'RBAC & Permissions', status: validationStatus.permissions }
-        ].map(({ key, name, status }) => (
-          <div key={key} className="flex items-center space-x-4 py-3">
-            <div className="flex-shrink-0 text-gray-400">
-              <ChevronRight className="w-5 h-5" />
-            </div>
-            <div className="flex-grow">
-              <h4 className="text-sm font-medium text-gray-900">{name}</h4>
-              {status && (
-                <p className={`text-sm ${status.success ? 'text-green-600' : 'text-red-600'}`}>
-                  {status.message}
-                </p>
-              )}
-            </div>
-            <div className="text-sm font-medium">
-              <div className="flex items-center">
-                {!status ? (
-                  <div className="w-5 h-5 border-2 border-t-blue-500 rounded-full animate-spin" />
-                ) : status.success ? (
-                  <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
-                    <ChevronRight className="w-4 h-4 text-white" />
+      {!validationComplete ? (
+        <div className="flex flex-col items-center py-8">
+          <div className="w-12 h-12 border-4 border-t-blue-500 border-gray-200 rounded-full animate-spin mb-4"></div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">Running Environment Checks</h3>
+          <p className="text-sm text-gray-600 text-center max-w-md">
+            Validating your environment to ensure it meets all requirements for WordPress Enterprise installation.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {hasValidationFailures ? (
+            <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <XCircle className="h-5 w-5 text-red-400" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">Environment Validation Failed</h3>
+                  <div className="mt-2 text-sm text-red-700">
+                    <p>Some environment checks failed. Please resolve the issues before proceeding with the installation.</p>
+                    <ul className="mt-2 space-y-1">
+                      {Object.entries(validationStatus)
+                        .filter(([_, result]) => result && !result.success)
+                        .map(([key, result]) => (
+                          <li key={key} className="flex items-start">
+                            <span className="font-medium mr-2">•</span>
+                            <span>{result?.message}</span>
+                          </li>
+                        ))}
+                    </ul>
                   </div>
-                ) : (
-                  <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
-                    <ChevronRight className="w-4 h-4 text-white" />
-                  </div>
-                )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ) : (
+            <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <CheckCircle className="h-5 w-5 text-green-400" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-green-800">Environment Validation Passed</h3>
+                  <p className="mt-1 text-sm text-green-700">
+                    All environment checks passed successfully. Your environment is ready for WordPress Enterprise installation.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 
