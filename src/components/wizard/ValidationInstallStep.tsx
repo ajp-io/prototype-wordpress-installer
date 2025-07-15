@@ -301,7 +301,9 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
     if (phase === 'installing') {
       return 'Next: Finish';
     }
-    return 'Next: Start Installation';
+    return prototypeSettings.clusterMode === 'embedded' 
+      ? 'Next: Continue Installation'
+      : 'Next: Start Installation';
   };
 
   const getPhaseDescription = () => {
