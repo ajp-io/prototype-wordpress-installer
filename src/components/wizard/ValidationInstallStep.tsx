@@ -240,7 +240,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
                   <CheckCircle className="h-5 w-5 text-green-400" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="text-sm font-medium text-green-800">Environment Validation Passed</h3>
+                  <h3 className="text-sm font-medium text-green-800">Preflight Checks Passed</h3>
                   <p className="mt-1 text-sm text-green-700">
                     All environment checks passed successfully. Your environment is ready for WordPress Enterprise installation.
                   </p>
