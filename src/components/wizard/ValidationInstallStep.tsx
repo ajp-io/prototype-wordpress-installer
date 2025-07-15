@@ -51,7 +51,6 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
   const [validationComplete, setValidationComplete] = useState(false);
   const isLinuxMode = prototypeSettings.clusterMode === 'embedded';
   const themeColor = prototypeSettings.themeColor;
-  const [isValidating, setIsValidating] = useState(false);
 
   useEffect(() => {
     if (phase === 'infrastructure' && isLinuxMode) {
@@ -80,7 +79,6 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
   };
 
   const startValidation = async () => {
-    setIsValidating(true);
     setValidationComplete(false);
     setHasValidationFailures(false);
     
@@ -98,17 +96,15 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
       
       setHasValidationFailures(hasFailures);
       setValidationComplete(true);
-      setIsValidating(false);
       
       // Only auto-proceed if all checks passed AND there are no failures
       if (allPassed && !hasFailures) {
-        setTimeout(() => setPhase('installing'), 1000);
+        setPhase('installing');
       }
     } catch (error) {
       console.error('Validation error:', error);
       setValidationComplete(true);
       setHasValidationFailures(true);
-      setIsValidating(false);
     }
   };
 
@@ -191,90 +187,48 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
     </div>
   );
 
-  const renderValidationPhase = () => {
-    // Show general validation indicator while running
-    if (isValidating) {
-      return (
-        <div className="space-y-6">
-          <div className="flex items-center space-x-4 py-6">
-            <div className="flex-shrink-0">
-              <div className="w-8 h-8 border-2 border-t-blue-500 rounded-full animate-spin" />
+  const renderValidationPhase = () => (
+    <div className="space-y-6">
+      <div className="space-y-2 divide-y divide-gray-200">
+        {[
+          { key: 'kubernetes', name: 'Kubernetes Availability', status: validationStatus.kubernetes },
+          { key: 'helm', name: 'Helm Installation', status: validationStatus.helm },
+          { key: 'storage', name: 'Storage Classes', status: validationStatus.storage },
+          { key: 'networking', name: 'Networking & Ingress', status: validationStatus.networking },
+          { key: 'permissions', name: 'RBAC & Permissions', status: validationStatus.permissions }
+        ].map(({ key, name, status }) => (
+          <div key={key} className="flex items-center space-x-4 py-3">
+            <div className="flex-shrink-0 text-gray-400">
+              <ChevronRight className="w-5 h-5" />
             </div>
-            <div>
-              <h4 className="text-lg font-medium text-gray-900">Running preflight checks...</h4>
-              <p className="text-sm text-gray-600">Validating your environment meets all requirements</p>
+            <div className="flex-grow">
+              <h4 className="text-sm font-medium text-gray-900">{name}</h4>
+              {status && (
+                <p className={`text-sm ${status.success ? 'text-green-600' : 'text-red-600'}`}>
+                  {status.message}
+                </p>
+              )}
             </div>
-          </div>
-        </div>
-      );
-    }
-
-    // Show success message if all passed
-    if (validationComplete && !hasValidationFailures) {
-      return (
-        <div className="space-y-6">
-          <div className="flex items-center space-x-4 py-6">
-            <div className="flex-shrink-0">
-              <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
-                <CheckCircle className="w-6 h-6 text-white" />
-              </div>
-            </div>
-            <div>
-              <h4 className="text-lg font-medium text-gray-900">All preflight checks passed</h4>
-              <p className="text-sm text-gray-600">Your environment is ready for installation</p>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    // Show only failed checks if validation completed with failures
-    if (validationComplete && hasValidationFailures) {
-      const failedChecks = [
-        { key: 'kubernetes', name: 'Kubernetes Availability', status: validationStatus.kubernetes },
-        { key: 'helm', name: 'Helm Installation', status: validationStatus.helm },
-        { key: 'storage', name: 'Storage Classes', status: validationStatus.storage },
-        { key: 'networking', name: 'Networking & Ingress', status: validationStatus.networking },
-        { key: 'permissions', name: 'RBAC & Permissions', status: validationStatus.permissions }
-      ].filter(({ status }) => status && !status.success);
-
-      return (
-        <div className="space-y-6">
-          <div className="mb-4">
-            <div className="flex items-center space-x-3 mb-4">
-              <XCircle className="w-6 h-6 text-red-500" />
-              <h4 className="text-lg font-medium text-gray-900">Preflight checks failed</h4>
-            </div>
-            <p className="text-sm text-gray-600 mb-6">
-              The following issues must be resolved before proceeding with the installation:
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            {failedChecks.map(({ key, name, status }) => (
-              <div key={key} className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <div className="flex items-start space-x-3">
-                  <XCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h5 className="text-sm font-medium text-red-800">{name}</h5>
-                    <p className="text-sm text-red-700 mt-1">{status?.message}</p>
+            <div className="text-sm font-medium">
+              <div className="flex items-center">
+                {!status ? (
+                  <div className="w-5 h-5 border-2 border-t-blue-500 rounded-full animate-spin" />
+                ) : status.success ? (
+                  <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
+                    <ChevronRight className="w-4 h-4 text-white" />
                   </div>
-                </div>
+                ) : (
+                  <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
+                    <ChevronRight className="w-4 h-4 text-white" />
+                  </div>
+                )}
               </div>
-            ))}
+            </div>
           </div>
-
-          <div className="mt-6">
-            <Button onClick={startValidation} variant="outline" size="sm">
-              Retry Preflight Checks
-            </Button>
-          </div>
-        </div>
-      );
-    }
-
-    return null;
-  };
+        ))}
+      </div>
+    </div>
+  );
 
   const renderInstallationPhase = () => (
     <div className="space-y-6">
@@ -324,9 +278,6 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
   };
 
   const getButtonText = () => {
-    if (phase === 'validating' && !validationComplete) {
-      return 'Running Checks...';
-    }
     if (phase === 'installing') {
       return 'Next: Finish';
     }
@@ -338,11 +289,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
       case 'infrastructure':
         return 'Installing infrastructure components';
       case 'validating':
-        return isValidating 
-          ? 'Running preflight checks...' 
-          : hasValidationFailures 
-            ? 'Preflight checks failed - please resolve issues to continue'
-            : 'Environment validation complete';
+        return 'Checking if your environment meets all requirements';
       case 'installing':
         return 'Installing WordPress Enterprise';
       default:
@@ -353,6 +300,14 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
   return (
     <div className="space-y-6">
       <Card>
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-gray-900">Installation</h2>
+          <p className="text-gray-600 mt-1">{getPhaseDescription()}</p>
+        </div>
+
+        {phase === 'infrastructure' && renderInfrastructurePhase()}
+        {phase === 'validating' && renderValidationPhase()}
+        {phase === 'installing' && renderInstallationPhase()}
       </Card>
 
       <div className="flex justify-end">
