@@ -137,7 +137,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
   const handleNextClick = () => {
     if (phase === 'validating') {
       // If we have validation failures and the skip setting is enabled, show modal
-      if (hasValidationFailures && prototypeSettings.skipHostPreflights) {
+      if (hasValidationFailures && prototypeSettings.skipAppPreflights) {
         setShowPreflightModal(true);
       } else if (!hasValidationFailures) {
         // No failures, proceed normally
@@ -292,7 +292,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
       if (!hasValidationFailures) return true;
       
       // If there are failures, can only proceed if skip setting is enabled
-      return prototypeSettings.skipHostPreflights;
+      return prototypeSettings.skipAppPreflights;
     }
     if (phase === 'installing') {
       return wordpressInstallComplete;
