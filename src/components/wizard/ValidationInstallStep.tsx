@@ -200,27 +200,37 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
       ) : (
         <div className="space-y-4">
           {hasValidationFailures ? (
-            <div className="p-4 bg-red-50 rounded-lg border border-red-200">
-              <div className="flex items-start">
-                <div className="flex-shrink-0">
-                  <XCircle className="h-5 w-5 text-red-400" />
-                </div>
-                <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">Environment Validation Failed</h3>
-                  <div className="mt-2 text-sm text-red-700">
-                    <p>Some environment checks failed. Please resolve the issues before proceeding with the installation.</p>
-                    <ul className="mt-2 space-y-1">
-                      {Object.entries(validationStatus)
-                        .filter(([_, result]) => result && !result.success)
-                        .map(([key, result]) => (
-                          <li key={key} className="flex items-start">
-                            <span className="font-medium mr-2">•</span>
-                            <span>{result?.message}</span>
-                          </li>
-                        ))}
-                    </ul>
-                  </div>
-                </div>
+            <div className="space-y-4">
+              <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                <p className="text-sm text-red-700">
+                  Environment validation failed. Please resolve the issues before proceeding with the installation.
+                </p>
+              </div>
+              
+              <div className="space-y-3">
+                {Object.entries(validationStatus)
+                  .filter(([_, result]) => result && !result.success)
+                  .map(([key, result]) => {
+                    const checkNames = {
+                      kubernetes: 'Kubernetes Availability',
+                      helm: 'Helm Installation',
+                      storage: 'Storage Classes & PV Provisioning',
+                      networking: 'Networking & Ingress',
+                      permissions: 'RBAC & Permissions'
+                    };
+                    
+                    return (
+                      <div key={key} className="flex items-start">
+                        <XCircle className="w-5 h-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" />
+                        <div>
+                          <h4 className="text-sm font-medium text-red-800">
+                            {checkNames[key as keyof typeof checkNames] || key}
+                          </h4>
+                          <p className="mt-1 text-sm text-red-700">{result?.message}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           ) : (
