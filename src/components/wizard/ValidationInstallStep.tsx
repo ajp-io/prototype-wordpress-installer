@@ -242,7 +242,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
                 <div className="ml-3">
                   <h3 className="text-sm font-medium text-green-800">Preflight Checks Passed</h3>
                   <p className="mt-1 text-sm text-green-700">
-                    All environment checks passed successfully. Your environment is ready for WordPress Enterprise installation.
+                    All preflight checks passed successfully. Your environment is ready for WordPress Enterprise installation.
                   </p>
                 </div>
               </div>
