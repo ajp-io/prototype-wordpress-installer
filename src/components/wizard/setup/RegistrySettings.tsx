@@ -71,7 +71,24 @@ const RegistrySettings: React.FC<RegistrySettingsProps> = ({
       >
         {connectionStatus === 'testing' ? 'Testing Connection...' : 'Test Connection'}
       </Button>
+      {registryUrl && registryUsername && registryPassword && connectionStatus !== 'success' && (
+        <span className="text-red-500 text-sm font-medium">*Required</span>
+      )}
     </div>
+
+    {validationErrors.connectionTest && (
+      <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <XCircle className="h-5 w-5 text-red-400" />
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-red-800">Connection Test Required</h3>
+            <p className="text-sm text-red-700 mt-1">{validationErrors.connectionTest}</p>
+          </div>
+        </div>
+      </div>
+    )}
 
     {connectionError && (
       <div className="p-4 bg-red-50 rounded-lg border border-red-200">

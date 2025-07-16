@@ -41,6 +41,13 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
       if (!config.registryPassword?.trim()) {
         errors.registryPassword = 'Registry password is required';
       }
+      
+      // Check if connection test is required and hasn't been completed successfully
+      if (config.registryUrl?.trim() && config.registryUsername?.trim() && config.registryPassword?.trim()) {
+        if (connectionStatus !== 'success') {
+          errors.connectionTest = 'Please test your registry connection before proceeding';
+        }
+      }
     }
     
     setValidationErrors(errors);
@@ -86,6 +93,15 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
   const testConnection = async () => {
     if (!config.usePrivateRegistry || !config.registryUrl || !config.registryUsername || !config.registryPassword) {
       return;
+    }
+
+    // Clear any existing connection test validation error
+    if (validationErrors.connectionTest) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors.connectionTest;
+        return newErrors;
+      });
     }
 
     setConnectionStatus('testing');
