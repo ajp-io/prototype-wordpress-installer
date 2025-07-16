@@ -8,7 +8,6 @@ import { ChevronLeft, ChevronRight, Loader2, AlertTriangle } from 'lucide-react'
 import LinuxSetup from './setup/LinuxSetup';
 import KubernetesSetup from './setup/KubernetesSetup';
 import K0sInstallation from './setup/K0sInstallation';
-import { ImagePushStatus } from './setup/types';
 
 interface SetupStepProps {
   onNext: () => void;
@@ -21,22 +20,12 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
   const { config, updateConfig, prototypeSettings } = useConfig();
   const { text } = useWizardMode();
   const [phase, setPhase] = useState<SetupPhase>('configuration');
-  const [isPushing, setIsPushing] = useState(false);
-  const [pushStatus, setPushStatus] = useState<ImagePushStatus[]>([]);
-  const [currentMessage, setCurrentMessage] = useState('');
-  const [pushComplete, setPushComplete] = useState(false);
-  const [authError, setAuthError] = useState<string | null>(null);
+  const [connectionStatus, setConnectionStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
+  const [connectionError, setConnectionError] = useState<string | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(true);
   const [k0sComplete, setK0sComplete] = useState(false);
   const [showPreflightModal, setShowPreflightModal] = useState(false);
   const [hasPreflightFailures, setHasPreflightFailures] = useState(false);
-
-  const images = [
-    'wordpress/wordpress:latest',
-    'bitnami/postgresql:latest',
-    'bitnami/nginx:latest',
-    'bitnami/redis:latest'
-  ];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -47,7 +36,7 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
     } else {
       updateConfig({ [id]: value });
     }
-    setAuthError(null);
+    setConnectionError(null);
   };
 
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -58,67 +47,29 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
   const handleRegistryChange = (usePrivate: boolean) => {
     updateConfig({ usePrivateRegistry: usePrivate });
     if (!usePrivate) {
-      setIsPushing(false);
-      setPushStatus([]);
-      setPushComplete(false);
-      setAuthError(null);
+      setConnectionStatus('idle');
+      setConnectionError(null);
     }
   };
 
-  const pushImages = async () => {
+  const testConnection = async () => {
     if (!config.usePrivateRegistry || !config.registryUrl || !config.registryUsername || !config.registryPassword) {
       return;
     }
 
-    setIsPushing(true);
-    setPushComplete(false);
-    setAuthError(null);
-    setPushStatus(images.map(image => ({
-      image,
-      status: 'pending',
-      progress: 0
-    })));
+    setConnectionStatus('testing');
+    setConnectionError(null);
 
     if (prototypeSettings?.failRegistryAuth) {
       await new Promise(resolve => setTimeout(resolve, 1500));
-      setAuthError('Invalid registry credentials. Please check your username and password.');
-      setIsPushing(false);
-      setPushStatus([]);
+      setConnectionError('Invalid registry credentials. Please check your username and password.');
+      setConnectionStatus('error');
       return;
     }
 
-    for (const image of images) {
-      const statusIndex = images.indexOf(image);
-      
-      setPushStatus(prev => prev.map((status, index) => 
-        index === statusIndex ? { ...status, status: 'pushing' } : status
-      ));
-      setCurrentMessage(`Pushing ${image}`);
-
-      try {
-        for (let progress = 0; progress <= 100; progress += 10) {
-          setPushStatus(prev => prev.map((status, index) => 
-            index === statusIndex ? { ...status, progress } : status
-          ));
-          await new Promise(resolve => setTimeout(resolve, 200));
-        }
-
-        setPushStatus(prev => prev.map((status, index) => 
-          index === statusIndex ? { ...status, status: 'complete', progress: 100 } : status
-        ));
-      } catch (error) {
-        setPushStatus(prev => prev.map((status, index) => 
-          index === statusIndex ? { ...status, status: 'failed', progress: 0 } : status
-        ));
-        setCurrentMessage(`Failed to push ${image}`);
-        setIsPushing(false);
-        return;
-      }
-    }
-
-    setCurrentMessage('All images pushed successfully');
-    setIsPushing(false);
-    setPushComplete(true);
+    // Simulate connection test
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setConnectionStatus('success');
   };
 
   const handleK0sComplete = (hasFailures: boolean = false) => {
@@ -128,9 +79,7 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
 
   const handleNext = async () => {
     if (phase === 'configuration') {
-      if (config.usePrivateRegistry && !pushComplete) {
-        await pushImages();
-      } else if (prototypeSettings.clusterMode === 'embedded') {
+      if (prototypeSettings.clusterMode === 'embedded') {
         setPhase('k0s-installation');
       } else {
         onNext();
@@ -157,9 +106,6 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
 
   const canProceed = () => {
     if (phase === 'configuration') {
-      if (config.usePrivateRegistry && !pushComplete) {
-        return !isPushing;
-      }
       return true;
     }
     
@@ -178,9 +124,6 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
 
   const getButtonText = () => {
     if (phase === 'configuration') {
-      if (config.usePrivateRegistry && !pushComplete) {
-        return isPushing ? 'Pushing Images...' : 'Push Images';
-      }
       if (prototypeSettings.clusterMode === 'embedded') {
         return 'Next: Set Up Hosts';
       } else {
@@ -192,9 +135,6 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
   };
 
   const getButtonIcon = () => {
-    if (phase === 'configuration' && config.usePrivateRegistry && !pushComplete) {
-      return isPushing ? <Loader2 className="w-5 h-5 animate-spin" /> : <ChevronRight className="w-5 h-5" />;
-    }
     return <ChevronRight className="w-5 h-5" />;
   };
 
@@ -222,10 +162,9 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
               onInputChange={handleInputChange}
               onSelectChange={handleSelectChange}
               onRegistryChange={handleRegistryChange}
-              authError={authError}
-              pushStatus={pushStatus}
-              currentMessage={currentMessage}
-              pushComplete={pushComplete}
+              onTestConnection={testConnection}
+              connectionStatus={connectionStatus}
+              connectionError={connectionError}
               isUpgrade={text.mode === 'upgrade'}
             />
           ) : (
@@ -233,10 +172,9 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
               config={config}
               onRegistryChange={handleRegistryChange}
               onInputChange={handleInputChange}
-              authError={authError}
-              pushStatus={pushStatus}
-              currentMessage={currentMessage}
-              pushComplete={pushComplete}
+              onTestConnection={testConnection}
+              connectionStatus={connectionStatus}
+              connectionError={connectionError}
               isUpgrade={text.mode === 'upgrade'}
             />
           )
