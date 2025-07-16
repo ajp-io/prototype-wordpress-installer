@@ -115,6 +115,11 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
         return;
       }
       
+      // Validate private registry configuration if using private registry
+      if (!validatePrivateRegistryConfig()) {
+        return;
+      }
+      
       if (prototypeSettings.clusterMode === 'embedded') {
         setPhase('k0s-installation');
       } else {
@@ -142,12 +147,6 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
 
   const canProceed = () => {
     if (phase === 'configuration') {
-      // Check if private registry validation would pass
-      if (config.usePrivateRegistry) {
-        return config.registryUrl?.trim() && 
-               config.registryUsername?.trim() && 
-               config.registryPassword?.trim();
-      }
       return true;
     }
     
