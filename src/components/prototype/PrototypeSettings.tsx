@@ -308,7 +308,7 @@ const PrototypeSettings: React.FC = () => {
                     } as React.CSSProperties}
                   />
                   <label htmlFor="failRegistryAuth" className="text-sm text-gray-700">
-                    Simulate registry authentication failure
+                    Force registry connection test to fail
                   </label>
                 </div>
               </div>
