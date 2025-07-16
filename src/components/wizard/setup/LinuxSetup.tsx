@@ -32,6 +32,7 @@ interface LinuxSetupProps {
   onTestConnection: () => void;
   connectionStatus: 'idle' | 'testing' | 'success' | 'error';
   connectionError: string | null;
+  validationErrors?: {[key: string]: string};
   isUpgrade?: boolean;
 }
 
@@ -46,6 +47,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
   onTestConnection,
   connectionStatus,
   connectionError,
+  validationErrors = {},
   isUpgrade
 }) => (
   <div className="space-y-6">
@@ -121,6 +123,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
               onTestConnection={onTestConnection}
               connectionStatus={connectionStatus}
               connectionError={connectionError}
+              validationErrors={validationErrors}
               isUpgrade={isUpgrade}
             />
           )}

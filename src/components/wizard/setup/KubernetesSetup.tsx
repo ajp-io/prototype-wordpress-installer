@@ -19,6 +19,7 @@ interface KubernetesSetupProps {
   onTestConnection: () => void;
   connectionStatus: 'idle' | 'testing' | 'success' | 'error';
   connectionError: string | null;
+  validationErrors?: {[key: string]: string};
   isUpgrade?: boolean;
 }
 
@@ -29,6 +30,7 @@ const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
   onTestConnection,
   connectionStatus,
   connectionError,
+  validationErrors = {},
   isUpgrade
 }) => (
   <div className="space-y-6">
@@ -85,6 +87,7 @@ const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
         onTestConnection={onTestConnection}
         connectionStatus={connectionStatus}
         connectionError={connectionError}
+        validationErrors={validationErrors}
         isUpgrade={isUpgrade}
       />
     )}

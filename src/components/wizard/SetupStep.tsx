@@ -26,9 +26,39 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
   const [k0sComplete, setK0sComplete] = useState(false);
   const [showPreflightModal, setShowPreflightModal] = useState(false);
   const [hasPreflightFailures, setHasPreflightFailures] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
+
+  const validatePrivateRegistryConfig = () => {
+    const errors: {[key: string]: string} = {};
+    
+    if (config.usePrivateRegistry) {
+      if (!config.registryUrl?.trim()) {
+        errors.registryUrl = 'Registry URL is required';
+      }
+      if (!config.registryUsername?.trim()) {
+        errors.registryUsername = 'Registry username is required';
+      }
+      if (!config.registryPassword?.trim()) {
+        errors.registryPassword = 'Registry password is required';
+      }
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
+    
+    // Clear validation error for this field
+    if (validationErrors[id]) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[id];
+        return newErrors;
+      });
+    }
+    
     if (id === 'networkCIDR' && !value) {
       updateConfig({ networkCIDR: '10.244.0.0/16' });
     } else if (id === 'adminConsolePort') {
@@ -49,6 +79,7 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
     if (!usePrivate) {
       setConnectionStatus('idle');
       setConnectionError(null);
+      setValidationErrors({});
     }
   };
 
@@ -79,6 +110,11 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
 
   const handleNext = async () => {
     if (phase === 'configuration') {
+      // Validate private registry configuration if using private registry
+      if (!validatePrivateRegistryConfig()) {
+        return;
+      }
+      
       if (prototypeSettings.clusterMode === 'embedded') {
         setPhase('k0s-installation');
       } else {
@@ -106,6 +142,12 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
 
   const canProceed = () => {
     if (phase === 'configuration') {
+      // Check if private registry validation would pass
+      if (config.usePrivateRegistry) {
+        return config.registryUrl?.trim() && 
+               config.registryUsername?.trim() && 
+               config.registryPassword?.trim();
+      }
       return true;
     }
     
@@ -165,6 +207,7 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
               onTestConnection={testConnection}
               connectionStatus={connectionStatus}
               connectionError={connectionError}
+              validationErrors={validationErrors}
               isUpgrade={text.mode === 'upgrade'}
             />
           ) : (
@@ -175,6 +218,7 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
               onTestConnection={testConnection}
               connectionStatus={connectionStatus}
               connectionError={connectionError}
+              validationErrors={validationErrors}
               isUpgrade={text.mode === 'upgrade'}
             />
           )

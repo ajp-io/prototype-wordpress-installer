@@ -12,6 +12,7 @@ interface RegistrySettingsProps {
   onTestConnection: () => void;
   connectionStatus: 'idle' | 'testing' | 'success' | 'error';
   connectionError: string | null;
+  validationErrors?: {[key: string]: string};
   isUpgrade?: boolean;
 }
 
@@ -23,6 +24,7 @@ const RegistrySettings: React.FC<RegistrySettingsProps> = ({
   onTestConnection,
   connectionStatus,
   connectionError,
+  validationErrors = {},
   isUpgrade
 }) => (
   <div className="space-y-4 pt-4">
@@ -34,7 +36,7 @@ const RegistrySettings: React.FC<RegistrySettingsProps> = ({
       placeholder="registry.example.com"
       required
       helpText="The URL of your private container registry"
-      error={connectionError ? ' ' : undefined}
+      error={validationErrors.registryUrl}
     />
 
     <Input
@@ -45,7 +47,7 @@ const RegistrySettings: React.FC<RegistrySettingsProps> = ({
       placeholder="username"
       required
       helpText="Username for registry authentication"
-      error={connectionError ? ' ' : undefined}
+      error={validationErrors.registryUsername}
     />
 
     <Input
@@ -57,7 +59,7 @@ const RegistrySettings: React.FC<RegistrySettingsProps> = ({
       placeholder="••••••••••••"
       required
       helpText="Password or access token for registry authentication"
-      error={connectionError ? ' ' : undefined}
+      error={validationErrors.registryPassword}
     />
 
     <div className="flex items-center space-x-3">
