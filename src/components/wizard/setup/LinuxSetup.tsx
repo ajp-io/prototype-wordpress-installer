@@ -4,7 +4,6 @@ import Select from '../../common/Select';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import RegistryChoice from './RegistryChoice';
 import RegistrySettings from './RegistrySettings';
-import { ImagePushStatus } from './types';
 
 interface LinuxSetupProps {
   config: {
@@ -30,10 +29,10 @@ interface LinuxSetupProps {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSelectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onRegistryChange: (usePrivate: boolean) => void;
-  authError: string | null;
-  pushStatus: ImagePushStatus[];
-  currentMessage: string;
-  pushComplete: boolean;
+  onTestConnection: () => void;
+  connectionStatus: 'idle' | 'testing' | 'success' | 'error';
+  connectionError: string | null;
+  validationErrors?: {[key: string]: string};
   isUpgrade?: boolean;
 }
 
@@ -45,10 +44,10 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
   onInputChange,
   onSelectChange,
   onRegistryChange,
-  authError,
-  pushStatus,
-  currentMessage,
-  pushComplete,
+  onTestConnection,
+  connectionStatus,
+  connectionError,
+  validationErrors = {},
   isUpgrade
 }) => (
   <div className="space-y-6">
@@ -121,10 +120,10 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
               registryUsername={config.registryUsername || ''}
               registryPassword={config.registryPassword || ''}
               onInputChange={onInputChange}
-              authError={authError}
-              pushStatus={pushStatus}
-              currentMessage={currentMessage}
-              pushComplete={pushComplete}
+              onTestConnection={onTestConnection}
+              connectionStatus={connectionStatus}
+              connectionError={connectionError}
+              validationErrors={validationErrors}
               isUpgrade={isUpgrade}
             />
           )}

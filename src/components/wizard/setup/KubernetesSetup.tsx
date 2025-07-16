@@ -2,7 +2,6 @@ import React from 'react';
 import Input from '../../common/Input';
 import RegistryChoice from './RegistryChoice';
 import RegistrySettings from './RegistrySettings';
-import { ImagePushStatus } from './types';
 
 interface KubernetesSetupProps {
   config: {
@@ -17,10 +16,10 @@ interface KubernetesSetupProps {
   };
   onRegistryChange: (usePrivate: boolean) => void;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  authError: string | null;
-  pushStatus: ImagePushStatus[];
-  currentMessage: string;
-  pushComplete: boolean;
+  onTestConnection: () => void;
+  connectionStatus: 'idle' | 'testing' | 'success' | 'error';
+  connectionError: string | null;
+  validationErrors?: {[key: string]: string};
   isUpgrade?: boolean;
 }
 
@@ -28,10 +27,10 @@ const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
   config,
   onRegistryChange,
   onInputChange,
-  authError,
-  pushStatus,
-  currentMessage,
-  pushComplete,
+  onTestConnection,
+  connectionStatus,
+  connectionError,
+  validationErrors = {},
   isUpgrade
 }) => (
   <div className="space-y-6">
@@ -85,10 +84,10 @@ const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
         registryUsername={config.registryUsername || ''}
         registryPassword={config.registryPassword || ''}
         onInputChange={onInputChange}
-        authError={authError}
-        pushStatus={pushStatus}
-        currentMessage={currentMessage}
-        pushComplete={pushComplete}
+        onTestConnection={onTestConnection}
+        connectionStatus={connectionStatus}
+        connectionError={connectionError}
+        validationErrors={validationErrors}
         isUpgrade={isUpgrade}
       />
     )}
