@@ -35,7 +35,6 @@ const RegistrySettings: React.FC<RegistrySettingsProps> = ({
       placeholder="registry.example.com"
       required
       helpText="The URL of your private container registry"
-      defaultValue="registry.example.com"
       error={authError ? ' ' : undefined}
     />
 
