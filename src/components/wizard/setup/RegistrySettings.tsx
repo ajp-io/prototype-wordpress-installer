@@ -94,7 +94,7 @@ const RegistrySettings: React.FC<RegistrySettingsProps> = ({
           <div className="ml-3">
             <h3 className="text-sm font-medium text-green-800">Connection successful</h3>
             <p className="text-sm text-green-700 mt-1">
-              Successfully connected to your private registry. You can now proceed with the {isUpgrade ? 'upgrade' : 'installation'}.
+              Successfully connected to your private registry.
             </p>
           </div>
         </div>
