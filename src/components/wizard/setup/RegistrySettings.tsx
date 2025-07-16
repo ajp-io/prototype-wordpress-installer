@@ -72,7 +72,7 @@ const RegistrySettings: React.FC<RegistrySettingsProps> = ({
         {connectionStatus === 'testing' ? 'Testing Connection...' : 'Test Connection'}
       </Button>
       {registryUrl && registryUsername && registryPassword && connectionStatus !== 'success' && (
-        <span className="text-red-500 text-sm font-medium">*Required</span>
+        <span className="text-red-500 ml-1">*</span>
       )}
     </div>
 
