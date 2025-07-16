@@ -38,7 +38,7 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
     installationDescription: '',
     completionTitle: isDryRun ? 'Configuration Complete' : 'Installation Complete!',
     completionDescription: isDryRun ? 'Your configuration is ready to use.' : 'WordPress Enterprise has been installed successfully.',
-    welcomeButtonText: isDryRun ? 'Start Configuration' : 'Start',
+    welcomeButtonText: isDryRun ? 'Start Configuration' : 'Continue',
     nextButtonText: isDryRun ? 'Next: Review Commands' : 'Next: Start Installation',
   },
   upgrade: {
