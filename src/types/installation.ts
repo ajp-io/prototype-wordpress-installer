@@ -2,6 +2,7 @@ export interface InstallationSubStep {
   id: string;
   name: string;
   status: 'pending' | 'running' | 'completed' | 'failed';
+  error?: string;
 }
 
 export interface InstallationStep {
