@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, XCircle, Loader2, Clock } from 'lucide-react';
+import { CheckCircle, XCircle, Loader2, Clock, AlertTriangle } from 'lucide-react';
 import { InstallationStep } from '../../../../types/installation';
 
 interface StepCardProps {
@@ -116,21 +116,42 @@ const StepCard: React.FC<StepCardProps> = ({
 
       {/* Application Installation Components */}
       {(step.id === 'application' || step.id === 'infrastructure') && step.subSteps && step.subSteps.length > 0 && (
-        <div className="mt-4 space-y-3">
+        <div className="mt-4 space-y-2 divide-y divide-gray-200">
           {step.subSteps.map((subStep) => (
-            <div key={subStep.id} className="flex items-center space-x-3">
-              {subStep.status === 'completed' ? (
-                <CheckCircle className="w-5 h-5 text-green-500" />
-              ) : subStep.status === 'failed' ? (
-                <XCircle className="w-5 h-5 text-red-500" />
-              ) : subStep.status === 'running' ? (
-                <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
-              ) : (
-                <div className="w-5 h-5 rounded-full border-2 border-gray-300" />
-              )}
-              <span className="text-sm font-medium text-gray-900">{subStep.name}</span>
+            <div key={subStep.id} className="flex items-center justify-between py-3">
+              <div className="flex items-center space-x-3">
+                <div className="flex-shrink-0 text-gray-400">
+                  <div className="w-5 h-5 rounded border border-gray-300" />
+                </div>
+                <span className="text-sm font-medium text-gray-900">{subStep.name}</span>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                {subStep.status === 'completed' ? (
+                  <>
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                    <span className="text-sm font-medium text-green-700">Complete</span>
+                  </>
+                ) : subStep.status === 'failed' ? (
+                  <>
+                    <XCircle className="w-5 h-5 text-red-500" />
+                    <span className="text-sm font-medium text-red-700">Failed</span>
+                  </>
+                ) : subStep.status === 'running' ? (
+                  <>
+                    <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
+                    <span className="text-sm font-medium text-blue-700">Installing...</span>
+                  </>
+                ) : (
+                  <>
+                    <AlertTriangle className="w-5 h-5 text-gray-400" />
+                    <span className="text-sm font-medium text-gray-500">Pending</span>
+                  </>
+                )}
+              </div>
+              
               {subStep.status === 'failed' && subStep.error && (
-                <span className="text-sm text-red-600">- {subStep.error}</span>
+                <div className="text-sm text-red-600 mt-1">{subStep.error}</div>
               )}
             </div>
           ))}
