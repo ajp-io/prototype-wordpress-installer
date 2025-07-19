@@ -124,6 +124,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
         startApplicationInstallation();
       }
     } else {
+      // All steps completed
       setInstallationComplete(true);
     }
   };
