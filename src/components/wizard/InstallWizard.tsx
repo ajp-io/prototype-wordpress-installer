@@ -3,7 +3,7 @@ import StepNavigation from './StepNavigation';
 import WelcomeStep from './WelcomeStep';
 import ConfigurationStep from './configuration/ConfigurationStep';
 import SetupStep from './SetupStep';
-import ValidationInstallStep from './ValidationInstallStep';
+import ConsolidatedInstallationStep from './installation/ConsolidatedInstallationStep';
 import CompletionStep from './CompletionStep';
 import { WizardStep } from '../../types';
 import { WordPressLogo } from '../common/Logo';
@@ -38,7 +38,7 @@ const InstallWizard: React.FC = () => {
       case 'setup':
         return <SetupStep onNext={goToNextStep} onBack={goToPreviousStep} />;
       case 'installation':
-        return <ValidationInstallStep onNext={goToNextStep} />;
+        return <ConsolidatedInstallationStep onNext={goToNextStep} />;
       case 'completion':
         return <CompletionStep />;
       default:
