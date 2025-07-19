@@ -17,7 +17,6 @@ interface UnifiedInstallationStepProps {
 const UnifiedInstallationStep: React.FC<UnifiedInstallationStepProps> = ({ onNext }) => {
   const { config, prototypeSettings } = useConfig();
   const { text } = useWizardMode();
-  const [expandedStep, setExpandedStep] = useState<string | null>(null);
   const [showAllLogs, setShowAllLogs] = useState(false);
 
   const {
@@ -30,17 +29,6 @@ const UnifiedInstallationStep: React.FC<UnifiedInstallationStepProps> = ({ onNex
   useEffect(() => {
     startInstallation();
   }, []);
-
-  // Auto-expand the currently running step
-  useEffect(() => {
-    if (status.currentStepId && expandedStep !== status.currentStepId) {
-      setExpandedStep(status.currentStepId);
-    }
-  }, [status.currentStepId]);
-
-  const handleStepToggle = (stepId: string) => {
-    setExpandedStep(expandedStep === stepId ? null : stepId);
-  };
 
   const getAllLogs = () => {
     return status.steps.flatMap(step => 
@@ -67,20 +55,11 @@ const UnifiedInstallationStep: React.FC<UnifiedInstallationStepProps> = ({ onNex
 
         <div className="space-y-4 mt-8">
           {status.steps.map((step) => (
-            <div key={step.id}>
-              <StepCard
-                step={step}
-                isExpanded={expandedStep === step.id}
-                onToggle={() => handleStepToggle(step.id)}
-                themeColor={prototypeSettings.themeColor}
-              />
-              {expandedStep === step.id && (
-                <StepDetails
-                  step={step}
-                  themeColor={prototypeSettings.themeColor}
-                />
-              )}
-            </div>
+            <StepCard
+              key={step.id}
+              step={step}
+              themeColor={prototypeSettings.themeColor}
+            />
           ))}
         </div>
 
