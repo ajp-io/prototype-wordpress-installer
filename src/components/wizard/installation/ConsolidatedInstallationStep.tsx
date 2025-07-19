@@ -180,7 +180,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       
       if (failedChecks.length === 0) {
         updateStepStatus('preflights', 'completed');
-        setTimeout(() => moveToNextStep(), 500);
+        setTimeout(() => moveToNextStep(), 1000);
       } else {
         updateStepStatus('preflights', 'failed');
         if (!prototypeSettings.blockOnAppPreflights) {
