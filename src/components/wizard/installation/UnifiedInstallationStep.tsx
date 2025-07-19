@@ -5,7 +5,10 @@ import { useConfig } from '../../../contexts/ConfigContext';
 import { useWizardMode } from '../../../contexts/WizardModeContext';
 import { ChevronRight } from 'lucide-react';
 import { useInstallationFlow } from './hooks/useInstallationFlow';
-import InstallationPhaseCard from './components/InstallationPhaseCard';
+import OverallProgress from './components/OverallProgress';
+import StepCard from './components/StepCard';
+import StepDetails from './components/StepDetails';
+import InstallationLogs from './components/InstallationLogs';
 
 interface UnifiedInstallationStepProps {
   onNext: () => void;
@@ -14,6 +17,7 @@ interface UnifiedInstallationStepProps {
 const UnifiedInstallationStep: React.FC<UnifiedInstallationStepProps> = ({ onNext }) => {
   const { config, prototypeSettings } = useConfig();
   const { text } = useWizardMode();
+  const [showAllLogs, setShowAllLogs] = useState(false);
 
   const {
     status,
@@ -26,54 +30,44 @@ const UnifiedInstallationStep: React.FC<UnifiedInstallationStepProps> = ({ onNex
     startInstallation();
   }, []);
 
-  const getOverallStatusText = () => {
-    if (hasErrors) return 'Installation Failed';
-    if (isInstallationComplete) return 'Installation Complete';
-    return `Installing WordPress Enterprise - ${Math.round(status.overallProgress)}% Complete`;
-  };
-
-  const getOverallProgressColor = () => {
-    if (hasErrors) return 'rgb(239 68 68)';
-    if (isInstallationComplete) return 'rgb(34 197 94)';
-    return prototypeSettings.themeColor;
+  const getAllLogs = () => {
+    return status.steps.flatMap(step => 
+      step.logs.length > 0 ? step.logs.map(log => `[${step.name}] ${log}`) : []
+    );
   };
 
   return (
     <div className="space-y-6">
       <Card>
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">{text.installationTitle || 'Installation'}</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Installation</h2>
           <p className="text-gray-600 mt-1">
             Installing WordPress Enterprise components
           </p>
         </div>
 
-        {/* Overall Progress */}
-        <div className="mb-8">
-          <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
-            <div
-              className="h-2 rounded-full transition-all duration-500"
-              style={{
-                backgroundColor: getOverallProgressColor(),
-                width: `${status.overallProgress}%`,
-              }}
-            />
-          </div>
-          <div className="text-center text-sm text-gray-600">
-            {getOverallStatusText()}
-          </div>
-        </div>
+        <OverallProgress 
+          progress={status.overallProgress}
+          isComplete={status.isComplete}
+          hasErrors={status.hasErrors}
+          themeColor={prototypeSettings.themeColor}
+        />
 
-        {/* Installation Phase Cards */}
-        <div className="space-y-4">
+        <div className="space-y-4 mt-8">
           {status.steps.map((step) => (
-            <InstallationPhaseCard
+            <StepCard
               key={step.id}
               step={step}
               themeColor={prototypeSettings.themeColor}
             />
           ))}
         </div>
+
+        <InstallationLogs
+          logs={getAllLogs()}
+          isExpanded={showAllLogs}
+          onToggle={() => setShowAllLogs(!showAllLogs)}
+        />
       </Card>
 
       <div className="flex justify-end">
