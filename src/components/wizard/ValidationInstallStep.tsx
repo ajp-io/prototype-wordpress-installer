@@ -179,14 +179,6 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
 
   const renderHostsPhase = () => (
     <div className="space-y-6">
-      <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-        <p className="text-sm text-blue-700">
-          {prototypeSettings.enableMultiNode 
-            ? 'Setting up hosts for this installation. This includes installing k0s on each host and running preflight checks.'
-            : 'Setting up the host for this installation. This includes installing k0s and running preflight checks.'}
-        </p>
-      </div>
-      
       <K0sInstallation onComplete={handleHostsComplete} />
     </div>
   );
