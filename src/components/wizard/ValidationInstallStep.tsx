@@ -52,6 +52,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
   const [hostsComplete, setHostsComplete] = useState(false);
   const [hasHostFailures, setHasHostFailures] = useState(false);
   const [validationComplete, setValidationComplete] = useState(false);
+  const [hostInstallationComplete, setHostInstallationComplete] = useState(false);
   const isLinuxMode = prototypeSettings.clusterMode === 'embedded';
   const themeColor = prototypeSettings.themeColor;
 
@@ -68,9 +69,8 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
   }, [phase]);
 
   const handleHostsComplete = (hasFailures: boolean = false) => {
-    setHostsComplete(true);
+    setHostInstallationComplete(true);
     setHasHostFailures(hasFailures);
-    setPhase('infrastructure');
   };
 
   const startInfrastructureSetup = async () => {
@@ -144,10 +144,10 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
 
   const handleNextClick = () => {
     if (phase === 'hosts') {
-      // Check if we have host failures and need to show modal
+      // User manually proceeds from hosts to infrastructure
       if (hasHostFailures && !prototypeSettings.skipHostPreflights) {
         setShowPreflightModal(true);
-      } else if (!hasHostFailures || prototypeSettings.skipHostPreflights) {
+      } else {
         setPhase('infrastructure');
       }
     } else if (phase === 'validating') {
@@ -318,7 +318,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
 
   const canProceed = () => {
     if (phase === 'hosts') {
-      if (!hostsComplete) return false;
+      if (!hostInstallationComplete) return false;
       
       // If there are no failures, can always proceed
       if (!hasHostFailures) return true;
@@ -345,7 +345,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
 
   const getButtonText = () => {
     if (phase === 'hosts') {
-      return 'Next: Install Infrastructure';
+      return hostInstallationComplete ? 'Next: Install Infrastructure' : 'Installing...';
     } else if (phase === 'installing') {
       return 'Next: Finish';
     }

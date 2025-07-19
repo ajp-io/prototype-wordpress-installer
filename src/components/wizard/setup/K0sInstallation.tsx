@@ -95,14 +95,12 @@ const K0sInstallation: React.FC<K0sInstallationProps> = ({ onComplete }) => {
 
   useEffect(() => {
     const requiredNodes = isMultiNode ? REQUIRED_NODES : SINGLE_NODE;
-    if (status.phase === 'ready' && (
-      prototypeSettings.skipNodeValidation || 
-      (joinedNodes.application >= requiredNodes.application && 
-       joinedNodes.database >= requiredNodes.database)
-    )) {
+    if (status.phase === 'ready') {
+      // Always call onComplete when k0s is ready, regardless of additional nodes
+      // The user can then choose to join more nodes or proceed
       onComplete(hasPreflightFailures);
     }
-  }, [status.phase, joinedNodes, prototypeSettings.skipNodeValidation, isMultiNode, hasPreflightFailures]);
+  }, [status.phase, hasPreflightFailures]);
 
   const startPreflightChecks = async () => {
     try {
