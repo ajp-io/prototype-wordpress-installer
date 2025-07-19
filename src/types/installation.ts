@@ -1,3 +1,9 @@
+export interface InstallationSubStep {
+  id: string;
+  name: string;
+  status: 'pending' | 'running' | 'completed' | 'failed';
+}
+
 export interface InstallationStep {
   id: string;
   name: string;
@@ -8,6 +14,7 @@ export interface InstallationStep {
   error?: string;
   startTime?: Date;
   endTime?: Date;
+  subSteps?: InstallationSubStep[];
 }
 
 export interface UnifiedInstallationStatus {

@@ -44,7 +44,7 @@ const UnifiedInstallationStep: React.FC<UnifiedInstallationStepProps> = ({ onNex
 
   const getAllLogs = () => {
     return status.steps.flatMap(step => 
-      step.logs.map(log => `[${step.name}] ${log}`)
+      step.logs.length > 0 ? step.logs.map(log => `[${step.name}] ${log}`) : []
     );
   };
 

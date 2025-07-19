@@ -1,5 +1,5 @@
 import React from 'react';
-import { InstallationStep } from '../../../../types/installation';
+import { InstallationStep, InstallationSubStep } from '../../../../types/installation';
 import { Clock, CheckCircle, XCircle } from 'lucide-react';
 
 interface StepDetailsProps {
@@ -19,6 +19,31 @@ const StepDetails: React.FC<StepDetailsProps> = ({ step, themeColor }) => {
     return `${duration}s`;
   };
 
+  const getSubStepIcon = (subStep: InstallationSubStep) => {
+    switch (subStep.status) {
+      case 'completed':
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case 'failed':
+        return <XCircle className="w-4 h-4 text-red-500" />;
+      case 'running':
+        return <div className="w-4 h-4 rounded-full border-2 border-blue-500 border-t-transparent animate-spin" />;
+      default:
+        return <div className="w-4 h-4 rounded-full border-2 border-gray-300" />;
+    }
+  };
+
+  const getSubStepTextColor = (subStep: InstallationSubStep) => {
+    switch (subStep.status) {
+      case 'completed':
+        return 'text-green-700';
+      case 'failed':
+        return 'text-red-700';
+      case 'running':
+        return 'text-blue-700';
+      default:
+        return 'text-gray-500';
+    }
+  };
   return (
     <div className="ml-8 mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
       {/* Timing Information */}
@@ -45,6 +70,23 @@ const StepDetails: React.FC<StepDetailsProps> = ({ step, themeColor }) => {
           </div>
         )}
       </div>
+
+      {/* Sub-steps */}
+      {step.subSteps && step.subSteps.length > 0 && (
+        <div className="mb-4">
+          <h5 className="text-sm font-medium text-gray-700 mb-3">Components</h5>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {step.subSteps.map((subStep) => (
+              <div key={subStep.id} className="flex items-center space-x-2 p-2 bg-white rounded border border-gray-200">
+                {getSubStepIcon(subStep)}
+                <span className={`text-sm font-medium ${getSubStepTextColor(subStep)}`}>
+                  {subStep.name}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Error Message */}
       {step.error && (
@@ -74,20 +116,6 @@ const StepDetails: React.FC<StepDetailsProps> = ({ step, themeColor }) => {
                 width: `${step.progress}%`,
               }}
             />
-          </div>
-        </div>
-      )}
-
-      {/* Logs */}
-      {step.logs.length > 0 && (
-        <div>
-          <h5 className="text-sm font-medium text-gray-700 mb-2">Logs</h5>
-          <div className="bg-gray-900 text-gray-200 rounded-md p-3 max-h-48 overflow-y-auto font-mono text-xs">
-            {step.logs.map((log, index) => (
-              <div key={index} className="whitespace-pre-wrap pb-1">
-                {log}
-              </div>
-            ))}
           </div>
         </div>
       )}
