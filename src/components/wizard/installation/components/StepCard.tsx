@@ -29,13 +29,22 @@ const StepCard: React.FC<StepCardProps> = ({
   const getStatusText = () => {
     switch (step.status) {
       case 'completed':
-        const completedCount = step.subSteps?.length || 0;
-        return `All ${completedCount} checks passed`;
+        if (step.id === 'preflights') {
+          const completedCount = step.subSteps?.length || 0;
+          return `All ${completedCount} checks passed`;
+        }
+        return 'Complete';
       case 'failed':
-        const failedChecks = step.subSteps?.filter(sub => sub.status === 'failed') || [];
-        return `${failedChecks.length} checks failed`;
+        if (step.id === 'preflights') {
+          const failedChecks = step.subSteps?.filter(sub => sub.status === 'failed') || [];
+          return `${failedChecks.length} checks failed`;
+        }
+        return 'Failed';
       case 'running':
-        return 'Running checks...';
+        if (step.id === 'preflights') {
+          return 'Running checks...';
+        }
+        return 'Installing...';
       case 'skipped':
         return 'Skipped';
       default:
@@ -91,7 +100,7 @@ const StepCard: React.FC<StepCardProps> = ({
       )}
 
       {/* Failed Checks Details */}
-      {step.status === 'failed' && failedChecks.length > 0 && (
+      {step.status === 'failed' && step.id === 'preflights' && failedChecks.length > 0 && (
         <div className="mt-4 space-y-2">
           {failedChecks.map((check) => (
             <div key={check.id} className="flex items-start space-x-2">
@@ -100,6 +109,29 @@ const StepCard: React.FC<StepCardProps> = ({
                 <div className="text-sm font-medium text-red-800">{check.name}</div>
                 <div className="text-sm text-red-700">{check.error || 'Check failed'}</div>
               </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Application Installation Components */}
+      {(step.id === 'application' || step.id === 'infrastructure') && step.subSteps && step.subSteps.length > 0 && (
+        <div className="mt-4 space-y-3">
+          {step.subSteps.map((subStep) => (
+            <div key={subStep.id} className="flex items-center space-x-3">
+              {subStep.status === 'completed' ? (
+                <CheckCircle className="w-5 h-5 text-green-500" />
+              ) : subStep.status === 'failed' ? (
+                <XCircle className="w-5 h-5 text-red-500" />
+              ) : subStep.status === 'running' ? (
+                <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
+              ) : (
+                <div className="w-5 h-5 rounded-full border-2 border-gray-300" />
+              )}
+              <span className="text-sm font-medium text-gray-900">{subStep.name}</span>
+              {subStep.status === 'failed' && subStep.error && (
+                <span className="text-sm text-red-600">- {subStep.error}</span>
+              )}
             </div>
           ))}
         </div>
