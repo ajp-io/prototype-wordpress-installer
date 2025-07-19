@@ -67,6 +67,3 @@ export interface ImagePushStatus {
 }
 
 export type SetupPhase = 'configuration' | 'k0s-installation';
-
-// Re-export installation types
-export * from './installation';
