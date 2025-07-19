@@ -9,6 +9,7 @@ import { ChevronRight, AlertTriangle, CheckCircle, XCircle } from 'lucide-react'
 import { setupInfrastructure } from '../../utils/infrastructure';
 import { validateEnvironment } from '../../utils/validation';
 import { installWordPress } from '../../utils/wordpress';
+import K0sInstallation from './setup/K0sInstallation';
 import InstallationProgress from './validation/InstallationProgress';
 import LogViewer from './validation/LogViewer';
 import StatusIndicator from './validation/StatusIndicator';
@@ -18,12 +19,12 @@ interface ValidationInstallStepProps {
   onNext: () => void;
 }
 
-type Phase = 'infrastructure' | 'validating' | 'installing';
+type Phase = 'hosts' | 'infrastructure' | 'validating' | 'installing';
 
 const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext }) => {
   const { config, prototypeSettings } = useConfig();
   const { text } = useWizardMode();
-  const [phase, setPhase] = useState<Phase>(prototypeSettings.clusterMode === 'embedded' ? 'infrastructure' : 'validating');
+  const [phase, setPhase] = useState<Phase>(prototypeSettings.clusterMode === 'embedded' ? 'hosts' : 'validating');
   const [installStatus, setInstallStatus] = useState<InstallationStatus>({
     openebs: 'pending',
     registry: 'pending',
@@ -48,12 +49,17 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
   const [showLogs, setShowLogs] = useState(false);
   const [showPreflightModal, setShowPreflightModal] = useState(false);
   const [hasValidationFailures, setHasValidationFailures] = useState(false);
+  const [hostsComplete, setHostsComplete] = useState(false);
+  const [hasHostFailures, setHasHostFailures] = useState(false);
   const [validationComplete, setValidationComplete] = useState(false);
+  const [hostInstallationComplete, setHostInstallationComplete] = useState(false);
   const isLinuxMode = prototypeSettings.clusterMode === 'embedded';
   const themeColor = prototypeSettings.themeColor;
 
   useEffect(() => {
-    if (phase === 'infrastructure' && isLinuxMode) {
+    if (phase === 'hosts' && isLinuxMode) {
+      // Hosts phase is handled by K0sInstallation component
+    } else if (phase === 'infrastructure' && isLinuxMode) {
       startInfrastructureSetup();
     } else if (phase === 'validating') {
       startValidation();
@@ -61,6 +67,11 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
       startInstallation();
     }
   }, [phase]);
+
+  const handleHostsComplete = (hasFailures: boolean = false) => {
+    setHostInstallationComplete(true);
+    setHasHostFailures(hasFailures);
+  };
 
   const startInfrastructureSetup = async () => {
     try {
@@ -132,7 +143,14 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
   };
 
   const handleNextClick = () => {
-    if (phase === 'validating') {
+    if (phase === 'hosts') {
+      // User manually proceeds from hosts to infrastructure
+      if (hasHostFailures && !prototypeSettings.skipHostPreflights) {
+        setShowPreflightModal(true);
+      } else {
+        setPhase('infrastructure');
+      }
+    } else if (phase === 'validating') {
       // If we have validation failures and the block setting is NOT enabled, show modal
       if (hasValidationFailures && !prototypeSettings.blockOnAppPreflights) {
         setShowPreflightModal(true);
@@ -148,12 +166,22 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
 
   const handleConfirmProceed = () => {
     setShowPreflightModal(false);
-    setPhase('installing');
+    if (phase === 'hosts') {
+      setPhase('infrastructure');
+    } else {
+      setPhase('installing');
+    }
   };
 
   const handleCancelProceed = () => {
     setShowPreflightModal(false);
   };
+
+  const renderHostsPhase = () => (
+    <div className="space-y-6">
+      <K0sInstallation onComplete={handleHostsComplete} />
+    </div>
+  );
 
   const renderInfrastructurePhase = () => (
     <div className="space-y-6">
@@ -281,6 +309,16 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
   );
 
   const canProceed = () => {
+    if (phase === 'hosts') {
+      if (!hostInstallationComplete) return false;
+      
+      // If there are no failures, can always proceed
+      if (!hasHostFailures) return true;
+      
+      // If there are failures, can only proceed if skip setting is enabled
+      return prototypeSettings.skipHostPreflights;
+    }
+    
     if (phase === 'validating') {
       // Must wait for validation to complete first
       if (!validationComplete) return false;
@@ -298,7 +336,9 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
   };
 
   const getButtonText = () => {
-    if (phase === 'installing') {
+    if (phase === 'hosts') {
+      return hostInstallationComplete ? 'Next: Install Infrastructure' : 'Installing...';
+    } else if (phase === 'installing') {
       return 'Next: Finish';
     }
     return prototypeSettings.clusterMode === 'embedded' 
@@ -308,6 +348,8 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
 
   const getPhaseDescription = () => {
     switch (phase) {
+      case 'hosts':
+        return 'Setting up hosts and installing k0s';
       case 'infrastructure':
         return 'Installing infrastructure components';
       case 'validating':
@@ -327,6 +369,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
           <p className="text-gray-600 mt-1">{getPhaseDescription()}</p>
         </div>
 
+        {phase === 'hosts' && renderHostsPhase()}
         {phase === 'infrastructure' && renderInfrastructurePhase()}
         {phase === 'validating' && renderValidationPhase()}
         {phase === 'installing' && renderInstallationPhase()}
@@ -369,8 +412,9 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
           </div>
           <div>
             <p className="text-sm text-gray-700">
-              Some preflight checks have failed. Are you sure you want to continue with the installation? 
-              This may cause installation issues.
+              {phase === 'hosts' 
+                ? 'Some host preflight checks failed. Are you sure you want to continue with the installation? Installation issues are likely to occur.'
+                : 'Some preflight checks have failed. Are you sure you want to continue with the installation? This may cause installation issues.'}
             </p>
           </div>
         </div>
