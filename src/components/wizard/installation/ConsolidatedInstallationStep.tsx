@@ -25,6 +25,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   
   // Installation state
   const [currentStepId, setCurrentStepId] = useState<string>('');
+  const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
   const [installationStatus, setInstallationStatus] = useState<InstallationStatus>({
     openebs: 'pending',
     registry: 'pending',
@@ -95,15 +96,17 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   // Initialize first step
   useEffect(() => {
     const firstStep = steps[0];
-    setCurrentStepId(firstStep.id);
-    updateStepStatus(firstStep.id, 'running');
-    
-    if (firstStep.id === 'infrastructure') {
-      startInfrastructureSetup();
-    } else if (firstStep.id === 'preflights') {
-      startValidation();
+    if (!completedSteps.has(firstStep.id)) {
+      setCurrentStepId(firstStep.id);
+      updateStepStatus(firstStep.id, 'running');
+      
+      if (firstStep.id === 'infrastructure') {
+        startInfrastructureSetup();
+      } else if (firstStep.id === 'preflights') {
+        startValidation();
+      }
     }
-  }, []);
+  }, [completedSteps]);
 
   const updateStepStatus = (stepId: string, status: 'pending' | 'running' | 'completed' | 'failed') => {
     setSteps(prev => prev.map(step => 
@@ -113,15 +116,26 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
   const moveToNextStep = () => {
     const currentIndex = steps.findIndex(step => step.id === currentStepId);
+    
+    // Mark current step as completed
+    setCompletedSteps(prev => new Set([...prev, currentStepId]));
+    
     if (currentIndex < steps.length - 1) {
       const nextStep = steps[currentIndex + 1];
-      setCurrentStepId(nextStep.id);
-      updateStepStatus(nextStep.id, 'running');
       
-      if (nextStep.id === 'preflights') {
-        startValidation();
-      } else if (nextStep.id === 'application') {
-        startApplicationInstallation();
+      // Only start next step if it hasn't been completed
+      if (!completedSteps.has(nextStep.id)) {
+        setCurrentStepId(nextStep.id);
+        updateStepStatus(nextStep.id, 'running');
+        
+        // Use setTimeout to prevent immediate re-execution
+        setTimeout(() => {
+          if (nextStep.id === 'preflights') {
+            startValidation();
+          } else if (nextStep.id === 'application') {
+            startApplicationInstallation();
+          }
+        }, 100);
       }
     } else {
       setInstallationComplete(true);
@@ -129,13 +143,15 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   };
 
   const startInfrastructureSetup = async () => {
+    if (completedSteps.has('infrastructure')) return;
+    
     try {
       await setupInfrastructure(config, (newStatus) => {
         setInstallationStatus(prev => {
           const updatedStatus = { ...prev, ...newStatus };
-          if (updatedStatus.overall === 'completed') {
+          if (updatedStatus.overall === 'completed' && !completedSteps.has('infrastructure')) {
             updateStepStatus('infrastructure', 'completed');
-            setTimeout(() => moveToNextStep(), 500);
+            setTimeout(() => moveToNextStep(), 1000);
           } else if (updatedStatus.overall === 'failed') {
             updateStepStatus('infrastructure', 'failed');
           }
@@ -149,6 +165,8 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   };
 
   const startValidation = async () => {
+    if (completedSteps.has('preflights')) return;
+    
     try {
       const results = await validateEnvironment(config);
       setValidationStatus(results);
@@ -180,7 +198,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       
       if (failedChecks.length === 0) {
         updateStepStatus('preflights', 'completed');
-        setTimeout(() => moveToNextStep(), 500);
+        setTimeout(() => moveToNextStep(), 1000);
       } else {
         updateStepStatus('preflights', 'failed');
         if (!prototypeSettings.blockOnAppPreflights) {
@@ -195,6 +213,8 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   };
 
   const startApplicationInstallation = async () => {
+    if (completedSteps.has('application')) return;
+    
     try {
       await installWordPress(config, (newStatus) => {
         setInstallationStatus((prev) => ({
@@ -205,7 +225,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
         
         if (newStatus.core === 'completed' && 
             newStatus.database === 'completed' && 
-            newStatus.plugins === 'completed') {
+            newStatus.plugins === 'completed' && !completedSteps.has('application')) {
           updateStepStatus('application', 'completed');
           setInstallationComplete(true);
         } else if (newStatus.overall === 'failed') {
@@ -226,6 +246,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
   const handleConfirmProceed = () => {
     setShowPreflightModal(false);
+    setCompletedSteps(prev => new Set([...prev, 'preflights']));
     updateStepStatus('preflights', 'completed');
     moveToNextStep();
   };
