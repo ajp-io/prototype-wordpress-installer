@@ -124,7 +124,6 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
         startApplicationInstallation();
       }
     } else {
-      // All steps completed
       setInstallationComplete(true);
     }
   };
@@ -181,7 +180,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       
       if (failedChecks.length === 0) {
         updateStepStatus('preflights', 'completed');
-        setTimeout(() => moveToNextStep(), 1000);
+        setTimeout(() => moveToNextStep(), 500);
       } else {
         updateStepStatus('preflights', 'failed');
         if (!prototypeSettings.blockOnAppPreflights) {
