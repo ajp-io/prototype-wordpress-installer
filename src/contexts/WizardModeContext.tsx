@@ -31,7 +31,7 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
         ? `This wizard will guide you through configuring WordPress Enterprise for your ${isEmbedded ? 'Linux machine' : 'Kubernetes cluster'}.`
         : `This wizard will guide you through installing WordPress Enterprise on your ${isEmbedded ? 'Linux machine' : 'Kubernetes cluster'}.`,
     setupTitle: 'Setup',
-    setupDescription: 'Set up the hosts for this installation.',
+    setupDescription: 'Configure the setup parameters for this installation.',
     configurationTitle: 'Configuration',
     configurationDescription: 'Configure your WordPress Enterprise installation by providing the information below.',
     installationTitle: 'Installation',
