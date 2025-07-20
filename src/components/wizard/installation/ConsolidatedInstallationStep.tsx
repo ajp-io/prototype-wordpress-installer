@@ -121,6 +121,10 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       if (nextStep.id === 'application') {
         startApplicationInstallation();
       }
+      
+      if (nextStep.id === 'application') {
+        startApplicationInstallation();
+      }
     } else {
       setInstallationComplete(true);
     }
