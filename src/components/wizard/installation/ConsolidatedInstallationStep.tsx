@@ -112,22 +112,27 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   };
 
   const moveToNextStep = () => {
+    console.log('moveToNextStep called, currentStepId:', currentStepId);
+    console.log('steps:', steps);
     const currentIndex = steps.findIndex(step => step.id === currentStepId);
+    console.log('currentIndex:', currentIndex);
     if (currentIndex < steps.length - 1) {
       const nextStep = steps[currentIndex + 1];
+      console.log('nextStep:', nextStep);
       setCurrentStepId(nextStep.id);
       updateStepStatus(nextStep.id, 'running');
       
       if (nextStep.id === 'application') {
+        console.log('Starting application installation');
         startApplicationInstallation();
       }
+    } else {
+      console.log('No next step found or at end of steps');
+      setInstallationComplete(true);
       
       if (nextStep.id === 'application') {
         startApplicationInstallation();
       }
-    } else {
-      setInstallationComplete(true);
-    }
   };
 
   const startInfrastructureSetup = async () => {
@@ -151,8 +156,10 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   };
 
   const startValidation = async () => {
+    console.log('startValidation called');
     try {
       const results = await validateEnvironment(config);
+      console.log('Validation results:', results);
       setValidationStatus(results);
       
       // Process validation results
@@ -181,10 +188,12 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       });
       
       if (failedChecks.length === 0) {
+        console.log('All checks passed, marking step as completed and moving to next');
         // All checks passed - mark step as completed and move to next step
         updateStepStatus('preflights', 'completed');
         setTimeout(() => moveToNextStep(), 500);
       } else {
+        console.log('Some checks failed:', failedChecks);
         // Some checks failed - mark step as failed
         updateStepStatus('preflights', 'failed');
         if (!prototypeSettings.blockOnAppPreflights) {
@@ -193,6 +202,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
         }
       }
     } catch (error) {
+      console.log('Validation error:', error);
       console.error('Validation error:', error);
       updateStepStatus('preflights', 'failed');
     }
