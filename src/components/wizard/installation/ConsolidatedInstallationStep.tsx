@@ -118,9 +118,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       setCurrentStepId(nextStep.id);
       updateStepStatus(nextStep.id, 'running');
       
-      if (nextStep.id === 'preflights') {
-        startValidation();
-      } else if (nextStep.id === 'application') {
+      if (nextStep.id === 'application') {
         startApplicationInstallation();
       }
     } else {
