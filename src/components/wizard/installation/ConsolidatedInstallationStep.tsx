@@ -129,10 +129,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     } else {
       console.log('No next step found or at end of steps');
       setInstallationComplete(true);
-      
-      if (nextStep.id === 'application') {
-        startApplicationInstallation();
-      }
+    }
   };
 
   const startInfrastructureSetup = async () => {
