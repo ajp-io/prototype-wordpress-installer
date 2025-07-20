@@ -2,6 +2,7 @@ import React from 'react';
 import { CheckCircle, XCircle, Loader2, AlertTriangle } from 'lucide-react';
 import { InstallationStatus, ValidationStatus } from '../../../types';
 import { useConfig } from '../../../contexts/ConfigContext';
+import Button from '../../common/Button';
 import StatusIndicator from '../validation/StatusIndicator';
 import InstallationProgress from '../validation/InstallationProgress';
 
@@ -16,6 +17,8 @@ interface StepDetailPanelProps {
     passedChecks: number;
     failedChecks: Array<{ name: string; message: string }>;
   };
+  onRerunPreflights?: () => void;
+  onContinueAnyway?: () => void;
 }
 
 const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
@@ -25,6 +28,8 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
   installationStatus,
   validationStatus,
   validationResults
+  onRerunPreflights,
+  onContinueAnyway
 }) => {
   const { prototypeSettings } = useConfig();
   const themeColor = prototypeSettings.themeColor;
@@ -102,6 +107,23 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
                   Please resolve the issues below before proceeding with the installation.
                 </p>
               </div>
+            </div>
+            
+            <div className="mt-4 flex space-x-3">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={onRerunPreflights}
+              >
+                🔄 Rerun Preflight Checks
+              </Button>
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={onContinueAnyway}
+              >
+                ⚠️ Continue Anyway
+              </Button>
             </div>
           </div>
           

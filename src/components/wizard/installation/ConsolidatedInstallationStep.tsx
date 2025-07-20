@@ -268,6 +268,8 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
             installationStatus={installationStatus}
             validationStatus={validationStatus}
             validationResults={validationResults}
+            onRerunPreflights={startValidation}
+            onContinueAnyway={() => setShowPreflightModal(true)}
           />
         </div>
       </Card>
