@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preflight Options Mockup</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9fafb;
+        }
+        .container {
+            display: flex;
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .option {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .option h2 {
+            margin-top: 0;
+            color: #1f2937;
+            border-bottom: 2px solid #3b82f6;
+            padding-bottom: 8px;
+        }
+        .failed-checks {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .failed-checks h3 {
+            color: #dc2626;
+            margin-top: 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 12px 0;
+        }
+        .check-icon {
+            color: #dc2626;
+            margin-right: 8px;
+            margin-top: 2px;
+        }
+        .check-content h4 {
+            margin: 0 0 4px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #7f1d1d;
+        }
+        .check-content p {
+            margin: 0;
+            font-size: 14px;
+            color: #991b1b;
+        }
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+        .btn-warning {
+            background-color: #f59e0b;
+            color: white;
+            border-color: #f59e0b;
+        }
+        .btn-warning:hover {
+            background-color: #d97706;
+        }
+        .separate-section {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        .separate-section p {
+            margin: 0 0 12px 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .main-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .btn-disabled {
+            background-color: #f3f4f6;
+            color: #9ca3af;
+            border-color: #d1d5db;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Option A -->
+        <div class="option">
+            <h2>Option A: Buttons in Failed Checks Section</h2>
+            
+            <div class="failed-checks">
+                <h3>❌ 2 Preflight Checks Failed</h3>
+                <p style="color: #991b1b; font-size: 14px; margin-bottom: 16px;">
+                    Please resolve the issues below before proceeding with the installation.
+                </p>
+                
+                <div class="check-item">
+                    <span class="check-icon">❌</span>
+                    <div class="check-content">
+                        <h4>Storage Classes & PV Provisioning</h4>
+                        <p>Storage class "standard" not found. Please create the storage class or select a different one.</p>
+                    </div>
+                </div>
+                
+                <div class="check-item">
+                    <span class="check-icon">❌</span>
+                    <div class="check-content">
+                        <h4>Networking & Ingress</h4>
+                        <p>Ingress controller not detected. Install an ingress controller (e.g., nginx-ingress) to enable external access.</p>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-primary">🔄 Rerun Preflight Checks</button>
+                    <button class="btn btn-warning">⚠️ Continue Anyway</button>
+                </div>
+            </div>
+            
+            <div class="main-buttons">
+                <button class="btn btn-disabled">Next: Start Installation</button>
+            </div>
+        </div>
+
+        <!-- Option B -->
+        <div class="option">
+            <h2>Option B: Separate Section Below</h2>
+            
+            <div class="failed-checks">
+                <h3>❌ 2 Preflight Checks Failed</h3>
+                <p style="color: #991b1b; font-size: 14px; margin-bottom: 16px;">
+                    Please resolve the issues below before proceeding with the installation.
+                </p>
+                
+                <div class="check-item">
+                    <span class="check-icon">❌</span>
+                    <div class="check-content">
+                        <h4>Storage Classes & PV Provisioning</h4>
+                        <p>Storage class "standard" not found. Please create the storage class or select a different one.</p>
+                    </div>
+                </div>
+                
+                <div class="check-item">
+                    <span class="check-icon">❌</span>
+                    <div class="check-content">
+                        <h4>Networking & Ingress</h4>
+                        <p>Ingress controller not detected. Install an ingress controller (e.g., nginx-ingress) to enable external access.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="separate-section">
+                <p>You can rerun the checks after fixing the issues, or proceed anyway (not recommended).</p>
+                <div class="button-group">
+                    <button class="btn btn-primary">🔄 Rerun Preflight Checks</button>
+                    <button class="btn btn-warning">⚠️ Continue Anyway</button>
+                </div>
+            </div>
+            
+            <div class="main-buttons">
+                <button class="btn btn-disabled">Next: Start Installation</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
