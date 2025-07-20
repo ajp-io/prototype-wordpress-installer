@@ -93,61 +93,37 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
 
     if (stepStatus === 'failed' && validationResults) {
       return (
-        <div className="space-y-4">
-          <div className="p-4 bg-red-50 rounded-lg border border-red-200">
-            <div className="flex items-start">
-              <div className="flex-shrink-0">
-                <XCircle className="h-5 w-5 text-red-400" />
-              </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">
-                  {validationResults.failedChecks.length} Preflight Check{validationResults.failedChecks.length !== 1 ? 's' : ''} Failed
-                </h3>
-                <p className="mt-1 text-sm text-red-700">
-                  Please resolve the issues below before proceeding with the installation.
-                </p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="space-y-3">
-            {validationResults.failedChecks.map((check, index) => (
-              <div key={index} className="flex items-start">
-                <XCircle className="w-5 h-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" />
-                <div>
-                  <h4 className="text-sm font-medium text-red-800">{check.name}</h4>
-                  <p className="mt-1 text-sm text-red-700">{check.message}</p>
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-lg font-medium text-gray-900 mb-4">
+              {validationResults.failedChecks.length} Preflight Check{validationResults.failedChecks.length !== 1 ? 's' : ''} Failed
+            </h3>
+            
+            <div className="space-y-4 mb-6">
+              {validationResults.failedChecks.map((check, index) => (
+                <div key={index} className="flex items-start">
+                  <XCircle className="w-5 h-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" />
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-900">{check.name}</h4>
+                    <p className="mt-1 text-sm text-gray-600">{check.message}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="text-sm font-medium text-gray-900">Next Steps</h4>
-                <p className="text-sm text-gray-600 mt-1">
-                  Fix the issues above and rerun checks, or proceed anyway (not recommended).
-                </p>
-              </div>
-              <div className="flex space-x-3 ml-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={onRerunPreflights}
-                  className="whitespace-nowrap"
-                >
-                  Rerun Checks
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={onContinueAnyway}
-                  className="whitespace-nowrap"
-                >
-                  Continue Anyway
-                </Button>
-              </div>
+              ))}
+            </div>
+            
+            <div className="flex space-x-3">
+              <Button
+                variant="primary"
+                onClick={onRerunPreflights}
+              >
+                Rerun Checks
+              </Button>
+              <Button
+                variant="danger"
+                onClick={onContinueAnyway}
+              >
+                Continue Anyway
+              </Button>
             </div>
           </div>
         </div>
