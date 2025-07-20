@@ -179,9 +179,11 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       });
       
       if (failedChecks.length === 0) {
+        // All checks passed - mark step as completed and move to next step
         updateStepStatus('preflights', 'completed');
         setTimeout(() => moveToNextStep(), 500);
       } else {
+        // Some checks failed - mark step as failed
         updateStepStatus('preflights', 'failed');
         if (!prototypeSettings.blockOnAppPreflights) {
           // Show modal to allow proceeding
