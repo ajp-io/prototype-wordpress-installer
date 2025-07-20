@@ -27,7 +27,7 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
   stepStatus,
   installationStatus,
   validationStatus,
-  validationResults
+  validationResults,
   onRerunPreflights,
   onContinueAnyway
 }) => {
