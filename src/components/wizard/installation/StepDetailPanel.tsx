@@ -95,36 +95,34 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
       return (
         <div className="space-y-6">
           <h3 className="text-lg font-medium text-red-600 mb-4">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
-              {validationResults.failedChecks.length} Preflight Check{validationResults.failedChecks.length !== 1 ? 's' : ''} Failed
-            </h3>
+            {validationResults.failedChecks.length} Preflight Check{validationResults.failedChecks.length !== 1 ? 's' : ''} Failed
+          </h3>
             
-            <div className="space-y-4 mb-6">
-              {validationResults.failedChecks.map((check, index) => (
-                <div key={index} className="flex items-start">
-                  <XCircle className="w-5 h-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" />
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900">{check.name}</h4>
-                    <p className="mt-1 text-sm text-gray-600">{check.message}</p>
-                  </div>
+          <div className="space-y-4 mb-6">
+            {validationResults.failedChecks.map((check, index) => (
+              <div key={index} className="flex items-start">
+                <XCircle className="w-5 h-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" />
+                <div>
+                  <h4 className="text-sm font-medium text-gray-900">{check.name}</h4>
+                  <p className="mt-1 text-sm text-gray-600">{check.message}</p>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+          </div>
             
-            <div className="flex space-x-3">
-              <Button
-                variant="primary"
-                onClick={onRerunPreflights}
-              >
-                Rerun Checks
-              </Button>
-              <Button
-                variant="danger"
-                onClick={onContinueAnyway}
-              >
-                Continue Anyway
-              </Button>
-            </div>
+          <div className="flex space-x-3">
+            <Button
+              variant="primary"
+              onClick={onRerunPreflights}
+            >
+              Rerun Checks
+            </Button>
+            <Button
+              variant="danger"
+              onClick={onContinueAnyway}
+            >
+              Continue Anyway
+            </Button>
           </div>
         </div>
       );
