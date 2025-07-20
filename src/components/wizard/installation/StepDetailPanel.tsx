@@ -108,23 +108,6 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
                 </p>
               </div>
             </div>
-            
-            <div className="mt-4 flex space-x-3">
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={onRerunPreflights}
-              >
-                🔄 Rerun Preflight Checks
-              </Button>
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={onContinueAnyway}
-              >
-                ⚠️ Continue Anyway
-              </Button>
-            </div>
           </div>
           
           <div className="space-y-3">
@@ -137,6 +120,35 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
                 </div>
               </div>
             ))}
+          </div>
+          
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="text-sm font-medium text-gray-900">Next Steps</h4>
+                <p className="text-sm text-gray-600 mt-1">
+                  Fix the issues above and rerun checks, or proceed anyway (not recommended).
+                </p>
+              </div>
+              <div className="flex space-x-3 ml-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={onRerunPreflights}
+                  className="whitespace-nowrap"
+                >
+                  Rerun Checks
+                </Button>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={onContinueAnyway}
+                  className="whitespace-nowrap"
+                >
+                  Continue Anyway
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       );
