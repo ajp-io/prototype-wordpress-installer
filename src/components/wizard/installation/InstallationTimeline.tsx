@@ -78,7 +78,7 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
                     isActive ? 'text-gray-900' : 'text-gray-700'
                   }`}>
                     {step.title}
-                  </h4>
+                className="absolute left-3 top-8 w-0.5 h-6 bg-gray-300"
                   <p className="text-xs text-gray-500 mt-1">
                     {step.description}
                   </p>
