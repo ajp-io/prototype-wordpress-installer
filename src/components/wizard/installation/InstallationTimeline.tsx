@@ -62,9 +62,7 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
               {/* Connector line */}
               {index < stepOrder.length - 1 && (
                 <div 
-                  className={`absolute left-3 top-8 w-0.5 h-8 ${
-                    isCompleted ? 'bg-green-500' : 'bg-gray-300'
-                  }`}
+                  className="absolute left-3 top-8 w-0.5 h-8 bg-gray-300"
                 />
               )}
               
