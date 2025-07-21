@@ -58,16 +58,16 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
           const isFailed = step.status === 'failed';
           
           return (
-            <div key={stepKey} className="relative">
+            <div key={stepKey} className="relative flex items-start">
               {/* Connector line */}
               {index < stepOrder.length - 1 && (
                 <div 
-                  className="absolute left-3 top-8 w-0.5 h-8 bg-gray-300"
+                  className="absolute left-3 top-6 w-0.5 h-6 bg-gray-300"
                 />
               )}
               
-              <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 mt-0.5">
+              <div className="flex items-start space-x-3 w-full">
+                <div className="flex-shrink-0">
                   {getStatusIcon(step.status)}
                 </div>
                 
