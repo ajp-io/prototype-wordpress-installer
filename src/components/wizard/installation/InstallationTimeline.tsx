@@ -62,10 +62,9 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
               {/* Connector line */}
               {index < stepOrder.length - 1 && (
                 <div 
-                  className="absolute left-3 top-8 w-0.5 h-8 bg-gray-300"
-                  style={{
-                    backgroundColor: isCompleted ? themeColor : 'rgb(209 213 219)'
-                  }}
+                  className={`absolute left-3 top-8 w-0.5 h-8 ${
+                    isCompleted ? 'bg-green-500' : 'bg-gray-300'
+                  }`}
                 />
               )}
               
@@ -85,21 +84,6 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
                   <p className="text-xs text-gray-500 mt-1">
                     {step.description}
                   </p>
-                  
-                  {step.status === 'running' && step.progress !== undefined && (
-                    <div className="mt-2">
-                      <div className="w-full bg-gray-200 rounded-full h-1.5">
-                        <div
-                          className="h-1.5 rounded-full transition-all duration-300"
-                          style={{
-                            width: `${step.progress}%`,
-                            backgroundColor: themeColor
-                          }}
-                        />
-                      </div>
-                      <p className="text-xs text-gray-500 mt-1">{step.progress}%</p>
-                    </div>
-                  )}
                   
                   {isFailed && step.error && (
                     <p className="text-xs text-red-600 mt-1">{step.error}</p>
