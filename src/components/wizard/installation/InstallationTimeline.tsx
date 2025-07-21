@@ -66,20 +66,20 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
                 />
               )}
               
-              <div className={`flex items-start space-x-3 p-3 rounded-lg transition-colors ${
-                isActive ? 'bg-white border border-gray-200 shadow-sm' : ''
-              }`}>
+              <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0 mt-0.5">
                   {getStatusIcon(step.status)}
                 </div>
                 
                 <div className="flex-grow min-w-0">
                   <h4 className={`text-sm font-medium ${
-                    isActive ? 'text-gray-900' : 'text-gray-700'
+                    isActive ? 'text-gray-900' : step.status === 'completed' ? 'text-gray-700' : 'text-gray-600'
                   }`}>
                     {step.title}
                   </h4>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className={`text-xs mt-1 ${
+                    isActive ? 'text-gray-600' : 'text-gray-500'
+                  }`}>
                     {step.description}
                   </p>
                   
