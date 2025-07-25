@@ -61,7 +61,7 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
   };
 
   return (
-    <div className="flex-1 p-6">
+    <div className="p-8">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900">{stepData.title}</h2>
         <p className="text-gray-600 mt-1">{stepData.description}</p>

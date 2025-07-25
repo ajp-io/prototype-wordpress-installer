@@ -308,15 +308,17 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
             themeColor={themeColor}
           />
           
-          <StepDetailPanel
-            selectedStep={selectedStep}
-            stepData={steps[selectedStep]}
-            infrastructureStatus={infrastructureStatus}
-            preflightResults={validationResults}
-            applicationStatus={applicationStatus}
-            themeColor={themeColor}
-            onHostsComplete={handleHostsComplete}
-          />
+          <div className="flex-1">
+            <StepDetailPanel
+              selectedStep={selectedStep}
+              stepData={steps[selectedStep]}
+              infrastructureStatus={infrastructureStatus}
+              preflightResults={validationResults}
+              applicationStatus={applicationStatus}
+              themeColor={themeColor}
+              onHostsComplete={handleHostsComplete}
+            />
+          </div>
         </div>
         
         <div className="border-t border-gray-200 p-6">
