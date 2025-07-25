@@ -3,6 +3,7 @@ import { InstallationStep, StepStatus } from './InstallationTimeline';
 import InfrastructureDetail from './steps/InfrastructureDetail';
 import PreflightDetail from './steps/PreflightDetail';
 import ApplicationDetail from './steps/ApplicationDetail';
+import HostsDetail from './steps/HostsDetail';
 
 interface StepDetailPanelProps {
   selectedStep: InstallationStep;
@@ -11,6 +12,7 @@ interface StepDetailPanelProps {
   preflightResults?: any;
   applicationStatus?: any;
   themeColor: string;
+  onHostsComplete?: (hasFailures?: boolean) => void;
 }
 
 const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
@@ -19,10 +21,18 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
   infrastructureStatus,
   preflightResults,
   applicationStatus,
-  themeColor
+  themeColor,
+  onHostsComplete
 }) => {
   const renderStepContent = () => {
     switch (selectedStep) {
+      case 'hosts':
+        return (
+          <HostsDetail
+            onComplete={onHostsComplete}
+            themeColor={themeColor}
+          />
+        );
       case 'infrastructure':
         return (
           <InfrastructureDetail

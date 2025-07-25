@@ -12,6 +12,7 @@ import { installWordPress } from '../../utils/wordpress';
 import InstallationTimeline, { InstallationStep, StepStatus } from './installation/InstallationTimeline';
 import StepDetailPanel from './installation/StepDetailPanel';
 import LogViewer from './validation/LogViewer';
+import K0sInstallation from './setup/K0sInstallation';
 
 interface ConsolidatedInstallationStepProps {
   onNext: () => void;
@@ -24,22 +25,28 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   const themeColor = prototypeSettings.themeColor;
 
   const [currentStep, setCurrentStep] = useState<InstallationStep>(
-    isLinuxMode ? 'infrastructure' : 'preflights'
+    isLinuxMode ? 'hosts' : 'preflights'
   );
   
   const [selectedStep, setSelectedStep] = useState<InstallationStep>(
-    isLinuxMode ? 'infrastructure' : 'preflights'
+    isLinuxMode ? 'hosts' : 'preflights'
   );
   
   const [steps, setSteps] = useState<Record<InstallationStep, StepStatus>>({
-    infrastructure: {
+    hosts: {
       status: isLinuxMode ? 'running' : 'pending',
+      title: 'Host Setup',
+      description: 'Installing k0s and setting up hosts',
+      progress: 0
+    },
+    infrastructure: {
+      status: 'pending',
       title: 'Infrastructure Setup',
       description: 'Installing storage, registry, and disaster recovery components',
       progress: 0
     },
     preflights: {
-      status: isLinuxMode ? 'pending' : 'running',
+      status: 'pending',
       title: 'Preflight Checks',
       description: 'Validating environment requirements',
       progress: 0
@@ -92,11 +99,12 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   const [showPreflightModal, setShowPreflightModal] = useState(false);
   const [allLogs, setAllLogs] = useState<string[]>([]);
   const [installationComplete, setInstallationComplete] = useState(false);
+  const [hostsComplete, setHostsComplete] = useState(false);
 
   // Start the appropriate first step
   useEffect(() => {
     if (isLinuxMode) {
-      startInfrastructureSetup();
+      startHostSetup();
     } else {
       startPreflightChecks();
     }
@@ -123,6 +131,22 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
   const addToAllLogs = (newLogs: string[]) => {
     setAllLogs(prev => [...prev, ...newLogs]);
+  };
+
+  const startHostSetup = async () => {
+    updateStepStatus('hosts', { status: 'running' });
+    setCurrentStep('hosts');
+    // Host setup is handled by the K0sInstallation component
+  };
+
+  const handleHostsComplete = (hasFailures: boolean = false) => {
+    setHostsComplete(true);
+    updateStepStatus('hosts', { status: hasFailures ? 'failed' : 'completed' });
+    
+    // Auto-proceed to infrastructure setup
+    setTimeout(() => {
+      startInfrastructureSetup();
+    }, 500);
   };
 
   const startInfrastructureSetup = async () => {
@@ -264,6 +288,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
             preflightResults={validationResults}
             applicationStatus={applicationStatus}
             themeColor={themeColor}
+            onHostsComplete={handleHostsComplete}
           />
         </div>
         

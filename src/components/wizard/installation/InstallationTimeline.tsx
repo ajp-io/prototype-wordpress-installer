@@ -1,7 +1,7 @@
 import React from 'react';
 import { CheckCircle, XCircle, AlertTriangle, Loader2, Clock } from 'lucide-react';
 
-export type InstallationStep = 'infrastructure' | 'preflights' | 'application';
+export type InstallationStep = 'hosts' | 'infrastructure' | 'preflights' | 'application';
 
 export interface StepStatus {
   status: 'pending' | 'running' | 'completed' | 'failed';
@@ -30,7 +30,7 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
 }) => {
   const getStepOrder = (): InstallationStep[] => {
     if (isLinuxMode) {
-      return ['infrastructure', 'preflights', 'application'];
+      return ['hosts', 'infrastructure', 'preflights', 'application'];
     }
     return ['preflights', 'application'];
   };
