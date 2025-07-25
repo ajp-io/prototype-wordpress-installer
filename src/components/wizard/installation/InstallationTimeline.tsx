@@ -65,13 +65,6 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
           
           return (
             <div key={stepKey} className="relative">
-              {/* Connector line */}
-              {index < stepOrder.length - 1 && (
-                <div 
-                  className="absolute left-3 top-8 w-0.5 h-8 bg-gray-300"
-                />
-              )}
-              
               <button
                 className={`flex items-start space-x-3 text-left w-full p-2 rounded-md transition-colors ${
                   isClickable ? 'hover:bg-gray-100 cursor-pointer' : 'cursor-default'
