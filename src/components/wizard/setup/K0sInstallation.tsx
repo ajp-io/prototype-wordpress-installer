@@ -185,7 +185,7 @@ const K0sInstallation: React.FC<K0sInstallationProps> = ({ onComplete }) => {
   };
 
   const copyJoinCommand = () => {
-    const joinCommand = `sudo ./wordpress-mastodon join 10.128.0.45:30000 ${
+    const joinCommand = `sudo ./wordpress-enterprise join 10.128.0.45:30000 ${
       selectedRole === 'application' ? 'EaKuL6cNeIlzMci3JdDU9Oi4' : 'Xm9pK4vRtY2wQn8sLj5uH7fB'
     }`;
     navigator.clipboard.writeText(joinCommand).then(() => {
