@@ -27,6 +27,10 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     isLinuxMode ? 'infrastructure' : 'preflights'
   );
   
+  const [selectedStep, setSelectedStep] = useState<InstallationStep>(
+    isLinuxMode ? 'infrastructure' : 'preflights'
+  );
+  
   const [steps, setSteps] = useState<Record<InstallationStep, StepStatus>>({
     infrastructure: {
       status: isLinuxMode ? 'running' : 'pending',
@@ -104,6 +108,18 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       [step]: { ...prev[step], ...updates }
     }));
   };
+
+  const handleStepClick = (step: InstallationStep) => {
+    // Only allow clicking on steps that have started (not pending)
+    if (steps[step].status !== 'pending') {
+      setSelectedStep(step);
+    }
+  };
+
+  // Auto-update selected step when current step changes
+  useEffect(() => {
+    setSelectedStep(currentStep);
+  }, [currentStep]);
 
   const addToAllLogs = (newLogs: string[]) => {
     setAllLogs(prev => [...prev, ...newLogs]);
@@ -235,13 +251,15 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
           <InstallationTimeline
             steps={steps}
             currentStep={currentStep}
+            selectedStep={selectedStep}
+            onStepClick={handleStepClick}
             isLinuxMode={isLinuxMode}
             themeColor={themeColor}
           />
           
           <StepDetailPanel
-            currentStep={currentStep}
-            stepData={steps[currentStep]}
+            selectedStep={selectedStep}
+            stepData={steps[selectedStep]}
             infrastructureStatus={infrastructureStatus}
             preflightResults={validationResults}
             applicationStatus={applicationStatus}

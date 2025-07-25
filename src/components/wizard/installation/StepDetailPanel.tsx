@@ -5,7 +5,7 @@ import PreflightDetail from './steps/PreflightDetail';
 import ApplicationDetail from './steps/ApplicationDetail';
 
 interface StepDetailPanelProps {
-  currentStep: InstallationStep;
+  selectedStep: InstallationStep;
   stepData: StepStatus;
   infrastructureStatus?: any;
   preflightResults?: any;
@@ -14,7 +14,7 @@ interface StepDetailPanelProps {
 }
 
 const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
-  currentStep,
+  selectedStep,
   stepData,
   infrastructureStatus,
   preflightResults,
@@ -22,7 +22,7 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
   themeColor
 }) => {
   const renderStepContent = () => {
-    switch (currentStep) {
+    switch (selectedStep) {
       case 'infrastructure':
         return (
           <InfrastructureDetail
