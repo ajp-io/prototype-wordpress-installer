@@ -142,11 +142,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   const handleHostsComplete = (hasFailures: boolean = false) => {
     setHostsComplete(true);
     updateStepStatus('hosts', { status: hasFailures ? 'failed' : 'completed' });
-    
-    // Auto-proceed to infrastructure setup
-    setTimeout(() => {
-      startInfrastructureSetup();
-    }, 500);
+    // Don't auto-proceed - let user manually click Next when ready
   };
 
   const startInfrastructureSetup = async () => {
@@ -265,7 +261,38 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   };
 
   const canProceed = () => {
-    return installationComplete;
+    if (isLinuxMode) {
+      // For Linux mode, check which step we're on
+      if (currentStep === 'hosts') {
+        return hostsComplete; // Can proceed once initial host setup is done
+      } else if (currentStep === 'infrastructure') {
+        return steps.infrastructure.status === 'completed';
+      } else if (currentStep === 'preflights') {
+        return steps.preflights.status === 'completed' || !prototypeSettings.blockOnAppPreflights;
+      } else if (currentStep === 'application') {
+        return installationComplete;
+      }
+    } else {
+      // For Kubernetes mode
+      if (currentStep === 'preflights') {
+        return steps.preflights.status === 'completed' || !prototypeSettings.blockOnAppPreflights;
+      } else if (currentStep === 'application') {
+        return installationComplete;
+      }
+    }
+    return false;
+  };
+
+  const handleNextClick = () => {
+    if (currentStep === 'hosts') {
+      startInfrastructureSetup();
+    } else if (currentStep === 'infrastructure') {
+      startPreflightChecks();
+    } else if (currentStep === 'preflights') {
+      startApplicationInstallation();
+    } else if (currentStep === 'application') {
+      onNext(); // Go to completion step
+    }
   };
 
   return (
@@ -304,11 +331,14 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
       <div className="flex justify-end">
         <Button
-          onClick={onNext}
+          onClick={handleNextClick}
           disabled={!canProceed()}
           icon={<ChevronRight className="w-5 h-5" />}
         >
-          Next: Finish
+          {currentStep === 'hosts' && 'Next: Infrastructure Setup'}
+          {currentStep === 'infrastructure' && 'Next: Preflight Checks'}
+          {currentStep === 'preflights' && 'Next: Install Application'}
+          {currentStep === 'application' && 'Next: Finish'}
         </Button>
       </div>
 
