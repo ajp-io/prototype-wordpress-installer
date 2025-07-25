@@ -85,12 +85,12 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
                 
                 <div className="flex-grow min-w-0">
                   <h4 className={`text-sm font-medium ${
-                    isSelected ? 'text-gray-900' : isActive ? 'text-gray-900' : step.status === 'completed' ? 'text-gray-700' : 'text-gray-600'
+                    isSelected ? 'text-blue-700' : isActive ? 'text-gray-900' : step.status === 'completed' ? 'text-gray-700' : 'text-gray-600'
                   }`}>
                     {step.title}
                   </h4>
                   <p className={`text-xs mt-1 ${
-                    isSelected ? 'text-gray-600' : isActive ? 'text-gray-600' : 'text-gray-500'
+                    isSelected ? 'text-blue-600' : isActive ? 'text-gray-600' : 'text-gray-500'
                   }`}>
                     {step.description}
                   </p>
