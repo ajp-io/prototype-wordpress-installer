@@ -112,7 +112,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       updateHost({
         phase: 'installing',
         progress: 40,
-        currentMessage: 'Installing k0s...'
+        currentMessage: 'Installing runtime...'
       });
 
       await installK0s(config, (k0sStatus) => {
