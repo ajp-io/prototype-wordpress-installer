@@ -118,7 +118,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       await installK0s(config, (k0sStatus) => {
         updateHost({
           progress: 40 + (k0sStatus.progress || 0) * 0.6, // Scale to 40-100%
-          currentMessage: k0sStatus.currentMessage || 'Installing k0s...',
+          currentMessage: k0sStatus.currentMessage || 'Installing runtime...',
           logs: [...(hosts.find(h => h.id === hostId)?.logs || []), ...(k0sStatus.logs || [])]
         });
       });
