@@ -103,7 +103,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
 
       updateHost({
         progress: 30,
-        currentMessage: 'Preflight checks passed, installing k0s...',
+        currentMessage: 'Preflight checks passed, installing runtime...',
         preflightStatus: preflightResults,
         logs: ['Preflight checks completed successfully', 'Starting k0s installation...']
       });
