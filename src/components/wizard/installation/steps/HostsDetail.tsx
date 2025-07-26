@@ -12,12 +12,6 @@ interface HostsDetailProps {
 }
 
 interface NodeMetric {
-  cpu: number;
-  memory: number;
-  storage: {
-    used: number;
-    total: number;
-  };
   dataPath: string;
 }
 
@@ -131,12 +125,6 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
 
       // Phase 3: Ready
       const mockMetrics: NodeMetric = {
-        cpu: Math.floor(Math.random() * 30) + 35,
-        memory: Math.floor(Math.random() * 20) + 55,
-        storage: {
-          used: Math.floor(Math.random() * 300) + 700,
-          total: 2000
-        },
         dataPath: '/data/wordpress'
       };
 
@@ -278,21 +266,9 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
 
       {/* Host Metrics (when ready) */}
       {host.phase === 'ready' && host.metrics && (
-        <div className="grid grid-cols-3 gap-2 text-center">
-          <div>
-            <div className="text-xs text-gray-500">CPU</div>
-            <div className="text-sm font-medium">{host.metrics.cpu}%</div>
-          </div>
-          <div>
-            <div className="text-xs text-gray-500">Memory</div>
-            <div className="text-sm font-medium">{host.metrics.memory}%</div>
-          </div>
-          <div>
-            <div className="text-xs text-gray-500">Storage</div>
-            <div className="text-sm font-medium">
-              {Math.round((host.metrics.storage.used / host.metrics.storage.total) * 100)}%
-            </div>
-          </div>
+        <div className="text-center">
+          <div className="text-xs text-gray-500">Data Directory</div>
+          <div className="text-xs font-mono text-gray-700">{host.metrics.dataPath}</div>
         </div>
       )}
     </div>
@@ -302,9 +278,9 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
     <div className="space-y-6">
       {/* Join Command Section - At the top for visibility */}
       {isMultiNode && readyHosts.length > 0 && (
-        <div className="bg-blue-50 rounded-lg border border-blue-200 p-4">
-          <h3 className="text-sm font-medium text-blue-900 mb-3">Add Additional Hosts</h3>
-          <p className="text-xs text-blue-700 mb-3">
+        <div className="bg-gray-50 rounded-lg border border-gray-200 p-4">
+          <h3 className="text-sm font-medium text-gray-900 mb-3">Add Additional Hosts</h3>
+          <p className="text-xs text-gray-600 mb-3">
             Run this command on additional hosts to join them to the cluster:
           </p>
           <div className="bg-gray-900 rounded-md p-3 flex items-center justify-between">
