@@ -22,7 +22,7 @@ export const installK0s = async (
   // Start k0s installation
   onStatusUpdate({
     phase: 'installing',
-    currentMessage: 'Installing k0s...',
+    currentMessage: 'Installing runtime...',
     progress: 30
   });
 
