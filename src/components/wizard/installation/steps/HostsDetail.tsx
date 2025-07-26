@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { Server, Copy, ClipboardCheck, CheckCircle, AlertTriangle, Cpu, MemoryStick as Memory, HardDrive } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Server, Copy, ClipboardCheck, CheckCircle, AlertTriangle, Cpu, MemoryStick as Memory, HardDrive, Loader2, XCircle } from 'lucide-react';
 import Button from '../../../common/Button';
 import { useConfig } from '../../../../contexts/ConfigContext';
+import { validateHostPreflights } from '../../../../utils/validation';
+import { installK0s } from '../../../../utils/k0s';
+import { HostPreflightStatus, K0sInstallStatus } from '../../../../types';
 
 interface HostsDetailProps {
   onComplete?: (hasFailures?: boolean) => void;
@@ -19,33 +22,153 @@ interface NodeMetric {
 }
 
 type NodeRole = 'application' | 'database';
+type HostPhase = 'preflight' | 'installing' | 'ready' | 'failed';
+
+interface HostStatus {
+  id: string;
+  name: string;
+  role: NodeRole;
+  phase: HostPhase;
+  progress: number;
+  currentMessage: string;
+  logs: string[];
+  preflightStatus?: HostPreflightStatus;
+  metrics?: NodeMetric;
+  error?: string;
+}
 
 const HostsDetail: React.FC<HostsDetailProps> = ({
   onComplete,
   themeColor
 }) => {
-  const { prototypeSettings } = useConfig();
+  const { config, prototypeSettings } = useConfig();
   const isMultiNode = prototypeSettings.enableMultiNode;
   const skipNodeValidation = prototypeSettings.skipNodeValidation;
   
   const [selectedRole, setSelectedRole] = useState<NodeRole>('application');
   const [copied, setCopied] = useState(false);
-  const [joinedNodes, setJoinedNodes] = useState({
-    application: 1, // Primary host starts as application
-    database: 0,
-  });
+  const [hosts, setHosts] = useState<HostStatus[]>([
+    {
+      id: 'host-1',
+      name: 'wordpress-app-1',
+      role: 'application',
+      phase: 'preflight',
+      progress: 0,
+      currentMessage: 'Starting host preflight checks...',
+      logs: ['Initializing host setup...']
+    }
+  ]);
   
   const requiredNodes = isMultiNode ? { application: 3, database: 3 } : { application: 1, database: 0 };
-  
-  // Mock node metrics
-  const [nodeMetrics] = useState<Record<string, NodeMetric>>({
-    'wordpress-app-1': {
-      cpu: 45,
-      memory: 60,
-      storage: { used: 800, total: 2000 },
-      dataPath: '/data/wordpress'
+  const readyHosts = hosts.filter(h => h.phase === 'ready');
+  const joinedNodes = {
+    application: readyHosts.filter(h => h.role === 'application').length,
+    database: readyHosts.filter(h => h.role === 'database').length
+  };
+
+  // Start the first host installation automatically
+  useEffect(() => {
+    startHostInstallation('host-1');
+  }, []);
+
+  // Check if we're done
+  useEffect(() => {
+    const allHostsReady = hosts.every(h => h.phase === 'ready' || h.phase === 'failed');
+    const hasFailures = hosts.some(h => h.phase === 'failed');
+    const meetsRequirements = skipNodeValidation || (
+      joinedNodes.application >= requiredNodes.application &&
+      joinedNodes.database >= requiredNodes.database
+    );
+
+    if (allHostsReady && (meetsRequirements || !isMultiNode)) {
+      onComplete?.(hasFailures);
     }
-  });
+  }, [hosts, joinedNodes, requiredNodes, skipNodeValidation, isMultiNode]);
+
+  const startHostInstallation = async (hostId: string) => {
+    const updateHost = (updates: Partial<HostStatus>) => {
+      setHosts(prev => prev.map(h => 
+        h.id === hostId ? { ...h, ...updates } : h
+      ));
+    };
+
+    try {
+      // Phase 1: Preflight checks
+      updateHost({
+        phase: 'preflight',
+        progress: 10,
+        currentMessage: 'Running preflight checks...',
+        logs: ['Starting preflight checks...']
+      });
+
+      const preflightResults = await validateHostPreflights(config);
+      const hasPreflightFailures = Object.values(preflightResults).some(
+        (result) => result && !result.success
+      );
+
+      if (hasPreflightFailures) {
+        updateHost({
+          phase: 'failed',
+          progress: 100,
+          currentMessage: 'Preflight checks failed',
+          preflightStatus: preflightResults,
+          error: 'Host preflight checks failed. Please resolve the issues and try again.',
+          logs: ['Preflight checks failed']
+        });
+        return;
+      }
+
+      updateHost({
+        progress: 30,
+        currentMessage: 'Preflight checks passed, installing k0s...',
+        preflightStatus: preflightResults,
+        logs: ['Preflight checks completed successfully', 'Starting k0s installation...']
+      });
+
+      // Phase 2: k0s Installation
+      updateHost({
+        phase: 'installing',
+        progress: 40,
+        currentMessage: 'Installing k0s...'
+      });
+
+      await installK0s(config, (k0sStatus) => {
+        updateHost({
+          progress: 40 + (k0sStatus.progress || 0) * 0.6, // Scale to 40-100%
+          currentMessage: k0sStatus.currentMessage || 'Installing k0s...',
+          logs: [...(hosts.find(h => h.id === hostId)?.logs || []), ...(k0sStatus.logs || [])]
+        });
+      });
+
+      // Phase 3: Ready
+      const mockMetrics: NodeMetric = {
+        cpu: Math.floor(Math.random() * 30) + 35,
+        memory: Math.floor(Math.random() * 20) + 55,
+        storage: {
+          used: Math.floor(Math.random() * 300) + 700,
+          total: 2000
+        },
+        dataPath: '/data/wordpress'
+      };
+
+      updateHost({
+        phase: 'ready',
+        progress: 100,
+        currentMessage: 'Host ready',
+        metrics: mockMetrics,
+        logs: [...(hosts.find(h => h.id === hostId)?.logs || []), 'k0s installation completed', 'Host is ready']
+      });
+
+    } catch (error) {
+      console.error('Host installation error:', error);
+      updateHost({
+        phase: 'failed',
+        progress: 100,
+        currentMessage: 'Installation failed',
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
+      });
+    }
+  };
 
   const copyJoinCommand = () => {
     const joinCommand = `sudo ./wordpress-enterprise join 10.128.0.45:30000 ${
@@ -58,18 +181,24 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
   };
 
   const handleStartNodeJoin = () => {
-    // Simulate node joining
-    const newCount = {
-      ...joinedNodes,
-      [selectedRole]: joinedNodes[selectedRole] + 1
-    };
-    setJoinedNodes(newCount);
-  };
+    const newHostId = `host-${hosts.length + 1}`;
+    const newHostName = selectedRole === 'application' ? 
+      `wordpress-app-${joinedNodes.application + 1}` : 
+      `wordpress-db-${joinedNodes.database + 1}`;
 
-  const allNodesJoined = skipNodeValidation || (
-    joinedNodes.application >= requiredNodes.application &&
-    joinedNodes.database >= requiredNodes.database
-  );
+    const newHost: HostStatus = {
+      id: newHostId,
+      name: newHostName,
+      role: selectedRole,
+      phase: 'preflight',
+      progress: 0,
+      currentMessage: 'Starting host preflight checks...',
+      logs: ['Initializing host setup...']
+    };
+
+    setHosts(prev => [...prev, newHost]);
+    startHostInstallation(newHostId);
+  };
 
   const renderMetricBar = (value: number, warningThreshold = 70) => {
     const color = value >= warningThreshold ? 'rgb(249 115 22)' : themeColor;
@@ -88,66 +217,134 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
 
   const formatStorage = (gb: number) => `${gb}GB`;
 
-  const renderHostCard = (name: string, type: string, metrics: NodeMetric) => (
-    <div key={name} className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
+  const getPhaseIcon = (phase: HostPhase) => {
+    switch (phase) {
+      case 'ready':
+        return <CheckCircle className="w-6 h-6 text-green-500" />;
+      case 'failed':
+        return <XCircle className="w-6 h-6 text-red-500" />;
+      case 'preflight':
+      case 'installing':
+        return <Loader2 className="w-6 h-6 animate-spin" style={{ color: themeColor }} />;
+      default:
+        return <Server className="w-6 h-6 text-gray-400" />;
+    }
+  };
+
+  const getPhaseColor = (phase: HostPhase) => {
+    switch (phase) {
+      case 'ready':
+        return 'text-green-600';
+      case 'failed':
+        return 'text-red-600';
+      case 'preflight':
+      case 'installing':
+        return 'text-blue-600';
+      default:
+        return 'text-gray-600';
+    }
+  };
+
+  const renderHostCard = (host: HostStatus) => (
+    <div key={host.id} className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm">
       <div className="flex items-center mb-4">
         <div className="w-10 h-10 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: `${themeColor}1A` }}>
-          <Server className="w-5 h-5" style={{ color: themeColor }} />
+          {getPhaseIcon(host.phase)}
         </div>
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900">{name}</h3>
-          <p className="text-sm text-gray-500">{type} Host</p>
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold text-gray-900">{host.name}</h3>
+          <p className="text-sm text-gray-500">{host.role === 'application' ? 'Application' : 'Database'} Host</p>
         </div>
-        <div className="ml-auto">
-          <div className="w-3 h-3 rounded-full" style={{ backgroundColor: themeColor }} />
-        </div>
-      </div>
-
-      <div className="space-y-4">
-        <div className="flex items-center">
-          <Cpu className="w-4 h-4 text-gray-400" />
-          <span className="ml-2 w-16 text-sm text-gray-600">CPU</span>
-          {renderMetricBar(metrics.cpu)}
-          <span className="ml-2 text-sm text-gray-600 w-12">{metrics.cpu}%</span>
-        </div>
-
-        <div className="flex items-center">
-          <Memory className="w-4 h-4 text-gray-400" />
-          <span className="ml-2 w-16 text-sm text-gray-600">Memory</span>
-          {renderMetricBar(metrics.memory)}
-          <span className="ml-2 text-sm text-gray-600 w-12">{metrics.memory}%</span>
-        </div>
-
-        <div className="flex items-center">
-          <HardDrive className="w-4 h-4 text-gray-400" />
-          <span className="ml-2 w-16 text-sm text-gray-600">Storage</span>
-          {renderMetricBar((metrics.storage.used / metrics.storage.total) * 100)}
-          <span className="ml-2 text-sm text-gray-600 w-20">
-            {formatStorage(metrics.storage.used)} / {formatStorage(metrics.storage.total)}
-          </span>
-        </div>
-
-        <div className="text-sm text-gray-500 mt-3 pt-3 border-t border-gray-100">
-          Data Path: {metrics.dataPath}
+        <div className={`text-sm font-medium ${getPhaseColor(host.phase)}`}>
+          {host.phase === 'ready' ? 'Ready' : 
+           host.phase === 'failed' ? 'Failed' :
+           host.phase === 'installing' ? 'Installing' : 'Checking'}
         </div>
       </div>
+
+      {/* Progress Bar */}
+      {host.phase !== 'ready' && (
+        <div className="mb-4">
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="h-2 rounded-full transition-all duration-300"
+              style={{
+                width: `${host.progress}%`,
+                backgroundColor: host.phase === 'failed' ? 'rgb(239 68 68)' : themeColor,
+              }}
+            />
+          </div>
+          <p className="text-sm text-gray-500 mt-2">{host.currentMessage}</p>
+        </div>
+      )}
+
+      {/* Error Display */}
+      {host.phase === 'failed' && host.error && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+          <p className="text-sm text-red-700">{host.error}</p>
+        </div>
+      )}
+
+      {/* Failed Preflight Checks */}
+      {host.phase === 'failed' && host.preflightStatus && (
+        <div className="mb-4 space-y-2">
+          {Object.entries(host.preflightStatus)
+            .filter(([_, result]) => result && !result.success)
+            .map(([key, result]) => (
+              <div key={key} className="flex items-start">
+                <XCircle className="w-4 h-4 text-red-500 mt-0.5 mr-2 flex-shrink-0" />
+                <div>
+                  <h5 className="text-sm font-medium text-red-800">
+                    {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                  </h5>
+                  <p className="mt-1 text-sm text-red-700">{result?.message}</p>
+                </div>
+              </div>
+            ))}
+        </div>
+      )}
+
+      {/* Host Metrics (when ready) */}
+      {host.phase === 'ready' && host.metrics && (
+        <div className="space-y-4">
+          <div className="flex items-center">
+            <Cpu className="w-4 h-4 text-gray-400" />
+            <span className="ml-2 w-16 text-sm text-gray-600">CPU</span>
+            {renderMetricBar(host.metrics.cpu)}
+            <span className="ml-2 text-sm text-gray-600 w-12">{host.metrics.cpu}%</span>
+          </div>
+
+          <div className="flex items-center">
+            <Memory className="w-4 h-4 text-gray-400" />
+            <span className="ml-2 w-16 text-sm text-gray-600">Memory</span>
+            {renderMetricBar(host.metrics.memory)}
+            <span className="ml-2 text-sm text-gray-600 w-12">{host.metrics.memory}%</span>
+          </div>
+
+          <div className="flex items-center">
+            <HardDrive className="w-4 h-4 text-gray-400" />
+            <span className="ml-2 w-16 text-sm text-gray-600">Storage</span>
+            {renderMetricBar((host.metrics.storage.used / host.metrics.storage.total) * 100)}
+            <span className="ml-2 text-sm text-gray-600 w-20">
+              {formatStorage(host.metrics.storage.used)} / {formatStorage(host.metrics.storage.total)}
+            </span>
+          </div>
+
+          <div className="text-sm text-gray-500 mt-3 pt-3 border-t border-gray-100">
+            Data Path: {host.metrics.dataPath}
+          </div>
+        </div>
+      )}
     </div>
+  );
+
+  const allNodesJoined = skipNodeValidation || (
+    joinedNodes.application >= requiredNodes.application &&
+    joinedNodes.database >= requiredNodes.database
   );
 
   return (
     <div className="space-y-8">
-      {/* Header Section */}
-      <div className="text-center">
-        <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: `${themeColor}1A` }}>
-          <CheckCircle className="w-10 h-10" style={{ color: themeColor }} />
-        </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Primary Host Ready</h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          k0s has been successfully installed on your primary host. 
-          {isMultiNode ? ' You can now join additional hosts to create a cluster.' : ' Your single-node installation is ready.'}
-        </p>
-      </div>
-
       {/* Progress Overview */}
       {isMultiNode && (
         <div className="bg-gray-50 rounded-lg p-6">
@@ -169,20 +366,18 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
         </div>
       )}
 
-      {/* Joined Hosts */}
+      {/* Host Cards */}
       <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">
           {isMultiNode ? 'Cluster Hosts' : 'Host'}
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {Object.entries(nodeMetrics).map(([name, metrics]) => 
-            renderHostCard(name, name.includes('app') ? 'Application' : 'Database', metrics)
-          )}
+          {hosts.map(renderHostCard)}
         </div>
       </div>
 
       {/* Join Additional Hosts Section */}
-      {isMultiNode && !allNodesJoined && (
+      {isMultiNode && !allNodesJoined && readyHosts.length > 0 && (
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <h3 className="text-lg font-medium text-gray-900 mb-4">Join Additional Hosts</h3>
           
@@ -273,7 +468,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
                 All Required Hosts Joined
               </h4>
               <p className="text-green-700">
-                Your cluster is ready with {joinedNodes.application + joinedNodes.database} hosts. 
+                Your cluster is ready with {hosts.filter(h => h.phase === 'ready').length} hosts. 
                 You can now proceed to install the infrastructure components.
               </p>
             </div>
