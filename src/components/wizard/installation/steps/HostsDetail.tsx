@@ -208,16 +208,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
           {getPhaseIcon(host.phase)}
           <div className="ml-3">
             <h3 className="text-sm font-medium text-gray-900">{host.name}</h3>
-            <p className="text-xs text-gray-500">
-              {host.phase === 'ready' ? 'Ready' : 
-               host.phase === 'failed' ? 'Failed' :
-               host.phase === 'installing' ? 'Installing k0s' : 'Running checks'}
-            </p>
           </div>
-        </div>
-        <div className="text-right">
-          <div className={`w-2 h-2 rounded-full ${host.phase === 'ready' ? 'bg-green-500' : host.phase === 'failed' ? 'bg-red-500' : ''}`} 
-               style={{ backgroundColor: host.phase === 'preflight' || host.phase === 'installing' ? themeColor : undefined }} />
         </div>
       </div>
 
@@ -233,12 +224,12 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
               }}
             />
           </div>
-          <p className="text-xs text-gray-500 mt-1">{host.currentMessage}</p>
         </div>
       )}
 
-      {/* Data Directory - Always shown */}
-      <div className="text-center">
+      {/* Status Message and Data Directory */}
+      <div className="text-center space-y-1">
+        <div className="text-xs text-gray-500">{host.currentMessage}</div>
         <div className="text-xs text-gray-500">Data Directory</div>
         <div className="text-xs font-mono text-gray-700">/data/wordpress</div>
       </div>
