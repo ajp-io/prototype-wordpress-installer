@@ -216,14 +216,13 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
           </div>
         </div>
         <div className="text-right">
-          <div className={`text-xs font-medium ${getPhaseColor(host.phase)}`}>
-            {host.progress}%
-          </div>
+          <div className={`w-2 h-2 rounded-full ${host.phase === 'ready' ? 'bg-green-500' : host.phase === 'failed' ? 'bg-red-500' : ''}`} 
+               style={{ backgroundColor: host.phase === 'preflight' || host.phase === 'installing' ? themeColor : undefined }} />
         </div>
       </div>
 
       {/* Progress Bar */}
-      {host.phase !== 'ready' && (
+      {host.phase !== 'ready' && host.phase !== 'failed' && (
         <div className="mb-3">
           <div className="w-full bg-gray-200 rounded-full h-1.5">
             <div
@@ -237,6 +236,12 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
           <p className="text-xs text-gray-500 mt-1">{host.currentMessage}</p>
         </div>
       )}
+
+      {/* Data Directory - Always shown */}
+      <div className="text-center">
+        <div className="text-xs text-gray-500">Data Directory</div>
+        <div className="text-xs font-mono text-gray-700">/data/wordpress</div>
+      </div>
 
       {/* Error Display */}
       {host.phase === 'failed' && host.error && (
@@ -261,14 +266,6 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
                 </div>
               </div>
             ))}
-        </div>
-      )}
-
-      {/* Host Metrics (when ready) */}
-      {host.phase === 'ready' && host.metrics && (
-        <div className="text-center">
-          <div className="text-xs text-gray-500">Data Directory</div>
-          <div className="text-xs font-mono text-gray-700">{host.metrics.dataPath}</div>
         </div>
       )}
     </div>
