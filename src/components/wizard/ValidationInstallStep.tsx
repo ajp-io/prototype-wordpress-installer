@@ -349,7 +349,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
   const getPhaseDescription = () => {
     switch (phase) {
       case 'hosts':
-        return 'Setting up hosts and installing k0s';
+        return 'Setting up hosts and installing runtime';
       case 'infrastructure':
         return 'Installing infrastructure components';
       case 'validating':
