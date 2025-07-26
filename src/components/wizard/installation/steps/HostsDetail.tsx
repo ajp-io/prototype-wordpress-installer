@@ -230,8 +230,9 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       {/* Status Message and Data Directory */}
       <div className="text-center space-y-1">
         <div className="text-xs text-gray-500">{host.currentMessage}</div>
-        <div className="text-xs text-gray-500">Data Directory</div>
-        <div className="text-xs font-mono text-gray-700">/data/wordpress</div>
+        <div className="text-xs text-gray-500">
+          Data Directory: <span className="font-mono text-gray-700">/data/wordpress</span>
+        </div>
       </div>
 
       {/* Error Display */}
@@ -264,8 +265,8 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Join Command Section - At the top for visibility */}
-      {isMultiNode && readyHosts.length > 0 && (
+      {/* Join Command Section - Always visible for multi-node */}
+      {isMultiNode && (
         <div className="bg-gray-50 rounded-lg border border-gray-200 p-4">
           <h3 className="text-sm font-medium text-gray-900 mb-3">Add Additional Hosts</h3>
           <p className="text-xs text-gray-600 mb-3">
