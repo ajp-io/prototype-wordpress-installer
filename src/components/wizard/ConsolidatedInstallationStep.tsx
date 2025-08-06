@@ -36,13 +36,13 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     hosts: {
       status: isLinuxMode ? 'running' : 'pending',
       title: 'Runtime Installation',
-      description: 'Installing runtime and setting up hosts',
+      description: 'Installing runtime on the host',
       progress: 0
     },
     infrastructure: {
       status: 'pending',
       title: 'Infrastructure Installation',
-      description: 'Installing storage, registry, and disaster recovery components',
+      description: 'Installing infrastructure components',
       progress: 0
     },
     preflights: {
