@@ -84,11 +84,53 @@ export const validateHostPreflights = async (config: ClusterConfig): Promise<Hos
   // Get prototype settings
   const prototypeSettings = JSON.parse(localStorage.getItem('wordpress-prototype-settings') || '{}');
   const shouldFail = prototypeSettings.failHostPreflights;
+  const showManyFailures = prototypeSettings.showManyHostFailures;
 
   // Simulate preflight checks
   await new Promise(resolve => setTimeout(resolve, 2000));
 
-  if (shouldFail) {
+  if (shouldFail && showManyFailures) {
+    // Show 7 failures for testing
+    preflightStatus.kernelVersion = {
+      success: false,
+      message: 'Kernel version 3.10.0 is not supported. Please upgrade to kernel version 4.15.0 or later. You can check your current kernel version with "uname -r" and upgrade using your distribution\'s package manager.',
+    };
+
+    preflightStatus.kernelParameters = {
+      success: false,
+      message: 'Required kernel parameter net.bridge.bridge-nf-call-iptables=1 is not set. Run: sysctl -w net.bridge.bridge-nf-call-iptables=1 and add "net.bridge.bridge-nf-call-iptables=1" to /etc/sysctl.conf to make it persistent across reboots.',
+    };
+
+    preflightStatus.dataDirectory = {
+      success: false,
+      message: 'Data directory /var/lib/wordpress is a symbolic link pointing to /tmp/wordpress. Please use a real directory path for data storage to ensure data persistence and proper permissions.',
+    };
+
+    preflightStatus.systemMemory = {
+      success: false,
+      message: 'Insufficient memory: 4GB available, minimum 8GB required. Add more memory to meet the requirements. WordPress Enterprise requires adequate memory for database operations and concurrent user sessions.',
+    };
+
+    preflightStatus.systemCPU = {
+      success: false,
+      message: 'Insufficient CPU cores: 2 cores available, minimum 4 cores required. Add more CPU resources to meet the requirements. Consider upgrading your instance type or adding more virtual CPUs.',
+    };
+
+    preflightStatus.diskSpace = {
+      success: false,
+      message: 'Insufficient disk space: 5GB available, minimum 20GB required. Free up space or add more storage. WordPress Enterprise needs space for application data, logs, backups, and temporary files during operation.',
+    };
+
+    preflightStatus.selinux = {
+      success: false,
+      message: 'SELinux is in enforcing mode which can interfere with WordPress Enterprise. To run SELinux in permissive mode, edit /etc/selinux/config, change SELINUX=enforcing to SELINUX=permissive, save the file, and reboot. Verify with "getenforce" command.',
+    };
+
+    preflightStatus.networkEndpoints = {
+      success: false,
+      message: 'Cannot reach required network endpoints including registry.wordpress.com and api.wordpress.com. Check firewall rules, DNS resolution, and network connectivity. Ensure ports 80, 443, and 6443 are accessible.',
+    };
+  } else if (shouldFail) {
     preflightStatus.kernelVersion = {
       success: false,
       message: 'Kernel version 3.10.0 is not supported. Please upgrade to kernel version 4.15.0 or later.',

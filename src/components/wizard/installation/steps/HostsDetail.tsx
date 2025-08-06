@@ -265,7 +265,6 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
         <div className="mb-3 space-y-3">
           {Object.entries(host.preflightStatus)
             .filter(([_, result]) => result && !result.success)
-            .slice(0, 3) // Show up to 3 errors
             .map(([key, result]) => (
               <div key={key} className="flex items-start">
                 <XCircle className="w-4 h-4 text-red-500 mt-0.5 mr-2 flex-shrink-0" />
@@ -279,13 +278,6 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
                 </div>
               </div>
             ))}
-          {Object.entries(host.preflightStatus || {})
-            .filter(([_, result]) => result && !result.success).length > 3 && (
-            <div className="text-xs text-gray-500 text-center">
-              +{Object.entries(host.preflightStatus || {})
-                .filter(([_, result]) => result && !result.success).length - 3} more issues
-            </div>
-          )}
         </div>
       )}
     </div>
