@@ -270,7 +270,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
         <div className="bg-gray-50 rounded-lg border border-gray-200 p-4">
           <h3 className="text-sm font-medium text-gray-900 mb-3">Add Additional Hosts</h3>
           <p className="text-xs text-gray-600 mb-3">
-            Run this command on additional hosts to join them to the cluster:
+            Run this command on additional hosts to join them to the installation:
           </p>
           <div className="bg-gray-900 rounded-md p-3 flex items-center justify-between">
             <code className="text-gray-200 text-xs font-mono flex-1 mr-3">
