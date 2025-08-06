@@ -83,9 +83,9 @@ const InfrastructureDetail: React.FC<InfrastructureDetailProps> = ({
       </div>
 
       <div className="space-y-2 divide-y divide-gray-200">
-        {renderComponentStatus('Storage (OpenEBS)', status.openebs, <Database className="w-5 h-5" />)}
+        {renderComponentStatus('Storage', status.openebs, <Database className="w-5 h-5" />)}
         {renderComponentStatus('Container Registry', status.registry, <Server className="w-5 h-5" />)}
-        {renderComponentStatus('Disaster Recovery (Velero)', status.velero, <Package className="w-5 h-5" />)}
+        {renderComponentStatus('Disaster Recovery', status.velero, <Package className="w-5 h-5" />)}
         {renderComponentStatus('Additional Components', status.components, <Package className="w-5 h-5" />)}
       </div>
     </div>
