@@ -220,64 +220,110 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
   };
 
   const renderHostCard = (host: HostStatus) => (
-    <div key={host.id} className="bg-white rounded-lg border border-gray-200 p-4">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center">
-          {getPhaseIcon(host.phase)}
-          <div className="ml-3">
-            <h3 className="text-sm font-medium text-gray-900">{host.name}</h3>
+    <div key={host.id} className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+      {/* Header Section */}
+      <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="flex-shrink-0">
+              {getPhaseIcon(host.phase)}
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">{host.name}</h3>
+              <p className="text-sm text-gray-500">Runtime Host</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <div className={`text-sm font-medium ${getPhaseColor(host.phase)}`}>
+              {host.phase === 'ready' ? 'Ready' : 
+               host.phase === 'failed' ? 'Failed' :
+               host.phase === 'installing' ? 'Installing' : 'Checking'}
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              {host.phase === 'ready' ? 'Installation Complete' : 
+               host.phase === 'failed' ? 'Requires Attention' :
+               `${host.progress}% Complete`}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Progress Bar */}
-      {host.phase !== 'ready' && host.phase !== 'failed' && (
-        <div className="mb-3">
-          <div className="w-full bg-gray-200 rounded-full h-1.5">
+      {/* Progress Section */}
+      <div className="px-6 py-4">
+        {/* Progress Bar - Always show, but different styles based on phase */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-gray-700">Installation Progress</span>
+            <span className="text-sm text-gray-500">{host.progress}%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
             <div
-              className="h-1.5 rounded-full transition-all duration-300"
+              className="h-2 rounded-full transition-all duration-500 ease-out"
               style={{
                 width: `${host.progress}%`,
-                backgroundColor: host.phase === 'failed' ? 'rgb(239 68 68)' : themeColor,
+                backgroundColor: host.phase === 'failed' ? 'rgb(239 68 68)' : 
+                               host.phase === 'ready' ? 'rgb(34 197 94)' : themeColor,
               }}
             />
           </div>
         </div>
-      )}
 
-      {/* Status Message and Data Directory */}
-      <div className="text-center space-y-1">
-        <div className="text-xs text-gray-500">{host.currentMessage}</div>
-        <div className="text-xs text-gray-500">
-          Data Directory: <span className="font-mono text-gray-700">/data/wordpress</span>
+        {/* Status Message */}
+        <div className="flex items-start space-x-3 mb-4">
+          <div className="flex-shrink-0 mt-1">
+            <div className="w-2 h-2 rounded-full" style={{
+              backgroundColor: host.phase === 'failed' ? 'rgb(239 68 68)' : 
+                             host.phase === 'ready' ? 'rgb(34 197 94)' : themeColor
+            }} />
+          </div>
+          <div>
+            <p className="text-sm text-gray-900 font-medium">{host.currentMessage}</p>
+            <p className="text-xs text-gray-500 mt-1">
+              Data Directory: <span className="font-mono bg-gray-100 px-1.5 py-0.5 rounded">/data/wordpress</span>
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Error Display */}
+      {/* Error Section */}
       {host.phase === 'failed' && host.error && (
-        <div className="mb-3 p-2 bg-red-50 border border-red-200 rounded-md">
-          <p className="text-xs text-red-700">{host.error}</p>
+        <div className="px-6 py-4 bg-red-50 border-t border-red-100">
+          <div className="flex items-start space-x-2">
+            <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+            <div>
+              <h4 className="text-sm font-medium text-red-800 mb-1">Installation Error</h4>
+              <p className="text-sm text-red-700">{host.error}</p>
+            </div>
+          </div>
         </div>
       )}
 
-      {/* Failed Preflight Checks */}
+      {/* Failed Preflight Checks Section */}
       {host.phase === 'failed' && host.preflightStatus && (
-        <div className="mb-3 space-y-3">
-          {Object.entries(host.preflightStatus)
-            .filter(([_, result]) => result && !result.success)
-            .map(([key, result]) => (
-              <div key={key} className="flex items-start">
-                <XCircle className="w-4 h-4 text-red-500 mt-0.5 mr-2 flex-shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <h5 className="text-xs font-medium text-red-800 mb-1">
-                    {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                  </h5>
-                  <p className="text-xs text-red-700 leading-relaxed">
-                    {result?.message}
-                  </p>
+        <div className="px-6 py-4 bg-red-50 border-t border-red-100">
+          <h4 className="text-sm font-medium text-red-800 mb-4 flex items-center">
+            <XCircle className="w-4 h-4 mr-2" />
+            Failed Preflight Checks
+          </h4>
+          <div className="space-y-4">
+            {Object.entries(host.preflightStatus)
+              .filter(([_, result]) => result && !result.success)
+              .map(([key, result]) => (
+                <div key={key} className="bg-white rounded-md border border-red-200 p-3">
+                  <div className="flex items-start space-x-3">
+                    <XCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <h5 className="text-sm font-medium text-red-800 mb-2">
+                        {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                      </h5>
+                      <p className="text-sm text-red-700 leading-relaxed">
+                        {result?.message}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+          </div>
         </div>
       )}
     </div>
