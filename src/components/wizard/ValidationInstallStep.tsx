@@ -85,7 +85,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
         });
       });
     } catch (error) {
-      console.error('Infrastructure setup error:', error);
+      console.error('Infrastructure installation error:', error);
     }
   };
 
