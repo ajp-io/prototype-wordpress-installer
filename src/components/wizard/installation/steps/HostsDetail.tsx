@@ -251,9 +251,6 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
 
       {/* Status message */}
       <p className="text-sm text-gray-600 mb-2">{host.currentMessage}</p>
-      <p className="text-xs text-gray-500">
-        <span className="font-mono bg-gray-100 px-1.5 py-0.5 rounded">/data/wordpress</span>
-      </p>
 
       {/* Failed preflight checks */}
       {host.phase === 'failed' && host.preflightStatus && (
