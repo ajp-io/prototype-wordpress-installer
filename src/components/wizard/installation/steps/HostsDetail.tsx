@@ -249,8 +249,10 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
         </div>
       )}
 
-      {/* Status message */}
-      <p className="text-sm text-gray-600 mb-2">{host.currentMessage}</p>
+      {/* Status message - only when not ready */}
+      {host.phase !== 'ready' && (
+        <p className="text-sm text-gray-600 mb-2">{host.currentMessage}</p>
+      )}
 
       {/* Failed preflight checks */}
       {host.phase === 'failed' && host.preflightStatus && (
