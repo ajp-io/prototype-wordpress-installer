@@ -262,20 +262,30 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
 
       {/* Failed Preflight Checks */}
       {host.phase === 'failed' && host.preflightStatus && (
-        <div className="mb-3 space-y-1">
+        <div className="mb-3 space-y-3">
           {Object.entries(host.preflightStatus)
             .filter(([_, result]) => result && !result.success)
-            .slice(0, 2) // Show only first 2 errors to save space
+            .slice(0, 3) // Show up to 3 errors
             .map(([key, result]) => (
               <div key={key} className="flex items-start">
-                <XCircle className="w-3 h-3 text-red-500 mt-0.5 mr-2 flex-shrink-0" />
-                <div>
-                  <h5 className="text-xs font-medium text-red-800">
+                <XCircle className="w-4 h-4 text-red-500 mt-0.5 mr-2 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <h5 className="text-xs font-medium text-red-800 mb-1">
                     {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
                   </h5>
+                  <p className="text-xs text-red-700 leading-relaxed">
+                    {result?.message}
+                  </p>
                 </div>
               </div>
             ))}
+          {Object.entries(host.preflightStatus || {})
+            .filter(([_, result]) => result && !result.success).length > 3 && (
+            <div className="text-xs text-gray-500 text-center">
+              +{Object.entries(host.preflightStatus || {})
+                .filter(([_, result]) => result && !result.success).length - 3} more issues
+            </div>
+          )}
         </div>
       )}
     </div>
