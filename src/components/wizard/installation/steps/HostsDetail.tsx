@@ -323,7 +323,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
         <h3 className="text-sm font-medium text-gray-900 mb-3">
           Hosts ({hosts.length})
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="space-y-4">
           {hosts.map(renderHostCard)}
         </div>
       </div>
