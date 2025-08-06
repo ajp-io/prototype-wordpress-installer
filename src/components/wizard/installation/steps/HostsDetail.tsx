@@ -239,37 +239,43 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
                host.phase === 'failed' ? 'Failed' :
                host.phase === 'installing' ? 'Installing' : 'Checking'}
             </div>
-            <div className="text-xs text-gray-500 mt-1">
-              {host.phase === 'ready' ? 'Installation Complete' : 
-               host.phase === 'failed' ? 'Requires Attention' :
-               `${host.progress}% Complete`}
-            </div>
           </div>
         </div>
       </div>
 
       {/* Progress Section */}
       <div className="px-6 py-4">
-        {/* Progress Bar - Always show, but different styles based on phase */}
-        <div className="mb-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">Installation Progress</span>
-            <span className="text-sm text-gray-500">{host.progress}%</span>
+        {/* Progress Bar - Only show when not ready/failed */}
+        {(host.phase === 'preflight' || host.phase === 'installing') && (
+          <div className="mb-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-700">Progress</span>
+              <span className="text-sm text-gray-500">{host.progress}%</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div
+                className="h-2 rounded-full transition-all duration-500 ease-out"
+                style={{
+                  width: `${host.progress}%`,
+                  backgroundColor: themeColor,
+                }}
+              />
+            </div>
           </div>
+        )}
+
+        {/* Completion indicator for ready state */}
+        {host.phase === 'ready' && (
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
               className="h-2 rounded-full transition-all duration-500 ease-out"
-              style={{
-                width: `${host.progress}%`,
-                backgroundColor: host.phase === 'failed' ? 'rgb(239 68 68)' : 
-                               host.phase === 'ready' ? 'rgb(34 197 94)' : themeColor,
-              }}
+              style={{ width: '100%', backgroundColor: 'rgb(34 197 94)' }}
             />
           </div>
-        </div>
+        )}
 
         {/* Status Message */}
-        <div className="flex items-start space-x-3 mb-4">
+        <div className="flex items-start space-x-3 mt-4">
           <div className="flex-shrink-0 mt-1">
             <div className="w-2 h-2 rounded-full" style={{
               backgroundColor: host.phase === 'failed' ? 'rgb(239 68 68)' : 
