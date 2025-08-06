@@ -168,7 +168,7 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
           icon={<ChevronRight className="w-5 h-5" />}
         >
           {prototypeSettings.clusterMode === 'embedded' 
-            ? 'Next: Start Installation'
+            ? 'Next: Installation'
             : 'Next: Preflight Checks'}
         </Button>
       </div>

@@ -310,13 +310,13 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
   const getNextButtonText = () => {
     if (currentStep === 'hosts') {
-      return 'Next: Infrastructure Installation';
+      return 'Next: Infrastructure';
     } else if (currentStep === 'infrastructure') {
       return 'Retry Infrastructure Installation';
     } else if (currentStep === 'preflights') {
       return 'Continue Despite Failures';
     } else if (currentStep === 'application') {
-      return 'Next: Finish';
+      return 'Next: Completion';
     }
     return 'Next';
   };
