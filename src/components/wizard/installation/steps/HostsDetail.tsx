@@ -261,32 +261,54 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       {/* Failed preflight checks */}
       {host.phase === 'failed' && host.preflightStatus && (
         <div className="mt-4 space-y-4">
-          <div className="p-3 bg-amber-50 border border-amber-200 rounded-md">
-            <p className="text-sm text-amber-800">
-              Please resolve the issues below and try again.
+          {/* Header with icon and message */}
+          <div className="text-center py-6">
+            <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+              <XCircle className="w-6 h-6 text-red-500" />
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Host Requirements Not Met</h3>
+            <p className="text-sm text-gray-600">
+              We found some issues that need to be resolved before proceeding with the installation.
             </p>
           </div>
           
-          {Object.entries(host.preflightStatus)
-            .filter(([_, result]) => result && !result.success)
-            .map(([key, result]) => (
-              <div key={key} className="bg-red-50 border border-red-200 rounded-md p-3">
-                <h5 className="text-sm font-medium text-red-800 mb-1">
-                  {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
-                </h5>
-                <p className="text-sm text-red-700 leading-relaxed">
-                  {result?.message}
-                </p>
-              </div>
-            ))}
+          {/* Failed checks list */}
+          <div className="space-y-3">
+            {Object.entries(host.preflightStatus)
+              .filter(([_, result]) => result && !result.success)
+              .map(([key, result]) => (
+                <div key={key} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-md border border-gray-200">
+                  <div className="flex-shrink-0 mt-0.5">
+                    <XCircle className="w-4 h-4 text-red-500" />
+                  </div>
+                  <div className="flex-1">
+                    <h5 className="text-sm font-medium text-gray-900 mb-1">
+                      {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                    </h5>
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      {result?.message}
+                    </p>
+                  </div>
+                </div>
+              ))}
+          </div>
+
+          {/* What's Next section */}
+          <div className="mt-6">
+            <h4 className="text-sm font-medium text-gray-900 mb-3">What's Next?</h4>
+            <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+              <li>Review and address each failed requirement</li>
+              <li>Re-run the validation once issues are addressed</li>
+            </ul>
+          </div>
           
-          <div className="pt-2">
+          {/* Rerun button */}
+          <div className="pt-4">
             <Button
-              size="sm"
               onClick={() => handleRerunPreflights(host.id)}
-              className="text-sm"
+              className="w-full sm:w-auto"
             >
-              Rerun Preflight Checks
+              Run Validation Again
             </Button>
           </div>
         </div>
