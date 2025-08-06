@@ -261,16 +261,10 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       {/* Failed preflight checks */}
       {host.phase === 'failed' && host.preflightStatus && (
         <div className="mt-4 space-y-4">
-          {/* Header with icon and message */}
-          <div className="text-center py-6">
-            <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
-              <XCircle className="w-6 h-6 text-red-500" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Host Requirements Not Met</h3>
-            <p className="text-sm text-gray-600">
-              We found some issues that need to be resolved before proceeding with the installation.
-            </p>
-          </div>
+          {/* Simple failure message */}
+          <p className="text-sm text-gray-600">
+            Preflight checks failed. Please resolve the issues below and try again.
+          </p>
           
           {/* Failed checks list */}
           <div className="space-y-3">
