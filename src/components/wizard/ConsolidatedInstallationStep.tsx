@@ -174,7 +174,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       console.error('Infrastructure installation error:', error);
       updateStepStatus('infrastructure', { 
         status: 'failed', 
-        error: 'Infrastructure instalation failed' 
+        error: 'Infrastructure installation failed' 
       });
     }
   };
@@ -295,6 +295,32 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     }
   };
 
+  const shouldShowNextButton = () => {
+    if (currentStep === 'hosts') {
+      return hostsComplete; // Always show for hosts when complete
+    } else if (currentStep === 'infrastructure') {
+      return steps.infrastructure.status === 'failed'; // Only show if failed
+    } else if (currentStep === 'preflights') {
+      return steps.preflights.status === 'failed' && !prototypeSettings.blockOnAppPreflights; // Only show if failed and not blocking
+    } else if (currentStep === 'application') {
+      return installationComplete; // Always show when complete
+    }
+    return false;
+  };
+
+  const getNextButtonText = () => {
+    if (currentStep === 'hosts') {
+      return 'Next: Infrastructure Installation';
+    } else if (currentStep === 'infrastructure') {
+      return 'Retry Infrastructure Installation';
+    } else if (currentStep === 'preflights') {
+      return 'Continue Despite Failures';
+    } else if (currentStep === 'application') {
+      return 'Next: Finish';
+    }
+    return 'Next';
+  };
+
   return (
     <div className="space-y-6">
       <Card className="p-0 overflow-hidden">
@@ -332,16 +358,16 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       </Card>
 
       <div className="flex justify-end">
-        <Button
-          onClick={handleNextClick}
-          disabled={!canProceed()}
-          icon={<ChevronRight className="w-5 h-5" />}
-        >
-          {currentStep === 'hosts' && 'Next: Infrastructure Installation'}
-          {currentStep === 'infrastructure' && 'Next: Preflight Checks'}
-          {currentStep === 'preflights' && 'Next: Install Application'}
-          {currentStep === 'application' && 'Next: Finish'}
-        </Button>
+        {shouldShowNextButton() && (
+          <Button
+            onClick={handleNextClick}
+            disabled={!canProceed()}
+            icon={<ChevronRight className="w-5 h-5" />}
+            variant={currentStep === 'preflights' ? 'danger' : 'primary'}
+          >
+            {getNextButtonText()}
+          </Button>
+        )}
       </div>
 
       <Modal
