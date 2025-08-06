@@ -191,6 +191,10 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
     startHostInstallation(newHostId);
   };
 
+  const handleRerunPreflights = (hostId: string) => {
+    startHostInstallation(hostId);
+  };
+
   const getPhaseIcon = (phase: HostPhase) => {
     switch (phase) {
       case 'ready':
@@ -256,7 +260,13 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
 
       {/* Failed preflight checks */}
       {host.phase === 'failed' && host.preflightStatus && (
-        <div className="mt-6 space-y-3">
+        <div className="mt-4 space-y-4">
+          <div className="p-3 bg-amber-50 border border-amber-200 rounded-md">
+            <p className="text-sm text-amber-800">
+              Please resolve the issues below and try again.
+            </p>
+          </div>
+          
           {Object.entries(host.preflightStatus)
             .filter(([_, result]) => result && !result.success)
             .map(([key, result]) => (
@@ -269,6 +279,16 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
                 </p>
               </div>
             ))}
+          
+          <div className="pt-2">
+            <Button
+              size="sm"
+              onClick={() => handleRerunPreflights(host.id)}
+              className="text-sm"
+            >
+              Rerun Preflight Checks
+            </Button>
+          </div>
         </div>
       )}
     </div>
