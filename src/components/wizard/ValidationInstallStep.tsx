@@ -6,7 +6,7 @@ import { useConfig } from '../../contexts/ConfigContext';
 import { useWizardMode } from '../../contexts/WizardModeContext';
 import { ValidationStatus, InstallationStatus } from '../../types';
 import { ChevronRight, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
-import { setupInfrastructure } from '../../utils/infrastructure';
+import { installInfrastructure } from '../../utils/infrastructure';
 import { validateEnvironment } from '../../utils/validation';
 import { installWordPress } from '../../utils/wordpress';
 import K0sInstallation from './setup/K0sInstallation';
@@ -60,7 +60,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
     if (phase === 'hosts' && isLinuxMode) {
       // Hosts phase is handled by K0sInstallation component
     } else if (phase === 'infrastructure' && isLinuxMode) {
-      startInfrastructureSetup();
+      startInfrastructureInstallation();
     } else if (phase === 'validating') {
       startValidation();
     } else if (phase === 'installing') {
@@ -73,9 +73,9 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
     setHasHostFailures(hasFailures);
   };
 
-  const startInfrastructureSetup = async () => {
+  const startInfrastructureInstallation = async () => {
     try {
-      await setupInfrastructure(config, (newStatus) => {
+      await installInfrastructure(config, (newStatus) => {
         setInstallStatus(prev => {
           const updatedStatus = { ...prev, ...newStatus };
           if (updatedStatus.overall === 'completed') {

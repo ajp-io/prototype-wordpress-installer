@@ -1,7 +1,7 @@
 import { ClusterConfig } from '../contexts/ConfigContext';
 import { InstallationStatus } from '../types';
 
-export const setupInfrastructure = async (
+export const installInfrastructure = async (
   config: ClusterConfig,
   onStatusUpdate: (status: Partial<InstallationStatus>) => void
 ): Promise<void> => {

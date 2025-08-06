@@ -6,7 +6,7 @@ import { useConfig } from '../../contexts/ConfigContext';
 import { useWizardMode } from '../../contexts/WizardModeContext';
 import { ValidationStatus, InstallationStatus } from '../../types';
 import { ChevronRight, AlertTriangle } from 'lucide-react';
-import { setupInfrastructure } from '../../utils/infrastructure';
+import { installInfrastructure } from '../../utils/infrastructure';
 import { validateEnvironment } from '../../utils/validation';
 import { installWordPress } from '../../utils/wordpress';
 import InstallationTimeline, { InstallationStep, StepStatus } from './installation/InstallationTimeline';
@@ -145,12 +145,12 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     // Don't auto-proceed - let user manually click Next when ready
   };
 
-  const startInfrastructureSetup = async () => {
+  const startInfrastructureInstallation = async () => {
     updateStepStatus('infrastructure', { status: 'running' });
     setCurrentStep('infrastructure');
 
     try {
-      await setupInfrastructure(config, (newStatus) => {
+      await installInfrastructure(config, (newStatus) => {
         setInfrastructureStatus(prev => {
           const updated = { ...prev, ...newStatus };
           updateStepStatus('infrastructure', { progress: updated.progress });
@@ -285,7 +285,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
   const handleNextClick = () => {
     if (currentStep === 'hosts') {
-      startInfrastructureSetup();
+      startInfrastructureInstallation();
     } else if (currentStep === 'infrastructure') {
       startPreflightChecks();
     } else if (currentStep === 'preflights') {
