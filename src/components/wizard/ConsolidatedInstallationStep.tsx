@@ -171,7 +171,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       }, 500);
 
     } catch (error) {
-      console.error('Infrastructure setup error:', error);
+      console.error('Infrastructure installation error:', error);
       updateStepStatus('infrastructure', { 
         status: 'failed', 
         error: 'Infrastructure setup failed' 
