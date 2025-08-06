@@ -230,14 +230,6 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-900">{host.name}</h3>
-              <p className="text-sm text-gray-500">Runtime Host</p>
-            </div>
-          </div>
-          <div className="text-right">
-            <div className={`text-sm font-medium ${getPhaseColor(host.phase)}`}>
-              {host.phase === 'ready' ? 'Ready' : 
-               host.phase === 'failed' ? 'Failed' :
-               host.phase === 'installing' ? 'Installing' : 'Checking'}
             </div>
           </div>
         </div>
@@ -245,13 +237,9 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
 
       {/* Progress Section */}
       <div className="px-6 py-4">
-        {/* Progress Bar - Only show when not ready/failed */}
+        {/* Progress Bar - Only show when in progress */}
         {(host.phase === 'preflight' || host.phase === 'installing') && (
           <div className="mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700">Progress</span>
-              <span className="text-sm text-gray-500">{host.progress}%</span>
-            </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
                 className="h-2 rounded-full transition-all duration-500 ease-out"
