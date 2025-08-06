@@ -337,7 +337,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
           disabled={!canProceed()}
           icon={<ChevronRight className="w-5 h-5" />}
         >
-          {currentStep === 'hosts' && 'Next: Infrastructure Setup'}
+          {currentStep === 'hosts' && 'Next: Infrastructure Installation'}
           {currentStep === 'infrastructure' && 'Next: Preflight Checks'}
           {currentStep === 'preflights' && 'Next: Install Application'}
           {currentStep === 'application' && 'Next: Finish'}
