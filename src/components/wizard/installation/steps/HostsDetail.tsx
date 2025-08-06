@@ -261,11 +261,6 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       {/* Failed preflight checks */}
       {host.phase === 'failed' && host.preflightStatus && (
         <div className="mt-4 space-y-4">
-          {/* Simple failure message */}
-          <p className="text-sm text-gray-600">
-            Preflight checks failed. Please resolve the issues below and try again.
-          </p>
-          
           {/* Failed checks list */}
           <div className="space-y-3">
             {Object.entries(host.preflightStatus)
