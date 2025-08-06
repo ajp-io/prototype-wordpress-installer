@@ -337,7 +337,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
 
   const getButtonText = () => {
     if (phase === 'hosts') {
-      return hostInstallationComplete ? 'Next: Install Infrastructure' : 'Installing...';
+      return hostInstallationComplete ? 'Next: Infrastructure Installation' : 'Installing...';
     } else if (phase === 'installing') {
       return 'Next: Finish';
     }
@@ -349,7 +349,7 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
   const getPhaseDescription = () => {
     switch (phase) {
       case 'hosts':
-        return 'Setting up hosts and installing runtime';
+        return 'Installing runtime and setting up hosts';
       case 'infrastructure':
         return 'Installing infrastructure components';
       case 'validating':

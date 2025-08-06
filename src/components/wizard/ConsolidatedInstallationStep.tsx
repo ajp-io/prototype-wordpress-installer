@@ -35,7 +35,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   const [steps, setSteps] = useState<Record<InstallationStep, StepStatus>>({
     hosts: {
       status: isLinuxMode ? 'running' : 'pending',
-      title: 'Host Setup',
+      title: 'Runtime Installation',
       description: 'Installing runtime and setting up hosts',
       progress: 0
     },
@@ -104,7 +104,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   // Start the appropriate first step
   useEffect(() => {
     if (isLinuxMode) {
-      startHostSetup();
+      startRuntimeInstallation();
     } else {
       startPreflightChecks();
     }
@@ -133,10 +133,10 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     setAllLogs(prev => [...prev, ...newLogs]);
   };
 
-  const startHostSetup = async () => {
+  const startRuntimeInstallation = async () => {
     updateStepStatus('hosts', { status: 'running' });
     setCurrentStep('hosts');
-    // Host setup is handled by the K0sInstallation component
+    // Runtime installation is handled by the K0sInstallation component
   };
 
   const handleHostsComplete = (hasFailures: boolean = false) => {
@@ -264,7 +264,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     if (isLinuxMode) {
       // For Linux mode, check which step we're on
       if (currentStep === 'hosts') {
-        return hostsComplete; // Can proceed once initial host setup is done
+        return hostsComplete; // Can proceed once initial runtime installation is done
       } else if (currentStep === 'infrastructure') {
         return steps.infrastructure.status === 'completed';
       } else if (currentStep === 'preflights') {
@@ -310,7 +310,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
   const getNextButtonText = () => {
     if (currentStep === 'hosts') {
-      return 'Next: Infrastructure';
+      return 'Next: Infrastructure Installation';
     } else if (currentStep === 'infrastructure') {
       return 'Retry Infrastructure Installation';
     } else if (currentStep === 'preflights') {
