@@ -41,7 +41,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     },
     infrastructure: {
       status: 'pending',
-      title: 'Infrastructure Setup',
+      title: 'Infrastructure Installation',
       description: 'Installing storage, registry, and disaster recovery components',
       progress: 0
     },
