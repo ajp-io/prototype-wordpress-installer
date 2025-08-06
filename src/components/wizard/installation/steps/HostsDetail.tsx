@@ -9,6 +9,7 @@ import { HostPreflightStatus, K0sInstallStatus } from '../../../../types';
 interface HostsDetailProps {
   onComplete?: (hasFailures?: boolean) => void;
   themeColor: string;
+  isRevisiting?: boolean;
 }
 
 interface NodeMetric {
@@ -33,7 +34,8 @@ interface HostStatus {
 
 const HostsDetail: React.FC<HostsDetailProps> = ({
   onComplete,
-  themeColor
+  themeColor,
+  isRevisiting = false
 }) => {
   const { config, prototypeSettings } = useConfig();
   const isMultiNode = prototypeSettings.enableMultiNode;
@@ -53,17 +55,33 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
   
   const readyHosts = hosts.filter(h => h.phase === 'ready');
 
-  // Start the first host installation automatically
+  // Start the first host installation automatically only if not revisiting
   useEffect(() => {
-    startHostInstallation('host-1');
-  }, []);
+    if (!isRevisiting) {
+      startHostInstallation('host-1');
+    } else {
+      // If revisiting, show completed state
+      setHosts([{
+        id: 'host-1',
+        name: 'host-1',
+        role: 'application',
+        phase: 'ready',
+        progress: 100,
+        currentMessage: 'Host ready',
+        logs: ['Runtime installation completed', 'Host ready'],
+        metrics: {
+          dataPath: '/data/wordpress'
+        }
+      }]);
+    }
+  }, [isRevisiting]);
 
   // Check if we're done
   useEffect(() => {
     const allHostsReady = hosts.every(h => h.phase === 'ready' || h.phase === 'failed');
     const hasFailures = hosts.some(h => h.phase === 'failed');
 
-    if (allHostsReady) {
+    if (allHostsReady && !isRevisiting) {
       onComplete?.(hasFailures);
     }
   }, [hosts, isMultiNode]);
