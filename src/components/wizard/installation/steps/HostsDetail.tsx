@@ -224,7 +224,11 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
   };
 
   const renderHostCard = (host: HostStatus) => (
-    <div key={host.id} className="bg-white rounded-lg border border-gray-200 p-6">
+    <div key={host.id} className={`rounded-lg p-6 ${
+      host.phase === 'failed' 
+        ? 'bg-red-50 border border-red-200' 
+        : 'bg-white border border-gray-200'
+    }`}>
       {/* Header with host name and status */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-900">{host.name}</h3>
