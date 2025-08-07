@@ -141,7 +141,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
   const handleHostsComplete = (hasFailures: boolean = false) => {
     setHostsComplete(true);
-    updateStepStatus('hosts', { status: hasFailures ? 'failed' : 'completed' });
+    updateStepStatus('hosts', { status: hasFailures ? 'warning' : 'completed' });
     // Don't auto-proceed - let user manually click Next when ready
   };
 
