@@ -261,6 +261,21 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       {/* Failed preflight checks */}
       {host.phase === 'failed' && host.preflightStatus && (
         <div className="mt-4 space-y-4">
+          {/* Header with count and rerun button */}
+          <div className="flex items-center justify-between">
+            <h4 className="text-base font-semibold text-gray-900">
+              {Object.entries(host.preflightStatus)
+                .filter(([_, result]) => result && !result.success).length} of {Object.keys(host.preflightStatus).length} preflight checks failed
+            </h4>
+            <Button
+              onClick={() => handleRerunPreflights(host.id)}
+              size="sm"
+              className="ml-4"
+            >
+              Rerun Preflight Checks
+            </Button>
+          </div>
+          
           {/* Failed checks list */}
           <div className="space-y-3">
             {Object.entries(host.preflightStatus)
@@ -280,25 +295,6 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
                   </div>
                 </div>
               ))}
-          </div>
-
-          {/* What's Next section */}
-          <div className="mt-6">
-            <h4 className="text-sm font-medium text-gray-900 mb-3">What's Next?</h4>
-            <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
-              <li>Review and address each failed requirement</li>
-              <li>Re-run the validation once issues are addressed</li>
-            </ul>
-          </div>
-          
-          {/* Rerun button */}
-          <div className="pt-4">
-            <Button
-              onClick={() => handleRerunPreflights(host.id)}
-              className="w-full sm:w-auto"
-            >
-              Run Validation Again
-            </Button>
           </div>
         </div>
       )}
