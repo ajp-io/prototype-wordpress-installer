@@ -193,7 +193,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
       if (hasFailures) {
         updateStepStatus('preflights', { 
-          status: 'failed',
+          status: 'warning',
           error: 'Some preflight checks failed'
         });
         
