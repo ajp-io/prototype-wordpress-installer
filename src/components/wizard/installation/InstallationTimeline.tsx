@@ -4,7 +4,7 @@ import { CheckCircle, XCircle, AlertTriangle, Loader2, Clock } from 'lucide-reac
 export type InstallationStep = 'hosts' | 'infrastructure' | 'preflights' | 'application';
 
 export interface StepStatus {
-  status: 'pending' | 'running' | 'completed' | 'failed';
+  status: 'pending' | 'running' | 'completed' | 'failed' | 'warning';
   title: string;
   description: string;
   progress?: number;
@@ -41,6 +41,8 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
         return <CheckCircle className="w-6 h-6 text-green-500" />;
       case 'failed':
         return <XCircle className="w-6 h-6 text-red-500" />;
+      case 'warning':
+        return <AlertTriangle className="w-6 h-6 text-amber-500" />;
       case 'running':
         return <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />;
       default:
