@@ -281,6 +281,25 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
                 </div>
               ))}
           </div>
+
+          {/* What's Next section */}
+          <div className="mt-6">
+            <h4 className="text-sm font-medium text-gray-900 mb-3">What's Next?</h4>
+            <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+              <li>Review and address each failed requirement</li>
+              <li>Re-run the validation once issues are addressed</li>
+            </ul>
+          </div>
+          
+          {/* Rerun button */}
+          <div className="pt-4">
+            <Button
+              onClick={() => handleRerunPreflights(host.id)}
+              className="w-full sm:w-auto"
+            >
+              Run Validation Again
+            </Button>
+          </div>
         </div>
       )}
     </div>
@@ -292,20 +311,8 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       {isMultiNode && (
         <div className="bg-gray-50 rounded-lg border border-gray-200 p-4">
           <h3 className="text-sm font-medium text-gray-900 mb-3">Add Additional Hosts</h3>
-          {/* Header with count and rerun button */}
-          <div className="flex items-center justify-between">
-            <h4 className="text-base font-semibold text-gray-900">
-              {Object.values(host.preflightStatus).filter(result => result && !result.success).length} of {Object.keys(host.preflightStatus).length} preflight checks failed
-            </h4>
-            <Button
-              onClick={() => handleRerunPreflights(host.id)}
-              size="sm"
-            >
-              Run Validation Again
-            </Button>
-          </div>
-          <p className="text-sm text-gray-600">
-            Please resolve the issues below and try again.
+          <p className="text-xs text-gray-600 mb-3">
+            Run this command on additional hosts to join them to the installation:
           </p>
           <div className="bg-gray-900 rounded-md p-3 flex items-center justify-between">
             <code className="text-gray-200 text-xs font-mono flex-1 mr-3">
