@@ -200,17 +200,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       case 'ready':
         return <CheckCircle className="w-5 h-5 text-green-500" />;
       case 'failed':
-        // Check if this is a preflight failure (retryable) or hard failure
-        const hasPreflightFailures = hosts.some(h => 
-          h.phase === 'failed' && h.preflightStatus && 
-          Object.values(h.preflightStatus).some(result => result && !result.success)
-        );
-        
-        if (hasPreflightFailures) {
-          return <AlertTriangle className="w-5 h-5 text-amber-500" />;
-        } else {
-          return <XCircle className="w-5 h-5 text-red-500" />;
-        }
+        return <XCircle className="w-5 h-5 text-red-500" />;
       case 'preflight':
       case 'installing':
         return <Loader2 className="w-5 h-5 animate-spin" style={{ color: themeColor }} />;
@@ -224,17 +214,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       case 'ready':
         return 'text-green-600';
       case 'failed':
-        // Check if this is a preflight failure (retryable) or hard failure
-        const hasPreflightFailures = hosts.some(h => 
-          h.phase === 'failed' && h.preflightStatus && 
-          Object.values(h.preflightStatus).some(result => result && !result.success)
-        );
-        
-        if (hasPreflightFailures) {
-          return 'text-amber-600';
-        } else {
-          return 'text-red-600';
-        }
+        return 'text-red-600';
       case 'preflight':
       case 'installing':
         return 'text-blue-600';
