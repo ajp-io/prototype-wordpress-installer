@@ -264,7 +264,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     if (isLinuxMode) {
       // For Linux mode, check which step we're on
       if (currentStep === 'hosts') {
-        return hostsComplete; // Can proceed once initial runtime installation is done
+        return hostsComplete && !hasHostFailures; // Can proceed only if complete AND no failures
       } else if (currentStep === 'infrastructure') {
         return steps.infrastructure.status === 'completed';
       } else if (currentStep === 'preflights') {
@@ -297,7 +297,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
   const shouldShowNextButton = () => {
     if (currentStep === 'hosts') {
-      return hostsComplete; // Always show for hosts when complete
+      return hostsComplete && !hasHostFailures; // Only show if complete AND no failures
     } else if (currentStep === 'infrastructure') {
       return steps.infrastructure.status === 'failed'; // Only show if failed
     } else if (currentStep === 'preflights') {
