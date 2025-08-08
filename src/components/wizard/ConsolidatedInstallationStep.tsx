@@ -157,10 +157,8 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     // For single-node successful installations, auto-proceed to infrastructure
     if (!hasFailures && !prototypeSettings.enableMultiNode) {
       updateStepStatus('hosts', { status: 'completed' });
-      // Auto-proceed to infrastructure installation after a brief delay
-      setTimeout(() => {
-        startInfrastructureInstallation();
-      }, 500);
+      // Immediately proceed to infrastructure installation
+      startInfrastructureInstallation();
     } else {
       // For multi-node or failed installations, keep status as 'running' until user manually proceeds
       // Don't auto-proceed - let user manually click Next when ready
@@ -325,7 +323,9 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
   const shouldShowNextButton = () => {
     if (currentStep === 'hosts') {
-      return hostsComplete && !hasHostFailures; // Only show if complete AND no failures
+      // For single-node, never show Next button since it auto-proceeds
+      // For multi-node, show Next button when complete and no failures
+      return prototypeSettings.enableMultiNode && hostsComplete && !hasHostFailures;
     } else if (currentStep === 'infrastructure') {
       return steps.infrastructure.status === 'failed'; // Only show if failed
     } else if (currentStep === 'preflights') {

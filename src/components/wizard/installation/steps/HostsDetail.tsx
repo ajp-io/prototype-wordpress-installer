@@ -85,10 +85,8 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
     if (allHostsReady && !isRevisiting) {
       // For single-node installations, auto-proceed if successful
       if (!isMultiNode && isSuccessful) {
-        // Small delay to show the success state before proceeding
-        setTimeout(() => {
-          onComplete?.(false);
-        }, 1500);
+        // Immediately proceed for single-node success
+        onComplete?.(false);
       } else {
         // For multi-node or failed installations, just call onComplete
         onComplete?.(hasFailures);
