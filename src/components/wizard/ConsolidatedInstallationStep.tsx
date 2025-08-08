@@ -54,7 +54,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     application: {
       status: 'pending',
       title: 'WordPress Installation',
-      description: 'Installing database, core, and plugins',
+      description: 'Installing Wordpress Enterprise components',
       progress: 0
     }
   });
