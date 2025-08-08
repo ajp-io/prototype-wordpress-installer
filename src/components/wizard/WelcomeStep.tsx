@@ -29,10 +29,10 @@ const WelcomeStep: React.FC<WelcomeStepProps> = ({ onNext }) => {
       return;
     }
 
-    if (password === 'password') {
+    if (password.trim() !== '') {
       onNext();
     } else {
-      setError('Incorrect password');
+      setError('Password is required');
     }
   };
 
