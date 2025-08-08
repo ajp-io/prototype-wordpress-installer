@@ -60,31 +60,6 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
   const hasAnyInProgress = hosts.some(h => h.phase === 'preflight' || h.phase === 'installing');
   const allReady = hosts.every(h => h.phase === 'ready');
 
-  // Calculate status based on current host states
-  const calculateStatus = () => {
-    const currentHasFailures = hosts.some(h => h.phase === 'failed');
-    const currentHasInProgress = hosts.some(h => h.phase === 'preflight' || h.phase === 'installing');
-    const currentAllReady = hosts.every(h => h.phase === 'ready');
-    
-    if (currentHasFailures) {
-      return 'warning';
-    } else if (currentHasInProgress) {
-      return 'running';
-    } else if (currentAllReady) {
-      return 'completed';
-    } else {
-      return 'running'; // default fallback
-    }
-  };
-
-  // Update parent component with calculated status
-  useEffect(() => {
-    if (onStatusChange) {
-      const status = calculateStatus();
-      onStatusChange(status);
-    }
-  }, [hosts, onStatusChange]);
-
   // Start the first host installation automatically only if not revisiting
   useEffect(() => {
     if (!isRevisiting) {
@@ -219,7 +194,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
   };
 
   const handleRerunPreflights = (hostId: string) => {
-    // Immediately reset the host to preflight phase when rerunning
+    // Reset the host to preflight phase when rerunning
     setHosts(prev => prev.map(h => 
       h.id === hostId 
         ? {
@@ -232,11 +207,6 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
           }
         : h
     ));
-    
-    // Force immediate status update after state change
-    if (onStatusChange) {
-      onStatusChange('running');
-    }
     
     startHostInstallation(hostId);
   };
