@@ -71,7 +71,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
         onStatusChange('completed');
       }
     }
-  }, [hasAnyFailures, hasAnyInProgress, allReady, onStatusChange]);
+  }, [hasAnyFailures, hasAnyInProgress, allReady, onStatusChange, hosts]);
 
   // Start the first host installation automatically only if not revisiting
   useEffect(() => {
