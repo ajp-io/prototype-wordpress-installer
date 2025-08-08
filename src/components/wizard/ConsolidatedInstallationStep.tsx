@@ -143,9 +143,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   const handleHostsComplete = (hasFailures: boolean = false) => {
     setHostsComplete(true);
     setHasHostFailures(hasFailures);
-    
-    // Don't immediately set to completed/warning here - let the HostsDetail component
-    // manage the dynamic status based on current host states
+    updateStepStatus('hosts', { status: hasFailures ? 'warning' : 'completed' });
     // Don't auto-proceed - let user manually click Next when ready
   };
 
@@ -357,9 +355,6 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
             logs={allLogs}
             isExpanded={showLogs}
             onToggle={() => setShowLogs(!showLogs)}
-            onHostsStatusChange={(status) => {
-              updateStepStatus('hosts', { status });
-            }}
           />
         </div>
       </Card>
