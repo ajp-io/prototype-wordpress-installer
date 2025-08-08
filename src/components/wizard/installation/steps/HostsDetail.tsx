@@ -363,7 +363,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       {/* Host Cards */}
       <div>
         <h3 className="text-sm font-medium text-gray-900 mb-3">
-          Hosts ({hosts.length})
+          {isMultiNode ? `Hosts (${hosts.length})` : 'Host'}
         </h3>
         <div className="space-y-4">
           {hosts.map(renderHostCard)}
