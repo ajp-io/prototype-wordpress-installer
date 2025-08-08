@@ -104,21 +104,6 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
         logs: ['Starting preflight checks...']
       });
 
-      // Show some progress during preflight checks
-      await new Promise(resolve => setTimeout(resolve, 500));
-      updateHost({
-        progress: 20,
-        currentMessage: 'Checking system requirements...',
-        logs: ['Starting preflight checks...', 'Checking kernel version...']
-      });
-
-      await new Promise(resolve => setTimeout(resolve, 500));
-      updateHost({
-        progress: 25,
-        currentMessage: 'Validating system configuration...',
-        logs: ['Starting preflight checks...', 'Checking kernel version...', 'Validating memory and CPU...']
-      });
-
       const preflightResults = await validateHostPreflights(config);
       const hasPreflightFailures = Object.values(preflightResults).some(
         (result) => result && !result.success
@@ -127,11 +112,11 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       if (hasPreflightFailures) {
         updateHost({
           phase: 'failed',
-          progress: 30,
+          progress: 100,
           currentMessage: 'Preflight checks failed',
           preflightStatus: preflightResults,
           error: 'Host preflight checks failed. Please resolve the issues and try again.',
-          logs: ['Starting preflight checks...', 'Checking kernel version...', 'Validating memory and CPU...', 'Preflight checks failed']
+          logs: ['Preflight checks failed']
         });
         return;
       }
@@ -215,7 +200,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
         ? {
             ...h,
             phase: 'preflight',
-            progress: 10,
+            progress: 0,
             currentMessage: 'Starting host preflight checks...',
             logs: ['Rerunning preflight checks...'],
             error: undefined
