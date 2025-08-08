@@ -80,9 +80,19 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
   useEffect(() => {
     const allHostsReady = hosts.every(h => h.phase === 'ready' || h.phase === 'failed');
     const hasFailures = hosts.some(h => h.phase === 'failed');
+    const isSuccessful = hosts.some(h => h.phase === 'ready') && !hasFailures;
 
     if (allHostsReady && !isRevisiting) {
-      onComplete?.(hasFailures);
+      // For single-node installations, auto-proceed if successful
+      if (!isMultiNode && isSuccessful) {
+        // Small delay to show the success state before proceeding
+        setTimeout(() => {
+          onComplete?.(false);
+        }, 1500);
+      } else {
+        // For multi-node or failed installations, just call onComplete
+        onComplete?.(hasFailures);
+      }
     }
   }, [hosts, isMultiNode]);
 

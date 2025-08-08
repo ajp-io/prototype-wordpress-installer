@@ -153,8 +153,18 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   const handleHostsComplete = (hasFailures: boolean = false) => {
     setHostsComplete(true);
     setHasHostFailures(hasFailures);
-    // Keep status as 'running' until user manually proceeds to next step
-    // Don't auto-proceed - let user manually click Next when ready
+    
+    // For single-node successful installations, auto-proceed to infrastructure
+    if (!hasFailures && !prototypeSettings.enableMultiNode) {
+      updateStepStatus('hosts', { status: 'completed' });
+      // Auto-proceed to infrastructure installation after a brief delay
+      setTimeout(() => {
+        startInfrastructureInstallation();
+      }, 500);
+    } else {
+      // For multi-node or failed installations, keep status as 'running' until user manually proceeds
+      // Don't auto-proceed - let user manually click Next when ready
+    }
   };
 
   const startInfrastructureInstallation = async () => {
