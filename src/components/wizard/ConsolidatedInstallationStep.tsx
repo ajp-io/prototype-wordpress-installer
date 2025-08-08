@@ -5,7 +5,7 @@ import Modal from '../common/Modal';
 import { useConfig } from '../../contexts/ConfigContext';
 import { useWizardMode } from '../../contexts/WizardModeContext';
 import { ValidationStatus, InstallationStatus } from '../../types';
-import { ChevronRight, AlertTriangle } from 'lucide-react';
+import { ChevronRight, ChevronLeft, AlertTriangle } from 'lucide-react';
 import { installInfrastructure } from '../../utils/infrastructure';
 import { validateEnvironment } from '../../utils/validation';
 import { installWordPress } from '../../utils/wordpress';
@@ -16,9 +16,10 @@ import K0sInstallation from './setup/K0sInstallation';
 
 interface ConsolidatedInstallationStepProps {
   onNext: () => void;
+  onBack: () => void;
 }
 
-const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> = ({ onNext }) => {
+const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> = ({ onNext, onBack }) => {
   const { config, prototypeSettings } = useConfig();
   const { text } = useWizardMode();
   const isLinuxMode = prototypeSettings.clusterMode === 'embedded';
@@ -378,7 +379,17 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
         </div>
       </Card>
 
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        {!isLinuxMode && currentStep === 'preflights' && (
+          <Button
+            variant="outline"
+            onClick={onBack}
+            icon={<ChevronLeft className="w-5 h-5" />}
+          >
+            Back
+          </Button>
+        )}
+        {isLinuxMode || currentStep !== 'preflights' ? <div></div> : null}
         {shouldShowNextButton() && (
           <Button
             onClick={handleNextClick}

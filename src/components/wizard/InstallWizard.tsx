@@ -38,7 +38,7 @@ const InstallWizard: React.FC = () => {
       case 'setup':
         return <SetupStep onNext={goToNextStep} onBack={goToPreviousStep} />;
       case 'installation':
-        return <ConsolidatedInstallationStep onNext={goToNextStep} />;
+        return <ConsolidatedInstallationStep onNext={goToNextStep} onBack={goToPreviousStep} />;
       case 'completion':
         return <CompletionStep />;
       default:
