@@ -102,6 +102,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   const [installationComplete, setInstallationComplete] = useState(false);
   const [hostsComplete, setHostsComplete] = useState(false);
   const [hasHostFailures, setHasHostFailures] = useState(false);
+  const [allRequiredNodesMet, setAllRequiredNodesMet] = useState(false);
 
   // Start the appropriate first step
   useEffect(() => {
@@ -153,6 +154,14 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   const handleHostsComplete = (hasFailures: boolean = false) => {
     setHostsComplete(true);
     setHasHostFailures(hasFailures);
+    
+    // For role-based installations, hasFailures indicates whether all required nodes are met
+    // (inverted logic: hasFailures = true means not all nodes are met)
+    if (prototypeSettings.useNodeRoles && prototypeSettings.enableMultiNode) {
+      setAllRequiredNodesMet(!hasFailures);
+    } else {
+      setAllRequiredNodesMet(true); // For non-role-based installations, always consider requirements met
+    }
     
     // For single-node successful installations, auto-proceed to infrastructure
     if (!hasFailures && !prototypeSettings.enableMultiNode) {
@@ -279,7 +288,13 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     if (isLinuxMode) {
       // For Linux mode, check which step we're on
       if (currentStep === 'hosts') {
-        return hostsComplete && !hasHostFailures; // Can proceed only if complete AND no failures
+        if (prototypeSettings.useNodeRoles && prototypeSettings.enableMultiNode) {
+          // For role-based installations, can only proceed when all required nodes are met
+          return hostsComplete && allRequiredNodesMet;
+        } else {
+          // For non-role-based installations, can proceed if complete and no failures
+          return hostsComplete && !hasHostFailures;
+        }
       } else if (currentStep === 'infrastructure') {
         return steps.infrastructure.status === 'completed';
       } else if (currentStep === 'preflights') {
@@ -325,7 +340,16 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     if (currentStep === 'hosts') {
       // For single-node, never show Next button since it auto-proceeds
       // For multi-node, show Next button when complete and no failures
-      return prototypeSettings.enableMultiNode && hostsComplete && !hasHostFailures;
+      if (prototypeSettings.enableMultiNode) {
+        if (prototypeSettings.useNodeRoles) {
+          // For role-based installations, show button only when all required nodes are met
+          return hostsComplete && allRequiredNodesMet;
+        } else {
+          // For non-role-based installations, show button when complete and no failures
+          return hostsComplete && !hasHostFailures;
+        }
+      }
+      return false; // Single-node never shows button
     } else if (currentStep === 'infrastructure') {
       return steps.infrastructure.status === 'failed'; // Only show if failed
     } else if (currentStep === 'preflights') {
