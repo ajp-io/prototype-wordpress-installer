@@ -352,6 +352,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
               applicationStatus={applicationStatus}
               themeColor={themeColor}
               onHostsComplete={handleHostsComplete}
+              updateStepStatus={updateStepStatus}
             />
           </div>
         </div>
