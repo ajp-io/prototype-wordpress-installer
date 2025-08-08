@@ -33,7 +33,7 @@ const NodeJoinSection: React.FC<NodeJoinSectionProps> = ({
   );
 
   return (
-    <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
       <h3 className="text-sm font-medium text-gray-900 mb-2">
         {useNodeRoles ? 'Join Additional Hosts by Role' : 'Join Additional Hosts'}
       </h3>
@@ -54,7 +54,7 @@ const NodeJoinSection: React.FC<NodeJoinSectionProps> = ({
           <button
             onClick={() => onRoleChange('application')}
             disabled={joinedNodes.application >= requiredNodes.application}
-            className="inline-flex items-center px-3 py-2 rounded-md transition-colors"
+            className="inline-flex items-center px-3 py-2 text-sm rounded-md transition-colors"
             style={{
               backgroundColor: selectedRole === 'application' ? themeColor : joinedNodes.application >= requiredNodes.application ? 'rgb(243 244 246)' : 'white',
               color: selectedRole === 'application' ? 'white' : joinedNodes.application >= requiredNodes.application ? 'rgb(156 163 175)' : 'rgb(55 65 81)',
@@ -68,7 +68,7 @@ const NodeJoinSection: React.FC<NodeJoinSectionProps> = ({
           <button
             onClick={() => onRoleChange('database')}
             disabled={joinedNodes.database >= requiredNodes.database}
-            className="inline-flex items-center px-3 py-2 rounded-md transition-colors"
+            className="inline-flex items-center px-3 py-2 text-sm rounded-md transition-colors"
             style={{
               backgroundColor: selectedRole === 'database' ? themeColor : joinedNodes.database >= requiredNodes.database ? 'rgb(243 244 246)' : 'white',
               color: selectedRole === 'database' ? 'white' : joinedNodes.database >= requiredNodes.database ? 'rgb(156 163 175)' : 'rgb(55 65 81)',

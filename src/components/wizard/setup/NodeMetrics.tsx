@@ -112,7 +112,7 @@ const NodeMetrics: React.FC<NodeMetricsProps> = ({ nodes, pendingNodes = [], isM
         <Server className="w-5 h-5 mr-2" style={{ color: themeColor }} />
         <div>
           <h3 className="text-lg font-medium text-gray-900">{name}</h3>
-          {useNodeRoles && <p className="text-sm text-gray-500">{type}</p>}
+          {useNodeRoles && type && <p className="text-sm text-gray-500">{type}</p>}
         </div>
         <div className="ml-auto">
           {metrics ? (

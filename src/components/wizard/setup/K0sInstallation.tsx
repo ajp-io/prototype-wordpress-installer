@@ -333,7 +333,7 @@ const K0sInstallation: React.FC<K0sInstallationProps> = ({ onComplete }) => {
 
   return (
     <div className="space-y-6">
-      {status.phase === 'ready' && isMultiNode && useNodeRoles && (
+      {status.phase === 'ready' && isMultiNode && (
         <NodeJoinSection
           selectedRole={selectedRole}
           joinedNodes={joinedNodes}
