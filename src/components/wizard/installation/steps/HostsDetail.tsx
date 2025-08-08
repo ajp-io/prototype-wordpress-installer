@@ -234,11 +234,9 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
     ));
     
     // Force immediate status update after state change
-    setTimeout(() => {
-      if (onStatusChange) {
-        onStatusChange('running');
-      }
-    }, 0);
+    if (onStatusChange) {
+      onStatusChange('running');
+    }
     
     startHostInstallation(hostId);
   };
