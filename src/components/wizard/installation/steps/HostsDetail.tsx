@@ -63,15 +63,19 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
   // Update parent component with dynamic status
   useEffect(() => {
     if (onStatusChange) {
-      if (hasAnyFailures) {
+      const currentFailures = hosts.some(h => h.phase === 'failed');
+      const currentInProgress = hosts.some(h => h.phase === 'preflight' || h.phase === 'installing');
+      const currentAllReady = hosts.every(h => h.phase === 'ready');
+      
+      if (currentFailures) {
         onStatusChange('warning');
-      } else if (hasAnyInProgress) {
+      } else if (currentInProgress) {
         onStatusChange('running');
-      } else if (allReady) {
+      } else if (currentAllReady) {
         onStatusChange('completed');
       }
     }
-  }, [hasAnyFailures, hasAnyInProgress, allReady, onStatusChange, hosts]);
+  }, [hosts, onStatusChange]);
 
   // Start the first host installation automatically only if not revisiting
   useEffect(() => {
@@ -207,6 +211,20 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
   };
 
   const handleRerunPreflights = (hostId: string) => {
+    // Reset the host to preflight phase when rerunning
+    setHosts(prev => prev.map(h => 
+      h.id === hostId 
+        ? {
+            ...h,
+            phase: 'preflight',
+            progress: 0,
+            currentMessage: 'Starting host preflight checks...',
+            logs: ['Rerunning preflight checks...'],
+            error: undefined
+          }
+        : h
+    ));
+    
     startHostInstallation(hostId);
   };
 
