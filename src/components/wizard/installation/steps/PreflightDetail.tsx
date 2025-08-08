@@ -92,7 +92,18 @@ const PreflightDetail: React.FC<PreflightDetailProps> = ({
         </div>
         
         <div className="space-y-4">
-          <h4 className="text-sm font-medium text-gray-900">Failed Checks:</h4>
+          <div className="flex items-center justify-between">
+            <h4 className="text-sm font-medium text-gray-900">Failed Checks:</h4>
+            {onRerun && (
+              <button
+                onClick={onRerun}
+                className="px-3 py-1.5 text-sm font-medium text-white rounded-md hover:opacity-90 transition-colors"
+                style={{ backgroundColor: themeColor }}
+              >
+                Rerun Preflight Checks
+              </button>
+            )}
+          </div>
           <div className="space-y-3">
             {failedChecks.map(({ key, title, message }) => (
               <div key={key} className="flex items-start">
@@ -104,17 +115,6 @@ const PreflightDetail: React.FC<PreflightDetailProps> = ({
               </div>
             ))}
           </div>
-          {onRerun && (
-            <div className="flex justify-end mt-4">
-              <button
-                onClick={onRerun}
-                className="px-3 py-1.5 text-sm font-medium text-white rounded-md hover:opacity-90 transition-colors"
-                style={{ backgroundColor: themeColor }}
-              >
-                Rerun Preflight Checks
-              </button>
-            </div>
-          )}
         </div>
       </div>
     );
