@@ -13,7 +13,6 @@ interface StepDetailPanelProps {
   applicationStatus?: any;
   themeColor: string;
   onHostsComplete?: (hasFailures?: boolean) => void;
-  onRerunPreflights?: () => void;
 }
 
 const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
@@ -23,8 +22,7 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
   preflightResults,
   applicationStatus,
   themeColor,
-  onHostsComplete,
-  onRerunPreflights
+  onHostsComplete
 }) => {
   const renderStepContent = () => {
     switch (selectedStep) {
@@ -49,7 +47,6 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
             results={preflightResults}
             status={stepData.status}
             themeColor={themeColor}
-            onRerun={onRerunPreflights}
           />
         );
       case 'application':

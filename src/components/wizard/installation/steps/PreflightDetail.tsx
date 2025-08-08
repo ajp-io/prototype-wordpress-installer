@@ -5,14 +5,12 @@ interface PreflightDetailProps {
   results: any;
   status: 'pending' | 'running' | 'completed' | 'failed';
   themeColor: string;
-  onRerun?: () => void;
 }
 
 const PreflightDetail: React.FC<PreflightDetailProps> = ({
   results,
   status,
-  themeColor,
-  onRerun
+  themeColor
 }) => {
   const getFailedChecks = () => {
     if (!results) return [];
@@ -105,21 +103,6 @@ const PreflightDetail: React.FC<PreflightDetailProps> = ({
             ))}
           </div>
         </div>
-        
-        {onRerun && (
-          <div className="mt-6">
-            <button
-              onClick={onRerun}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
-              style={{
-                backgroundColor: themeColor,
-                '--tw-ring-color': themeColor,
-              } as React.CSSProperties}
-            >
-              Rerun Preflight Checks
-            </button>
-          </div>
-        )}
       </div>
     );
   }
