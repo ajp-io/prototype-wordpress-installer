@@ -54,7 +54,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     application: {
       status: 'pending',
       title: 'WordPress Installation',
-      description: 'Installing Wordpress Enterprise components',
+      description: 'Installing WordPress Enterprise components',
       progress: 0
     }
   });
@@ -335,7 +335,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       const hasFailures = Object.values(validationResults).some(
         (result) => result && !result.success
       );
-      return hasFailures ? 'Next: WordPress Installation' : 'Next: WordPress Installation';
+      return hasFailures ? 'Next: WordPress Enterprise Installation' : 'Next: WordPress Enterprise Installation';
     } else if (currentStep === 'application') {
       return 'Next: Completion';
     }
