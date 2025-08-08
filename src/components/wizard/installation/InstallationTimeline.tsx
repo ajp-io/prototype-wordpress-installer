@@ -35,14 +35,12 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
     return ['preflights', 'application'];
   };
 
-  const getStatusIcon = (status: 'pending' | 'running' | 'completed' | 'failed' | 'warning') => {
+  const getStatusIcon = (status: 'pending' | 'running' | 'completed' | 'failed') => {
     switch (status) {
       case 'completed':
         return <CheckCircle className="w-6 h-6 text-green-500" />;
       case 'failed':
         return <XCircle className="w-6 h-6 text-red-500" />;
-      case 'warning':
-        return <AlertTriangle className="w-6 h-6 text-amber-500" />;
       case 'warning':
         return <AlertTriangle className="w-6 h-6 text-amber-500" />;
       case 'running':

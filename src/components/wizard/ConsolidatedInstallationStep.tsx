@@ -144,9 +144,8 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     setHostsComplete(true);
     setHasHostFailures(hasFailures);
     
-    // Update the step status to completed when hosts are done
-    updateStepStatus('hosts', { status: 'completed' });
-    
+    // Don't immediately set to completed/warning here - let the HostsDetail component
+    // manage the dynamic status based on current host states
     // Don't auto-proceed - let user manually click Next when ready
   };
 
@@ -345,6 +344,9 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
               stepData={steps[selectedStep]}
               infrastructureStatus={infrastructureStatus}
               preflightResults={validationResults}
+              applicationStatus={applicationStatus}
+              themeColor={themeColor}
+              onHostsComplete={handleHostsComplete}
             />
           </div>
         </div>

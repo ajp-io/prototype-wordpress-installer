@@ -34,6 +34,7 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
             onComplete={onHostsComplete}
             themeColor={themeColor}
             isRevisiting={stepData.status === 'completed'}
+            onStatusChange={onHostsStatusChange}
           />
         );
       case 'infrastructure':

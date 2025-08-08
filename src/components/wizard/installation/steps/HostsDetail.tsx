@@ -60,6 +60,19 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
   const hasAnyInProgress = hosts.some(h => h.phase === 'preflight' || h.phase === 'installing');
   const allReady = hosts.every(h => h.phase === 'ready');
 
+  // Update parent component with dynamic status
+  useEffect(() => {
+    if (onStatusChange) {
+      if (hasAnyFailures) {
+        onStatusChange('warning');
+      } else if (hasAnyInProgress) {
+        onStatusChange('running');
+      } else if (allReady) {
+        onStatusChange('completed');
+      }
+    }
+  }, [hasAnyFailures, hasAnyInProgress, allReady, onStatusChange]);
+
   // Start the first host installation automatically only if not revisiting
   useEffect(() => {
     if (!isRevisiting) {
@@ -122,7 +135,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       }
 
       updateHost({
-        progress: 35,
+        progress: 30,
         currentMessage: 'Preflight checks passed, installing runtime...',
         preflightStatus: preflightResults,
         logs: ['Preflight checks completed successfully', 'Starting k0s installation...']
@@ -131,13 +144,13 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       // Phase 2: k0s Installation
       updateHost({
         phase: 'installing',
-        progress: 45,
+        progress: 40,
         currentMessage: 'Installing runtime...'
       });
 
       await installK0s(config, (k0sStatus) => {
         updateHost({
-          progress: 45 + (k0sStatus.progress || 0) * 0.55, // Scale to 45-100%
+          progress: 40 + (k0sStatus.progress || 0) * 0.6, // Scale to 40-100%
           currentMessage: k0sStatus.currentMessage || 'Installing runtime...',
           logs: [...(hosts.find(h => h.id === hostId)?.logs || []), ...(k0sStatus.logs || [])]
         });
@@ -194,20 +207,6 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
   };
 
   const handleRerunPreflights = (hostId: string) => {
-    // Reset the host to preflight phase when rerunning
-    setHosts(prev => prev.map(h => 
-      h.id === hostId 
-        ? {
-            ...h,
-            phase: 'preflight',
-            progress: 10,
-            currentMessage: 'Starting host preflight checks...',
-            logs: ['Rerunning preflight checks...'],
-            error: undefined
-          }
-        : h
-    ));
-    
     startHostInstallation(hostId);
   };
 
@@ -219,7 +218,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
         return <XCircle className="w-5 h-5 text-red-500" />;
       case 'preflight':
       case 'installing':
-        return <Loader2 className="w-5 h-5 animate-spin text-blue-500" />;
+        return <Loader2 className="w-5 h-5 animate-spin" style={{ color: themeColor }} />;
       default:
         return <Server className="w-5 h-5 text-gray-400" />;
     }
