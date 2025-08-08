@@ -122,7 +122,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       }
 
       updateHost({
-        progress: 30,
+        progress: 35,
         currentMessage: 'Preflight checks passed, installing runtime...',
         preflightStatus: preflightResults,
         logs: ['Preflight checks completed successfully', 'Starting k0s installation...']
@@ -131,13 +131,13 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
       // Phase 2: k0s Installation
       updateHost({
         phase: 'installing',
-        progress: 40,
+        progress: 45,
         currentMessage: 'Installing runtime...'
       });
 
       await installK0s(config, (k0sStatus) => {
         updateHost({
-          progress: 40 + (k0sStatus.progress || 0) * 0.6, // Scale to 40-100%
+          progress: 45 + (k0sStatus.progress || 0) * 0.55, // Scale to 45-100%
           currentMessage: k0sStatus.currentMessage || 'Installing runtime...',
           logs: [...(hosts.find(h => h.id === hostId)?.logs || []), ...(k0sStatus.logs || [])]
         });
@@ -200,7 +200,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
         ? {
             ...h,
             phase: 'preflight',
-            progress: 0,
+            progress: 10,
             currentMessage: 'Starting host preflight checks...',
             logs: ['Rerunning preflight checks...'],
             error: undefined
