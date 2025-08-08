@@ -297,7 +297,11 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
           {/* Header with count and rerun button */}
           <div className="flex items-center justify-between">
             <h4 className="text-sm font-medium text-gray-900">
-              Preflight checks failed
+              {(() => {
+                const totalChecks = Object.keys(host.preflightStatus).length;
+                const failedChecks = Object.values(host.preflightStatus).filter(result => result && !result.success).length;
+                return `${failedChecks} of ${totalChecks} preflight checks failed`;
+              })()}
             </h4>
             <Button
               onClick={() => handleRerunPreflights(host.id)}
