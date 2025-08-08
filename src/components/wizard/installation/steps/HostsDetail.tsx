@@ -219,7 +219,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
         return <XCircle className="w-5 h-5 text-red-500" />;
       case 'preflight':
       case 'installing':
-        return <Loader2 className="w-5 h-5 animate-spin" style={{ color: themeColor }} />;
+        return <Loader2 className="w-5 h-5 animate-spin text-blue-500" />;
       default:
         return <Server className="w-5 h-5 text-gray-400" />;
     }
