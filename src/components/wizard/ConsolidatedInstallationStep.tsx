@@ -143,7 +143,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   const handleHostsComplete = (hasFailures: boolean = false) => {
     setHostsComplete(true);
     setHasHostFailures(hasFailures);
-    updateStepStatus('hosts', { status: hasFailures ? 'warning' : 'completed' });
+    // Keep status as 'running' until user manually proceeds to next step
     // Don't auto-proceed - let user manually click Next when ready
   };
 
@@ -287,6 +287,8 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
   const handleNextClick = () => {
     if (currentStep === 'hosts') {
+      // Mark hosts as completed when user clicks Next
+      updateStepStatus('hosts', { status: 'completed' });
       startInfrastructureInstallation();
     } else if (currentStep === 'infrastructure') {
       startPreflightChecks();
