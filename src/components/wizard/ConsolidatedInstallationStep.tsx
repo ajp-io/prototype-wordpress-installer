@@ -198,11 +198,6 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
           status: 'warning',
           error: 'Some preflight checks failed'
         });
-        
-        // Check if we should show modal or block
-        if (!prototypeSettings.blockOnAppPreflights) {
-          setShowPreflightModal(true);
-        }
       } else {
         updateStepStatus('preflights', { status: 'completed' });
         
@@ -293,7 +288,16 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     } else if (currentStep === 'infrastructure') {
       startPreflightChecks();
     } else if (currentStep === 'preflights') {
-      startApplicationInstallation();
+      // Check if there are failures and show modal if needed
+      const hasFailures = Object.values(validationResults).some(
+        (result) => result && !result.success
+      );
+      
+      if (hasFailures && !prototypeSettings.blockOnAppPreflights) {
+        setShowPreflightModal(true);
+      } else {
+        startApplicationInstallation();
+      }
     } else if (currentStep === 'application') {
       onNext(); // Go to completion step
     }
@@ -305,7 +309,8 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     } else if (currentStep === 'infrastructure') {
       return steps.infrastructure.status === 'failed'; // Only show if failed
     } else if (currentStep === 'preflights') {
-      return steps.preflights.status === 'failed' && !prototypeSettings.blockOnAppPreflights; // Only show if failed and not blocking
+      return steps.preflights.status === 'completed' || 
+             (steps.preflights.status === 'warning' && !prototypeSettings.blockOnAppPreflights);
     } else if (currentStep === 'application') {
       return installationComplete; // Always show when complete
     }
@@ -318,7 +323,10 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     } else if (currentStep === 'infrastructure') {
       return 'Retry Infrastructure Installation';
     } else if (currentStep === 'preflights') {
-      return 'Continue Despite Failures';
+      const hasFailures = Object.values(validationResults).some(
+        (result) => result && !result.success
+      );
+      return hasFailures ? 'Next: WordPress Installation' : 'Next: WordPress Installation';
     } else if (currentStep === 'application') {
       return 'Next: Completion';
     }
