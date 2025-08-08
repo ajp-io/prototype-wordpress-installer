@@ -10,6 +10,7 @@ interface HostsDetailProps {
   onComplete?: (hasFailures?: boolean) => void;
   themeColor: string;
   isRevisiting?: boolean;
+  onStatusChange?: (status: 'running' | 'completed' | 'warning') => void;
 }
 
 interface NodeMetric {
@@ -35,7 +36,8 @@ interface HostStatus {
 const HostsDetail: React.FC<HostsDetailProps> = ({
   onComplete,
   themeColor,
-  isRevisiting = false
+  isRevisiting = false,
+  onStatusChange
 }) => {
   const { config, prototypeSettings } = useConfig();
   const isMultiNode = prototypeSettings.enableMultiNode;
@@ -53,7 +55,23 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
     }
   ]);
   
-  const readyHosts = hosts.filter(h => h.phase === 'ready');
+  // Calculate overall status based on all hosts
+  const hasAnyFailures = hosts.some(h => h.phase === 'failed');
+  const hasAnyInProgress = hosts.some(h => h.phase === 'preflight' || h.phase === 'installing');
+  const allReady = hosts.every(h => h.phase === 'ready');
+
+  // Update parent component with dynamic status
+  useEffect(() => {
+    if (onStatusChange) {
+      if (hasAnyFailures) {
+        onStatusChange('warning');
+      } else if (hasAnyInProgress) {
+        onStatusChange('running');
+      } else if (allReady) {
+        onStatusChange('completed');
+      }
+    }
+  }, [hasAnyFailures, hasAnyInProgress, allReady, onStatusChange]);
 
   // Start the first host installation automatically only if not revisiting
   useEffect(() => {
@@ -78,13 +96,10 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
 
   // Check if we're done
   useEffect(() => {
-    const allHostsReady = hosts.every(h => h.phase === 'ready' || h.phase === 'failed');
-    const hasFailures = hosts.some(h => h.phase === 'failed');
-
-    if (allHostsReady && !isRevisiting) {
-      onComplete?.(hasFailures);
+    if ((allReady || hasAnyFailures) && !isRevisiting) {
+      onComplete?.(hasAnyFailures);
     }
-  }, [hosts, isMultiNode]);
+  }, [hosts, allReady, hasAnyFailures, isRevisiting, onComplete]);
 
   const startHostInstallation = async (hostId: string) => {
     const updateHost = (updates: Partial<HostStatus>) => {
