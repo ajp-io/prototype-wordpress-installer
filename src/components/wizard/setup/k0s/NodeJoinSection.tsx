@@ -12,7 +12,6 @@ interface NodeJoinSectionProps {
   copied: boolean;
   themeColor: string;
   skipNodeValidation: boolean;
-  useNodeRoles: boolean;
 }
 
 const NodeJoinSection: React.FC<NodeJoinSectionProps> = ({
@@ -25,7 +24,6 @@ const NodeJoinSection: React.FC<NodeJoinSectionProps> = ({
   copied,
   themeColor,
   skipNodeValidation,
-  useNodeRoles,
 }) => {
   const allNodesJoined = skipNodeValidation || (
     joinedNodes.application >= requiredNodes.application &&
@@ -33,58 +31,48 @@ const NodeJoinSection: React.FC<NodeJoinSectionProps> = ({
   );
 
   return (
-    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-      <h3 className="text-sm font-medium text-gray-900 mb-2">
-        {useNodeRoles ? 'Join Additional Hosts by Role' : 'Join Additional Hosts'}
-      </h3>
+    <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+      <h3 className="text-sm font-medium text-gray-900 mb-2">Join Additional Hosts</h3>
       <div className="flex items-center justify-between mb-4">
-        {useNodeRoles ? (
-          <p className="text-sm text-gray-600">
-            Hosts joined: {joinedNodes.application}/{requiredNodes.application} application, {joinedNodes.database}/{requiredNodes.database} database
-          </p>
-        ) : (
-          <p className="text-sm text-gray-600">
-            Additional hosts can be joined to the cluster
-          </p>
-        )}
+        <p className="text-sm text-gray-600">
+          Hosts joined: {joinedNodes.application}/{requiredNodes.application} application, {joinedNodes.database}/{requiredNodes.database} database
+        </p>
       </div>
       
-      {useNodeRoles && (
-        <div className="mb-4 space-x-4">
-          <button
-            onClick={() => onRoleChange('application')}
-            disabled={joinedNodes.application >= requiredNodes.application}
-            className="inline-flex items-center px-3 py-2 text-sm rounded-md transition-colors"
-            style={{
-              backgroundColor: selectedRole === 'application' ? themeColor : joinedNodes.application >= requiredNodes.application ? 'rgb(243 244 246)' : 'white',
-              color: selectedRole === 'application' ? 'white' : joinedNodes.application >= requiredNodes.application ? 'rgb(156 163 175)' : 'rgb(55 65 81)',
-              border: selectedRole === 'application' ? 'none' : '1px solid rgb(229 231 235)',
-              cursor: joinedNodes.application >= requiredNodes.application ? 'not-allowed' : 'pointer',
-            }}
-          >
-            <Server className="w-4 h-4 mr-2" />
-            Application Host ({joinedNodes.application}/{requiredNodes.application})
-          </button>
-          <button
-            onClick={() => onRoleChange('database')}
-            disabled={joinedNodes.database >= requiredNodes.database}
-            className="inline-flex items-center px-3 py-2 text-sm rounded-md transition-colors"
-            style={{
-              backgroundColor: selectedRole === 'database' ? themeColor : joinedNodes.database >= requiredNodes.database ? 'rgb(243 244 246)' : 'white',
-              color: selectedRole === 'database' ? 'white' : joinedNodes.database >= requiredNodes.database ? 'rgb(156 163 175)' : 'rgb(55 65 81)',
-              border: selectedRole === 'database' ? 'none' : '1px solid rgb(229 231 235)',
-              cursor: joinedNodes.database >= requiredNodes.database ? 'not-allowed' : 'pointer',
-            }}
-          >
-            <Server className="w-4 h-4 mr-2" />
-            Database Host ({joinedNodes.database}/{requiredNodes.database})
-          </button>
-        </div>
-      )}
+      <div className="mb-4 space-x-4">
+        <button
+          onClick={() => onRoleChange('application')}
+          disabled={joinedNodes.application >= requiredNodes.application}
+          className="inline-flex items-center px-3 py-2 rounded-md transition-colors"
+          style={{
+            backgroundColor: selectedRole === 'application' ? themeColor : joinedNodes.application >= requiredNodes.application ? 'rgb(243 244 246)' : 'white',
+            color: selectedRole === 'application' ? 'white' : joinedNodes.application >= requiredNodes.application ? 'rgb(156 163 175)' : 'rgb(55 65 81)',
+            border: selectedRole === 'application' ? 'none' : '1px solid rgb(229 231 235)',
+            cursor: joinedNodes.application >= requiredNodes.application ? 'not-allowed' : 'pointer',
+          }}
+        >
+          <Server className="w-4 h-4 mr-2" />
+          Application Host ({joinedNodes.application}/{requiredNodes.application})
+        </button>
+        <button
+          onClick={() => onRoleChange('database')}
+          disabled={joinedNodes.database >= requiredNodes.database}
+          className="inline-flex items-center px-3 py-2 rounded-md transition-colors"
+          style={{
+            backgroundColor: selectedRole === 'database' ? themeColor : joinedNodes.database >= requiredNodes.database ? 'rgb(243 244 246)' : 'white',
+            color: selectedRole === 'database' ? 'white' : joinedNodes.database >= requiredNodes.database ? 'rgb(156 163 175)' : 'rgb(55 65 81)',
+            border: selectedRole === 'database' ? 'none' : '1px solid rgb(229 231 235)',
+            cursor: joinedNodes.database >= requiredNodes.database ? 'not-allowed' : 'pointer',
+          }}
+        >
+          <Server className="w-4 h-4 mr-2" />
+          Database Host ({joinedNodes.database}/{requiredNodes.database})
+        </button>
+      </div>
 
       <div className="bg-gray-900 rounded-md p-4 flex items-center justify-between">
         <code className="text-gray-200 text-sm font-mono">
-          sudo ./wordpress-enterprise join 10.128.0.45:30000 {useNodeRoles && selectedRole === 'database' ? 'Xm9pK4vRtY2wQn8sLj5uH7fB' : 'EaKuL6cNeIlzMci3JdDU9Oi4'}
+          sudo ./wordpress-enterprise join 10.128.0.45:30000 {selectedRole === 'application' ? 'EaKuL6cNeIlzMci3JdDU9Oi4' : 'Xm9pK4vRtY2wQn8sLj5uH7fB'}
         </code>
         <div className="flex space-x-2">
           <Button
@@ -99,7 +87,7 @@ const NodeJoinSection: React.FC<NodeJoinSectionProps> = ({
             variant="outline"
             size="sm"
             onClick={onStartNodeJoin}
-            disabled={useNodeRoles && joinedNodes[selectedRole] >= requiredNodes[selectedRole]}
+            disabled={joinedNodes[selectedRole] >= requiredNodes[selectedRole]}
           >
             Start Host Join
           </Button>
@@ -111,10 +99,10 @@ const NodeJoinSection: React.FC<NodeJoinSectionProps> = ({
           <div className="flex items-start">
             <div className="ml-3">
               <h4 className="text-sm font-medium text-green-800">
-                {useNodeRoles ? 'All required hosts have joined' : 'Host ready for additional nodes'}
+                All required hosts have joined
               </h4>
               <p className="mt-1 text-sm text-green-600">
-                {useNodeRoles ? 'You can now proceed with the installation' : 'Additional hosts can be joined or you can proceed'}
+                You can now proceed with the installation
               </p>
             </div>
           </div>

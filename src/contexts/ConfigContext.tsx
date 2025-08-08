@@ -55,7 +55,6 @@ interface PrototypeSettings {
     name: string;
     description: string;
   }>;
-  useNodeRoles: boolean;
 }
 
 interface ConfigContextType {
@@ -108,8 +107,7 @@ const defaultPrototypeSettings: PrototypeSettings = {
     { name: 'eth1', description: 'Secondary Network Interface' },
     { name: 'wlan0', description: 'Wireless Interface' },
     { name: 'docker0', description: 'Docker Bridge Interface' }
-  ],
-  useNodeRoles: false
+  ]
 };
 
 const PROTOTYPE_SETTINGS_KEY = 'wordpress-prototype-settings';
