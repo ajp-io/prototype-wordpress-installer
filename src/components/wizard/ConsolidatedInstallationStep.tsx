@@ -100,6 +100,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
   const [allLogs, setAllLogs] = useState<string[]>([]);
   const [installationComplete, setInstallationComplete] = useState(false);
   const [hostsComplete, setHostsComplete] = useState(false);
+  const [hasHostFailures, setHasHostFailures] = useState(false);
 
   // Start the appropriate first step
   useEffect(() => {
@@ -141,6 +142,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
   const handleHostsComplete = (hasFailures: boolean = false) => {
     setHostsComplete(true);
+    setHasHostFailures(hasFailures);
     updateStepStatus('hosts', { status: hasFailures ? 'warning' : 'completed' });
     // Don't auto-proceed - let user manually click Next when ready
   };
