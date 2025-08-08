@@ -169,7 +169,7 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
         >
           {prototypeSettings.clusterMode === 'embedded' 
             ? 'Next: Installation'
-            : 'Next: Preflight Checks'}
+            : 'Next: Installation'}
         </Button>
       </div>
     </div>
