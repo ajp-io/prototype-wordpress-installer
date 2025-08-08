@@ -47,6 +47,12 @@ const StepDetailPanel: React.FC<StepDetailPanelProps> = ({
             results={preflightResults}
             status={stepData.status}
             themeColor={themeColor}
+            onRerun={() => {
+              // This will be handled by the parent component
+              if (window.rerunPreflights) {
+                window.rerunPreflights();
+              }
+            }}
           />
         );
       case 'application':

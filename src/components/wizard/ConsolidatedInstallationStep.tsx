@@ -109,6 +109,15 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     } else {
       startPreflightChecks();
     }
+    
+    // Set up global rerun function for preflights
+    window.rerunPreflights = () => {
+      startPreflightChecks();
+    };
+    
+    return () => {
+      delete window.rerunPreflights;
+    };
   }, []);
 
   const updateStepStatus = (step: InstallationStep, updates: Partial<StepStatus>) => {
