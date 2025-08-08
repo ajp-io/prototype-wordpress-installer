@@ -355,6 +355,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
               applicationStatus={applicationStatus}
               themeColor={themeColor}
               onHostsComplete={handleHostsComplete}
+              onRerunPreflights={handleRerunPreflights}
             />
           </div>
         </div>
