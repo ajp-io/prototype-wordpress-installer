@@ -298,7 +298,7 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
           <div className="flex items-center justify-between">
             <h4 className="text-sm font-medium text-gray-900">
               {(() => {
-                const totalChecks = Object.keys(host.preflightStatus).length;
+                const totalChecks = 52; // Total number of preflight checks
                 const failedChecks = Object.values(host.preflightStatus).filter(result => result && !result.success).length;
                 return `${failedChecks} of ${totalChecks} preflight checks failed`;
               })()}
