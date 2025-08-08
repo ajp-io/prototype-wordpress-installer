@@ -242,6 +242,30 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
         </div>
       </div>
 
+      {/* Basic host info - show when ready */}
+      {host.phase === 'ready' && host.metrics && (
+        <div className="mb-4 p-3 bg-gray-50 rounded-md">
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-500">Data Directory:</span>
+              <div className="font-mono text-gray-900">{host.metrics.dataPath}</div>
+            </div>
+            <div>
+              <span className="text-gray-500">CPU:</span>
+              <div className="text-gray-900">4 cores</div>
+            </div>
+            <div>
+              <span className="text-gray-500">Memory:</span>
+              <div className="text-gray-900">16 GB</div>
+            </div>
+            <div>
+              <span className="text-gray-500">Storage:</span>
+              <div className="text-gray-900">50 GB available</div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Progress bar - only when in progress */}
       {(host.phase === 'preflight' || host.phase === 'installing') && (
         <div className="mb-4">
