@@ -72,7 +72,7 @@ const NodeJoinSection: React.FC<NodeJoinSectionProps> = ({
 
       <div className="bg-gray-900 rounded-md p-4 flex items-center justify-between">
         <code className="text-gray-200 text-sm font-mono">
-          sudo ./wordpress-mastodon join 10.128.0.45:30000 {selectedRole === 'application' ? 'EaKuL6cNeIlzMci3JdDU9Oi4' : 'Xm9pK4vRtY2wQn8sLj5uH7fB'}
+          sudo ./wordpress-enterprise join 10.128.0.45:30000 {selectedRole === 'application' ? 'EaKuL6cNeIlzMci3JdDU9Oi4' : 'Xm9pK4vRtY2wQn8sLj5uH7fB'}
         </code>
         <div className="flex space-x-2">
           <Button
