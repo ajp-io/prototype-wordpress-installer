@@ -28,6 +28,11 @@ interface PendingNode {
 }
 
 const REQUIRED_NODES: NodeCount = {
+  application: 3, 
+  database: 3,
+};
+
+const REQUIRED_NODES_WITH_ROLES: NodeCount = {
   application: 3,
   database: 3,
 };
@@ -48,6 +53,7 @@ const K0sInstallation: React.FC<K0sInstallationProps> = ({ onComplete }) => {
   const { config, prototypeSettings } = useConfig();
   const themeColor = prototypeSettings.themeColor;
   const isMultiNode = prototypeSettings.enableMultiNode;
+  const useNodeRoles = prototypeSettings.useNodeRoles && isMultiNode;
   const [phase, setPhase] = useState<'preflight' | 'installing'>('preflight');
   const [status, setStatus] = useState<K0sInstallStatus>({
     phase: 'installing',
@@ -94,13 +100,23 @@ const K0sInstallation: React.FC<K0sInstallationProps> = ({ onComplete }) => {
   }, [phase]);
 
   useEffect(() => {
-    const requiredNodes = isMultiNode ? REQUIRED_NODES : SINGLE_NODE;
+    const requiredNodes = useNodeRoles ? REQUIRED_NODES_WITH_ROLES : 
+                         isMultiNode ? REQUIRED_NODES : SINGLE_NODE;
+    
+    const allRequiredNodesMet = useNodeRoles ? 
+      (joinedNodes.application >= requiredNodes.application && joinedNodes.database >= requiredNodes.database) :
+      true; // For non-role-based installations, we don't enforce specific counts
+    
     if (status.phase === 'ready') {
-      // Always call onComplete when k0s is ready, regardless of additional nodes
-      // The user can then choose to join more nodes or proceed
-      onComplete(hasPreflightFailures);
+      if (useNodeRoles) {
+        // Only call onComplete when all required nodes are met for role-based installations
+        onComplete(hasPreflightFailures || !allRequiredNodesMet);
+      } else {
+        // For non-role-based installations, call onComplete when k0s is ready
+        onComplete(hasPreflightFailures);
+      }
     }
-  }, [status.phase, hasPreflightFailures]);
+  }, [status.phase, hasPreflightFailures, joinedNodes, useNodeRoles]);
 
   const startPreflightChecks = async () => {
     try {
@@ -317,17 +333,18 @@ const K0sInstallation: React.FC<K0sInstallationProps> = ({ onComplete }) => {
 
   return (
     <div className="space-y-6">
-      {status.phase === 'ready' && isMultiNode && (
+      {status.phase === 'ready' && isMultiNode && useNodeRoles && (
         <NodeJoinSection
           selectedRole={selectedRole}
           joinedNodes={joinedNodes}
-          requiredNodes={REQUIRED_NODES}
+          requiredNodes={REQUIRED_NODES_WITH_ROLES}
           onRoleChange={setSelectedRole}
           onCopyCommand={copyJoinCommand}
           onStartNodeJoin={handleStartNodeJoin}
           copied={copied}
           themeColor={themeColor}
           skipNodeValidation={prototypeSettings.skipNodeValidation}
+          useNodeRoles={useNodeRoles}
         />
       )}
       
@@ -335,6 +352,7 @@ const K0sInstallation: React.FC<K0sInstallationProps> = ({ onComplete }) => {
         nodes={nodeMetrics} 
         pendingNodes={pendingNodes}
         isMultiNode={isMultiNode}
+        useNodeRoles={useNodeRoles}
       />
     </div>
   );

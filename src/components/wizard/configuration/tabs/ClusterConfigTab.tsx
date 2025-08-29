@@ -126,7 +126,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
           <p className="text-sm text-red-500">{errors.deploymentMode}</p>
         )}
         <p className="text-sm text-gray-500">
-          Choose your deployment configuration <span className="font-semibold">Default:</span> <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">standard</code>
+          Choose your deployment configuration (Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">standard</code>)
         </p>
       </div>
 

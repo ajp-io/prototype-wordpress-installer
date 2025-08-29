@@ -34,9 +34,10 @@ interface NodeMetricsProps {
   };
   pendingNodes?: PendingNode[];
   isMultiNode?: boolean;
+  useNodeRoles?: boolean;
 }
 
-const NodeMetrics: React.FC<NodeMetricsProps> = ({ nodes, pendingNodes = [], isMultiNode = true }) => {
+const NodeMetrics: React.FC<NodeMetricsProps> = ({ nodes, pendingNodes = [], isMultiNode = true, useNodeRoles = false }) => {
   const { prototypeSettings } = useConfig();
   const themeColor = prototypeSettings.themeColor;
 
@@ -111,7 +112,7 @@ const NodeMetrics: React.FC<NodeMetricsProps> = ({ nodes, pendingNodes = [], isM
         <Server className="w-5 h-5 mr-2" style={{ color: themeColor }} />
         <div>
           <h3 className="text-lg font-medium text-gray-900">{name}</h3>
-          <p className="text-sm text-gray-500">{type}</p>
+          {useNodeRoles && <p className="text-sm text-gray-500">{type}</p>}
         </div>
         <div className="ml-auto">
           {metrics ? (
@@ -167,19 +168,26 @@ const NodeMetrics: React.FC<NodeMetricsProps> = ({ nodes, pendingNodes = [], isM
 
   return (
     <div className="space-y-6">
-      <h2 className="text-lg font-medium text-gray-900">{isMultiNode ? 'Hosts' : 'Host'}</h2>
+      <h2 className="text-lg font-medium text-gray-900">
+        {isMultiNode ? 'Hosts' : 'Host'}
+        {useNodeRoles && isMultiNode && (
+          <span className="text-sm font-normal text-gray-500 ml-2">
+            ({Object.keys(nodes.application).length} application, {Object.keys(nodes.database).length} database)
+          </span>
+        )}
+      </h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {Object.entries(nodes.application).map(([name, metrics]) => 
-          renderNode(name, 'Application', metrics)
+          renderNode(name, useNodeRoles ? 'Application' : '', metrics)
         )}
         {Object.entries(nodes.database).map(([name, metrics]) => 
-          renderNode(name, 'Database', metrics)
+          renderNode(name, useNodeRoles ? 'Database' : '', metrics)
         )}
         {pendingNodes.map(node => 
           renderNode(
             node.name, 
-            node.type === 'application' ? 'Application' : 'Database',
+            useNodeRoles ? (node.type === 'application' ? 'Application' : 'Database') : '',
             null,
             node
           )
