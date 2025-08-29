@@ -72,13 +72,13 @@ const Select: React.FC<SelectProps> = ({
         <p className="mt-1 text-sm text-gray-500">
           {helpText && defaultValue && defaultValue !== '(none)' && defaultValue !== '(required)' ? (
             <span>
-              {helpText} (Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">{defaultValue}</code>)
+              {helpText} <span className="font-semibold">Default:</span> <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">{defaultValue}</code>
             </span>
           ) : helpText ? (
             helpText
           ) : defaultValue && defaultValue !== '(none)' && defaultValue !== '(required)' ? (
             <span>
-              (Default: <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">{defaultValue}</code>)
+              <span className="font-semibold">Default:</span> <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono">{defaultValue}</code>
             </span>
           ) : null}
         </p>
