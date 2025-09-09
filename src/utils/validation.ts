@@ -39,19 +39,19 @@ export const validateEnvironment = async (config: ClusterConfig): Promise<Valida
     validationStatus.storage = {
       success: false,
       message: `Storage class "${config.storageClass}" not found. Please create the storage class or select a different one.`,
-      isStrict: false
+      isStrict: prototypeSettings.makePreflightsStrict
     };
 
     validationStatus.networking = {
       success: false,
       message: 'Ingress controller not detected. Install an ingress controller (e.g., nginx-ingress) to enable external access.',
-      isStrict: false
+      isStrict: prototypeSettings.makePreflightsStrict
     };
 
     validationStatus.permissions = {
       success: false,
       message: 'Insufficient RBAC permissions. The current user lacks required cluster-admin privileges to install WordPress Enterprise.',
-      isStrict: true
+      isStrict: prototypeSettings.makePreflightsStrict
     };
   } else {
     validationStatus.helm = {
@@ -62,19 +62,19 @@ export const validateEnvironment = async (config: ClusterConfig): Promise<Valida
     validationStatus.storage = {
       success: true,
       message: `Storage class "${config.storageClass}" is available with dynamic provisioning support`,
-      isStrict: false
+      isStrict: prototypeSettings.makePreflightsStrict
     };
 
     validationStatus.networking = {
       success: true,
       message: 'All networking prerequisites verified successfully',
-      isStrict: false
+      isStrict: prototypeSettings.makePreflightsStrict
     };
 
     validationStatus.permissions = {
       success: true,
       message: 'The current user has sufficient permissions in the namespace',
-      isStrict: true
+      isStrict: prototypeSettings.makePreflightsStrict
     };
   }
 

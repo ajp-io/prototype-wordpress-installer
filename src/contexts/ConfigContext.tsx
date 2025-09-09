@@ -44,6 +44,7 @@ interface PrototypeSettings {
   failRegistryAuth: boolean;
   failHostPreflights: boolean;
   blockOnAppPreflights: boolean;
+  makePreflightsStrict: boolean;
   clusterMode: 'existing' | 'embedded';
   themeColor: string;
   skipNodeValidation: boolean;
@@ -95,6 +96,7 @@ const defaultPrototypeSettings: PrototypeSettings = {
   failRegistryAuth: false,
   failHostPreflights: false,
   blockOnAppPreflights: false,
+  makePreflightsStrict: false,
   clusterMode: 'existing',
   themeColor: '#316DE6',
   skipNodeValidation: false,

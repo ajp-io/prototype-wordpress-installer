@@ -261,6 +261,23 @@ const PrototypeSettings: React.FC = () => {
                 <div className="flex items-center space-x-3">
                   <input
                     type="checkbox"
+                    id="makePreflightsStrict"
+                    checked={prototypeSettings.makePreflightsStrict}
+                    onChange={(e) => updatePrototypeSettings({ makePreflightsStrict: e.target.checked })}
+                    disabled={!prototypeSettings.failPreflights}
+                    className="h-4 w-4 border-gray-300 rounded focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                      accentColor: prototypeSettings.themeColor,
+                      '--tw-ring-color': prototypeSettings.themeColor
+                    } as React.CSSProperties}
+                  />
+                  <label htmlFor="makePreflightsStrict" className={`text-sm ${!prototypeSettings.failPreflights ? 'text-gray-400' : 'text-gray-700'}`}>
+                    Make failed preflight checks strict (blocks installation)
+                  </label>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
                     id="failHostPreflights"
                     checked={prototypeSettings.failHostPreflights}
                     onChange={handleFailHostPreflightsChange}
