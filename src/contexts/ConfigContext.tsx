@@ -47,7 +47,6 @@ interface PrototypeSettings {
   clusterMode: 'existing' | 'embedded';
   themeColor: string;
   skipNodeValidation: boolean;
-  useSelfSignedCert: boolean;
   enableMultiNode: boolean;
   skipHostPreflights: boolean;
   configFormat: 'helm-values' | 'config-values';
@@ -99,7 +98,6 @@ const defaultPrototypeSettings: PrototypeSettings = {
   clusterMode: 'existing',
   themeColor: '#316DE6',
   skipNodeValidation: false,
-  useSelfSignedCert: false,
   enableMultiNode: true,
   skipHostPreflights: false,
   configFormat: 'config-values',

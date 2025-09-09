@@ -39,10 +39,6 @@ const PrototypeSettings: React.FC = () => {
     updatePrototypeSettings({ themeColor: e.target.value });
   };
 
-  const handleSelfSignedCertChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updatePrototypeSettings({ useSelfSignedCert: e.target.checked });
-  };
-
   const handleSkipNodeValidationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updatePrototypeSettings({ skipNodeValidation: e.target.checked });
   };
@@ -131,28 +127,6 @@ const PrototypeSettings: React.FC = () => {
                   pattern="^#[0-9A-Fa-f]{6}$"
                 />
                 <p className="text-sm text-gray-500">Enter a hex color code (e.g., #21759B)</p>
-              </div>
-            </div>
-
-            <div className="border-t border-gray-200 pt-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Security Settings</h2>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    id="useSelfSignedCert"
-                    checked={prototypeSettings.useSelfSignedCert}
-                    onChange={handleSelfSignedCertChange}
-                    className="h-4 w-4 border-gray-300 rounded focus:ring-2 focus:ring-offset-2"
-                    style={{
-                      accentColor: prototypeSettings.themeColor,
-                      '--tw-ring-color': prototypeSettings.themeColor
-                    } as React.CSSProperties}
-                  />
-                  <label htmlFor="useSelfSignedCert" className="text-sm text-gray-700">
-                    Use self-signed certificate for installer
-                  </label>
-                </div>
               </div>
             </div>
 
