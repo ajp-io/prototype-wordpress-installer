@@ -22,7 +22,6 @@ interface ConsolidatedInstallationStepProps {
 const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> = ({ onNext, onBack }) => {
   const { config, prototypeSettings } = useConfig();
   const { text } = useWizardMode();
-  const [hasStrictValidationFailures, setHasStrictValidationFailures] = useState(false);
   const isLinuxMode = prototypeSettings.clusterMode === 'embedded';
   const themeColor = prototypeSettings.themeColor;
 
@@ -220,12 +219,6 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       const hasFailures = Object.values(results).some(
         (result) => result && !result.success
       );
-      
-      const hasStrictFailures = Object.values(results).some(
-        (result) => result && !result.success && result.isStrict
-      );
-
-      setHasStrictValidationFailures(hasStrictFailures);
 
       if (hasFailures) {
         updateStepStatus('preflights', { 
@@ -246,7 +239,6 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
         status: 'failed',
         error: 'Preflight validation failed'
       });
-      setHasStrictValidationFailures(false);
     }
   };
 
@@ -306,9 +298,6 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       } else if (currentStep === 'infrastructure') {
         return steps.infrastructure.status === 'completed';
       } else if (currentStep === 'preflights') {
-        // If there are strict failures, cannot proceed regardless of settings
-        if (hasStrictValidationFailures) return false;
-        
         return steps.preflights.status === 'completed' || !prototypeSettings.blockOnAppPreflights;
       } else if (currentStep === 'application') {
         return installationComplete;
@@ -316,9 +305,6 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     } else {
       // For Kubernetes mode
       if (currentStep === 'preflights') {
-        // If there are strict failures, cannot proceed regardless of settings
-        if (hasStrictValidationFailures) return false;
-        
         return steps.preflights.status === 'completed' || !prototypeSettings.blockOnAppPreflights;
       } else if (currentStep === 'application') {
         return installationComplete;
@@ -340,8 +326,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
         (result) => result && !result.success
       );
       
-      // Only show modal for non-strict failures
-      if (hasFailures && !hasStrictValidationFailures && !prototypeSettings.blockOnAppPreflights) {
+      if (hasFailures && !prototypeSettings.blockOnAppPreflights) {
         setShowPreflightModal(true);
       } else {
         startApplicationInstallation();
@@ -445,7 +430,6 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
             disabled={!canProceed()}
             icon={<ChevronRight className="w-5 h-5" />}
             variant={currentStep === 'preflights' ? 'danger' : 'primary'}
-            title={hasStrictValidationFailures ? 'Critical preflight checks must be resolved before proceeding' : undefined}
           >
             {getNextButtonText()}
           </Button>

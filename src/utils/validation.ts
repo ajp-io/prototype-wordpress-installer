@@ -33,15 +33,11 @@ export const validateEnvironment = async (config: ClusterConfig): Promise<Valida
     validationStatus.storage = {
       success: false,
       message: `Storage class "${config.storageClass}" not found. Please create the storage class or select a different one.`,
-      isStrict: true,
-      isStrict: true,
     };
 
     validationStatus.networking = {
       success: false,
       message: 'Ingress controller not detected. Install an ingress controller (e.g., nginx-ingress) to enable external access.',
-      isStrict: false,
-      isStrict: false,
     };
 
     validationStatus.permissions = {
