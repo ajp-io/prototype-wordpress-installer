@@ -254,7 +254,7 @@ const PrototypeSettings: React.FC = () => {
                     } as React.CSSProperties}
                   />
                   <label htmlFor="failPreflights" className="text-sm text-gray-700">
-                    Force Kubernetes preflight checks to fail
+                    Force application preflight checks to fail
                   </label>
                 </div>
 
