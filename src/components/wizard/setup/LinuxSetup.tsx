@@ -61,6 +61,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
         placeholder="/var/lib/wordpress"
         helpText="Directory where WordPress will store its data"
         defaultValue="/var/lib/wordpress"
+        readOnly={isUpgrade}
       />
     </div>
 
@@ -141,6 +142,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
             ]}
             helpText="Network interface to use for WordPress"
             defaultValue="eth0"
+            disabled={isUpgrade}
           />
           
           <Input
@@ -151,6 +153,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
             placeholder="10.244.0.0/16"
             helpText="CIDR notation for the reserved network range (must be /16 or larger)"
             defaultValue="10.244.0.0/16"
+            readOnly={isUpgrade}
           />
         </div>
       )}
