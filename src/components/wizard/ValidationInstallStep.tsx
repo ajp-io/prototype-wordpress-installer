@@ -1,175 +1,75 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Card from '../common/Card';
 import Button from '../common/Button';
 import Modal from '../common/Modal';
-import { useConfig } from '../../contexts/ConfigContext';
-import { useWizardMode } from '../../contexts/WizardModeContext';
-import { ValidationStatus, InstallationStatus } from '../../types';
 import { ChevronRight, AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
-import { installInfrastructure } from '../../utils/infrastructure';
-import { validateEnvironment } from '../../utils/validation';
-import { installWordPress } from '../../utils/wordpress';
 import K0sInstallation from './setup/K0sInstallation';
 import InstallationProgress from './validation/InstallationProgress';
 import LogViewer from './validation/LogViewer';
 import StatusIndicator from './validation/StatusIndicator';
 import ErrorMessage from './validation/ErrorMessage';
+import { useValidationInstallFlow } from '../../hooks/useValidationInstallFlow';
+import { useValidationInstallNavigation } from '../../hooks/useValidationInstallNavigation';
+import { useConfig } from '../../contexts/ConfigContext';
 
 interface ValidationInstallStepProps {
   onNext: () => void;
 }
 
-type Phase = 'hosts' | 'infrastructure' | 'validating' | 'installing';
-
 const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext }) => {
-  const { config, prototypeSettings } = useConfig();
-  const { text } = useWizardMode();
-  const [phase, setPhase] = useState<Phase>(prototypeSettings.clusterMode === 'embedded' ? 'hosts' : 'validating');
-  const [installStatus, setInstallStatus] = useState<InstallationStatus>({
-    openebs: 'pending',
-    registry: 'pending',
-    velero: 'pending',
-    components: 'pending',
-    database: 'pending',
-    core: 'pending',
-    plugins: 'pending',
-    overall: 'pending',
-    currentMessage: '',
-    logs: [],
-    progress: 0,
-  });
-  const [validationStatus, setValidationStatus] = useState<ValidationStatus>({
-    kubernetes: null,
-    helm: null,
-    storage: null,
-    networking: null,
-    permissions: null,
-  });
-  const [wordpressInstallComplete, setWordPressInstallComplete] = useState(false);
-  const [showLogs, setShowLogs] = useState(false);
-  const [showPreflightModal, setShowPreflightModal] = useState(false);
-  const [hasValidationFailures, setHasValidationFailures] = useState(false);
-  const [hostsComplete, setHostsComplete] = useState(false);
-  const [hasHostFailures, setHasHostFailures] = useState(false);
-  const [validationComplete, setValidationComplete] = useState(false);
-  const [hostInstallationComplete, setHostInstallationComplete] = useState(false);
-  const isLinuxMode = prototypeSettings.clusterMode === 'embedded';
+  const { prototypeSettings } = useConfig();
   const themeColor = prototypeSettings.themeColor;
 
-  useEffect(() => {
-    if (phase === 'hosts' && isLinuxMode) {
-      // Hosts phase is handled by K0sInstallation component
-    } else if (phase === 'infrastructure' && isLinuxMode) {
-      startInfrastructureInstallation();
-    } else if (phase === 'validating') {
-      startValidation();
-    } else if (phase === 'installing') {
-      startInstallation();
-    }
-  }, [phase]);
+  const {
+    phase,
+    installStatus,
+    validationStatus,
+    wordpressInstallComplete,
+    hasValidationFailures,
+    hasHostFailures,
+    validationComplete,
+    hostInstallationComplete,
+    isLinuxMode,
+    handleHostsComplete,
+    startValidation,
+    proceedToNextPhase,
+  } = useValidationInstallFlow();
 
-  const handleHostsComplete = (hasFailures: boolean = false) => {
-    setHostInstallationComplete(true);
-    setHasHostFailures(hasFailures);
-  };
+  const {
+    canProceed,
+    getButtonText,
+    shouldShowPreflightModal,
+    getPhaseDescription,
+  } = useValidationInstallNavigation({
+    phase,
+    hostInstallationComplete,
+    hasHostFailures,
+    validationComplete,
+    hasValidationFailures,
+    wordpressInstallComplete,
+  });
 
-  const startInfrastructureInstallation = async () => {
-    try {
-      await installInfrastructure(config, (newStatus) => {
-        setInstallStatus(prev => {
-          const updatedStatus = { ...prev, ...newStatus };
-          if (updatedStatus.overall === 'completed') {
-            setTimeout(() => setPhase('validating'), 500);
-          }
-          return updatedStatus;
-        });
-      });
-    } catch (error) {
-      console.error('Infrastructure installation error:', error);
-    }
-  };
-
-  const startValidation = async () => {
-    setValidationComplete(false);
-    setHasValidationFailures(false);
-    
-    try {
-      const results = await validateEnvironment(config);
-      setValidationStatus(results);
-      
-      const allPassed = Object.values(results).every(
-        (result) => result && result.success && !result.message.includes('warning')
-      );
-      
-      const hasFailures = Object.values(results).some(
-        (result) => result && !result.success
-      );
-      
-      setHasValidationFailures(hasFailures);
-      setValidationComplete(true);
-      
-      // No longer auto-proceed - user must click Next even when checks pass
-    } catch (error) {
-      console.error('Validation error:', error);
-      setValidationComplete(true);
-      setHasValidationFailures(true);
-    }
-  };
-
-  const startInstallation = async () => {
-    try {
-      await installWordPress(config, (newStatus) => {
-        setInstallStatus((prev) => ({
-          ...prev,
-          ...newStatus,
-          logs: [...prev.logs, ...(newStatus.logs || [])],
-        }));
-        
-        if (newStatus.core === 'completed' && 
-            newStatus.database === 'completed' && 
-            newStatus.plugins === 'completed') {
-          setWordPressInstallComplete(true);
-        }
-      });
-    } catch (error) {
-      console.error('Installation error:', error);
-      setInstallStatus((prev) => ({
-        ...prev,
-        overall: 'failed',
-        currentMessage: 'Installation failed',
-        error: error instanceof Error ? error.message : 'Unknown error occurred',
-      }));
-    }
-  };
+  const [showLogs, setShowLogs] = useState(false);
+  const [showPreflightModal, setShowPreflightModal] = useState(false);
 
   const handleNextClick = () => {
-    if (phase === 'hosts') {
-      // User manually proceeds from hosts to infrastructure
-      if (hasHostFailures && !prototypeSettings.skipHostPreflights) {
-        setShowPreflightModal(true);
-      } else {
-        setPhase('infrastructure');
-      }
-    } else if (phase === 'validating') {
-      // If we have validation failures and the block setting is NOT enabled, show modal
-      if (hasValidationFailures && !prototypeSettings.blockOnAppPreflights) {
-        setShowPreflightModal(true);
-      } else if (!hasValidationFailures) {
-        // No failures, proceed normally
-        setPhase('installing');
-      }
-      // If there are failures and block is enabled, button should be disabled (handled in canProceed)
+    const shouldShowModal = shouldShowPreflightModal(phase, hasValidationFailures, hasHostFailures);
+    
+    if (shouldShowModal) {
+      setShowPreflightModal(true);
     } else if (phase === 'installing' && wordpressInstallComplete) {
       onNext();
+    } else {
+      proceedToNextPhase();
     }
   };
 
   const handleConfirmProceed = () => {
     setShowPreflightModal(false);
-    if (phase === 'hosts') {
-      setPhase('infrastructure');
+    if (phase === 'installing' && wordpressInstallComplete) {
+      onNext();
     } else {
-      setPhase('installing');
+      proceedToNextPhase();
     }
   };
 
@@ -273,6 +173,12 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
               </div>
             </div>
           )}
+          
+          <div className="mt-6">
+            <Button onClick={startValidation} variant="outline" size="sm">
+              Revalidate Environment
+            </Button>
+          </div>
         </div>
       )}
     </div>
@@ -308,56 +214,18 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
     </div>
   );
 
-  const canProceed = () => {
-    if (phase === 'hosts') {
-      if (!hostInstallationComplete) return false;
-      
-      // If there are no failures, can always proceed
-      if (!hasHostFailures) return true;
-      
-      // If there are failures, can only proceed if skip setting is enabled
-      return prototypeSettings.skipHostPreflights;
-    }
-    
-    if (phase === 'validating') {
-      // Must wait for validation to complete first
-      if (!validationComplete) return false;
-      
-      // If there are no failures, can always proceed
-      if (!hasValidationFailures) return true;
-      
-      // If there are failures, can only proceed if block setting is NOT enabled
-      return !prototypeSettings.blockOnAppPreflights;
-    }
-    if (phase === 'installing') {
-      return wordpressInstallComplete;
-    }
-    return false;
-  };
-
-  const getButtonText = () => {
-    if (phase === 'hosts') {
-      return hostInstallationComplete ? 'Next: Infrastructure Installation' : 'Installing...';
-    } else if (phase === 'installing') {
-      return 'Next: Finish';
-    }
-    return prototypeSettings.clusterMode === 'embedded' 
-      ? 'Next: Continue Installation'
-      : 'Next: Start Installation';
-  };
-
-  const getPhaseDescription = () => {
+  const renderPhaseContent = () => {
     switch (phase) {
       case 'hosts':
-        return 'Installing runtime and setting up hosts';
+        return renderHostsPhase();
       case 'infrastructure':
-        return 'Installing infrastructure components';
+        return renderInfrastructurePhase();
       case 'validating':
-        return 'Checking if your environment meets all requirements';
+        return renderValidationPhase();
       case 'installing':
-        return 'Installing WordPress Enterprise';
+        return renderInstallationPhase();
       default:
-        return '';
+        return null;
     }
   };
 
@@ -366,13 +234,10 @@ const ValidationInstallStep: React.FC<ValidationInstallStepProps> = ({ onNext })
       <Card>
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-900">Installation</h2>
-          <p className="text-gray-600 mt-1">{getPhaseDescription()}</p>
+          <p className="text-gray-600 mt-1">{getPhaseDescription(phase)}</p>
         </div>
 
-        {phase === 'hosts' && renderHostsPhase()}
-        {phase === 'infrastructure' && renderInfrastructurePhase()}
-        {phase === 'validating' && renderValidationPhase()}
-        {phase === 'installing' && renderInstallationPhase()}
+        {renderPhaseContent()}
       </Card>
 
       <div className="flex justify-end">
