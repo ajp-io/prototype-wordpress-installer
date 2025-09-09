@@ -17,7 +17,7 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
   const { text } = useWizardMode();
   const [connectionStatus, setConnectionStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
   const [connectionError, setConnectionError] = useState<string | null>(null);
-  const [showAdvanced, setShowAdvanced] = useState(true);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
 
   const validatePrivateRegistryConfig = () => {
