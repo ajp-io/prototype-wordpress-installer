@@ -24,7 +24,6 @@ const PreflightDetail: React.FC<PreflightDetailProps> = ({
         title: key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
         message: result?.message || '',
         isStrict: result?.isStrict || false
-        isStrict: result?.isStrict || false
       }));
   };
 
