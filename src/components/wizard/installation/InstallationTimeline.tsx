@@ -18,6 +18,7 @@ interface InstallationTimelineProps {
   onStepClick: (step: InstallationStep) => void;
   isLinuxMode: boolean;
   themeColor: string;
+  isUpgrade?: boolean;
 }
 
 const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
@@ -27,6 +28,7 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
   onStepClick,
   isLinuxMode,
   themeColor
+  isUpgrade = false
 }) => {
   const getStepOrder = (): InstallationStep[] => {
     if (isLinuxMode) {
@@ -54,7 +56,9 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
 
   return (
     <div className="w-80 bg-gray-50 border-r border-gray-200 p-6">
-      <h3 className="text-lg font-medium text-gray-900 mb-6">Installation Progress</h3>
+      <h3 className="text-lg font-medium text-gray-900 mb-6">
+        {isUpgrade ? 'Upgrade Progress' : 'Installation Progress'}
+      </h3>
       
       <div className="space-y-6">
         {stepOrder.map((stepKey, index) => {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useConfig } from '../contexts/ConfigContext';
+import { useWizardMode } from '../contexts/WizardModeContext';
 import { ValidationStatus, InstallationStatus } from '../types';
 import { installInfrastructure } from '../utils/infrastructure';
 import { validateEnvironment } from '../utils/validation';
@@ -8,7 +9,9 @@ import { InstallationStep, StepStatus } from '../components/wizard/installation/
 
 export const useInstallationFlow = () => {
   const { config, prototypeSettings } = useConfig();
+  const { mode } = useWizardMode();
   const isLinuxMode = prototypeSettings.clusterMode === 'embedded';
+  const isUpgrade = mode === 'upgrade';
 
   const [currentStep, setCurrentStep] = useState<InstallationStep>(
     isLinuxMode ? 'hosts' : 'preflights'
@@ -21,8 +24,8 @@ export const useInstallationFlow = () => {
   const [steps, setSteps] = useState<Record<InstallationStep, StepStatus>>({
     hosts: {
       status: isLinuxMode ? 'running' : 'pending',
-      title: 'Runtime Installation',
-      description: 'Installing runtime on the host',
+      title: isUpgrade ? 'Runtime Upgrade' : 'Runtime Installation',
+      description: isUpgrade ? 'Upgrading runtime on the host' : 'Installing runtime on the host',
       progress: 0
     },
     infrastructure: {

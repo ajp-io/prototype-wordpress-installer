@@ -9,6 +9,7 @@ import { ChevronRight, ChevronLeft, AlertTriangle } from 'lucide-react';
 import { useInstallationFlow } from '../../hooks/useInstallationFlow';
 import { useInstallationLogs } from '../../hooks/useInstallationLogs';
 import { useInstallationNavigation } from '../../hooks/useInstallationNavigation';
+import { useWizardMode } from '../../contexts/WizardModeContext';
 import InstallationTimeline from './installation/InstallationTimeline';
 import StepDetailPanel from './installation/StepDetailPanel';
 import LogViewer from './validation/LogViewer';
@@ -19,7 +20,7 @@ interface ConsolidatedInstallationStepProps {
 }
 
 const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> = ({ onNext, onBack }) => {
-  const { text } = useWizardMode();
+  const { text, mode } = useWizardMode();
   const { prototypeSettings } = useConfig();
   const themeColor = prototypeSettings.themeColor;
 
@@ -132,6 +133,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
             onStepClick={setSelectedStep}
             isLinuxMode={isLinuxMode}
             themeColor={themeColor}
+            isUpgrade={mode === 'upgrade'}
           />
           
           <div className="flex-1">
