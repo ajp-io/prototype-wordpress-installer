@@ -24,7 +24,12 @@ const PreflightDetail: React.FC<PreflightDetailProps> = ({
         title: key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
         message: result?.message || '',
         isStrict: result?.isStrict || false
+        isStrict: result?.isStrict || false
       }));
+  };
+
+  const getStrictFailedChecks = () => {
+    return getFailedChecks().filter(check => check.isStrict);
   };
 
   const getStrictFailedChecks = () => {
@@ -43,8 +48,10 @@ const PreflightDetail: React.FC<PreflightDetailProps> = ({
 
   const failedChecks = getFailedChecks();
   const strictFailedChecks = getStrictFailedChecks();
+  const strictFailedChecks = getStrictFailedChecks();
   const totalChecks = getTotalChecks();
   const passedChecks = getPassedChecks();
+  const hasStrictFailures = strictFailedChecks.length > 0;
   const hasStrictFailures = strictFailedChecks.length > 0;
 
   if (status === 'running') {
@@ -87,6 +94,10 @@ const PreflightDetail: React.FC<PreflightDetailProps> = ({
             ? 'bg-red-100 border-red-300' 
             : 'bg-red-50 border-red-200'
         }`}>
+          hasStrictFailures 
+            ? 'bg-red-100 border-red-300' 
+            : 'bg-red-50 border-red-200'
+        }`}>
           <div className="flex items-start">
             <div className="flex-shrink-0">
               <XCircle className="h-5 w-5 text-red-400" />
@@ -95,9 +106,13 @@ const PreflightDetail: React.FC<PreflightDetailProps> = ({
               <h3 className="text-sm font-medium text-red-800">
                 {failedChecks.length} of {totalChecks} Preflight Checks Failed
                 {hasStrictFailures && ' (Critical Issues Found)'}
+                {hasStrictFailures && ' (Critical Issues Found)'}
               </h3>
               <p className="mt-1 text-sm text-red-700">
                 {hasStrictFailures 
+                  ? 'Critical preflight checks have failed and must be resolved before proceeding with the installation.'
+                  : 'Please resolve the issues below before proceeding with the installation.'
+                }
                   ? 'Critical preflight checks have failed and must be resolved before proceeding with the installation.'
                   : 'Please resolve the issues below before proceeding with the installation.'
                 }
@@ -124,9 +139,20 @@ const PreflightDetail: React.FC<PreflightDetailProps> = ({
               <div key={key} className={`flex items-start p-3 rounded-md ${
                 isStrict ? 'bg-red-100 border border-red-200' : ''
               }`}>
+                isStrict ? 'bg-red-100 border border-red-200' : ''
+              }`}>
                 <XCircle className="w-5 h-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" />
                 <div>
                   <div className="flex items-center gap-2">
+                    <h5 className={`text-sm font-medium text-red-800 ${isStrict ? 'font-bold' : ''}`}>
+                      {title}
+                    </h5>
+                    {isStrict && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-200 text-red-800">
+                        CRITICAL
+                      </span>
+                    )}
+                  </div>
                     <h5 className={`text-sm font-medium text-red-800 ${isStrict ? 'font-bold' : ''}`}>
                       {title}
                     </h5>
