@@ -14,7 +14,7 @@ interface SetupStepProps {
 
 const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
   const { config, updateConfig, prototypeSettings } = useConfig();
-  const { text } = useWizardMode();
+  const { text, mode } = useWizardMode();
   const [connectionStatus, setConnectionStatus] = useState<'idle' | 'testing' | 'success' | 'error'>('idle');
   const [connectionError, setConnectionError] = useState<string | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
