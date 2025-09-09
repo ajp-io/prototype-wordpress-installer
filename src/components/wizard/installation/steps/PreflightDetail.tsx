@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { CheckCircle, XCircle, Loader2, AlertTriangle } from 'lucide-react';
 
 interface PreflightDetailProps {
   results: any;
@@ -189,12 +189,7 @@ const PreflightDetail: React.FC<PreflightDetailProps> = ({
             </div>
           )}
         </div>
-      </div>
-    );
-  }
-
-  return null;
-};
+        <div className="p-4 bg-red-50 rounded-lg border border-red-200">
           <div className="flex items-start">
             <div className="flex-shrink-0">
               <XCircle className="h-5 w-5 text-red-400" />
