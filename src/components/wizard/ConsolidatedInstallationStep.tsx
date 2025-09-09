@@ -177,6 +177,11 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
                 ? 'Critical preflight checks must pass before proceeding' 
                 : undefined
             }
+            title={
+              !canProceed() && currentStep === 'preflights' 
+                ? 'Critical preflight checks must pass before proceeding' 
+                : undefined
+            }
           >
             {getNextButtonText()}
           </Button>
