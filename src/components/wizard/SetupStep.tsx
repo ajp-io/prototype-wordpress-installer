@@ -143,7 +143,7 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
             connectionStatus={connectionStatus}
             connectionError={connectionError}
             validationErrors={validationErrors}
-            isUpgrade={text.mode === 'upgrade'}
+            isUpgrade={mode === 'upgrade'}
           />
         ) : (
           <KubernetesSetup
@@ -154,7 +154,7 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
             connectionStatus={connectionStatus}
             connectionError={connectionError}
             validationErrors={validationErrors}
-            isUpgrade={text.mode === 'upgrade'}
+            isUpgrade={mode === 'upgrade'}
           />
         )}
       </Card>
