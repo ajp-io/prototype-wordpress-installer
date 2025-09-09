@@ -272,7 +272,7 @@ const PrototypeSettings: React.FC = () => {
                     } as React.CSSProperties}
                   />
                   <label htmlFor="makePreflightsStrict" className={`text-sm ${!prototypeSettings.failPreflights ? 'text-gray-400' : 'text-gray-700'}`}>
-                    Make failed preflight checks strict (blocks installation)
+                    Make one preflight check strict (mixed strict/non-strict)
                   </label>
                 </div>
                 <div className="flex items-center space-x-3">
