@@ -27,7 +27,7 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
   selectedStep,
   onStepClick,
   isLinuxMode,
-  themeColor
+  themeColor,
   isUpgrade = false
 }) => {
   const getStepOrder = (): InstallationStep[] => {
