@@ -298,13 +298,14 @@ const PrototypeSettings: React.FC = () => {
                     id="showManyHostFailures"
                     checked={prototypeSettings.showManyHostFailures || false}
                     onChange={(e) => updatePrototypeSettings({ showManyHostFailures: e.target.checked })}
+                    disabled={!prototypeSettings.failHostPreflights}
                     className="h-4 w-4 border-gray-300 rounded focus:ring-2 focus:ring-offset-2"
                     style={{
                       accentColor: prototypeSettings.themeColor,
                       '--tw-ring-color': prototypeSettings.themeColor
                     } as React.CSSProperties}
                   />
-                  <label htmlFor="showManyHostFailures" className="text-sm text-gray-700">
+                  <label htmlFor="showManyHostFailures" className={`text-sm ${!prototypeSettings.failHostPreflights ? 'text-gray-400' : 'text-gray-700'}`}>
                     Show many host preflight failures (7 failures for testing)
                   </label>
                 </div>
