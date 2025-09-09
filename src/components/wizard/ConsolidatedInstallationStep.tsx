@@ -9,7 +9,6 @@ import { ChevronRight, ChevronLeft, AlertTriangle } from 'lucide-react';
 import { useInstallationFlow } from '../../hooks/useInstallationFlow';
 import { useInstallationLogs } from '../../hooks/useInstallationLogs';
 import { useInstallationNavigation } from '../../hooks/useInstallationNavigation';
-import { useWizardMode } from '../../contexts/WizardModeContext';
 import InstallationTimeline from './installation/InstallationTimeline';
 import StepDetailPanel from './installation/StepDetailPanel';
 import LogViewer from './validation/LogViewer';
