@@ -173,6 +173,11 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
             disabled={!canProceed()}
             icon={<ChevronRight className="w-5 h-5" />}
             variant={currentStep === 'preflights' ? 'danger' : 'primary'}
+            title={
+              !canProceed() && currentStep === 'preflights' 
+                ? 'Critical preflight checks must pass before proceeding' 
+                : undefined
+            }
           >
             {getNextButtonText()}
           </Button>

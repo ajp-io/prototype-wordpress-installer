@@ -25,6 +25,12 @@ export const useInstallationNavigation = ({
 }: UseInstallationNavigationProps) => {
   const { prototypeSettings } = useConfig();
 
+  const hasStrictPreflightFailures = () => {
+    return Object.values(validationResults).some(
+      (result) => result && !result.success && result.isStrict
+    );
+  };
+
   const canProceed = () => {
     if (isLinuxMode) {
       // For Linux mode, check which step we're on
@@ -39,6 +45,10 @@ export const useInstallationNavigation = ({
       } else if (currentStep === 'infrastructure') {
         return steps.infrastructure.status === 'completed';
       } else if (currentStep === 'preflights') {
+        // Cannot proceed if there are strict preflight failures
+        if (hasStrictPreflightFailures()) {
+          return false;
+        }
         return steps.preflights.status === 'completed' || !prototypeSettings.blockOnAppPreflights;
       } else if (currentStep === 'application') {
         return installationComplete;
@@ -85,10 +95,16 @@ export const useInstallationNavigation = ({
     } else if (currentStep === 'infrastructure') {
       return 'Retry Infrastructure Installation';
     } else if (currentStep === 'preflights') {
-      const hasFailures = Object.values(validationResults).some(
+      const hasStrictFailures = hasStrictPreflightFailures();
+      const hasNonStrictFailures = Object.values(validationResults).some(
         (result) => result && !result.success
       );
-      return hasFailures ? 'Next: WordPress Enterprise Installation' : 'Next: WordPress Enterprise Installation';
+      
+      if (hasStrictFailures) {
+        return 'Resolve Critical Issues';
+      }
+      
+      return hasNonStrictFailures ? 'Next: WordPress Enterprise Installation' : 'Next: WordPress Enterprise Installation';
     } else if (currentStep === 'application') {
       return 'Next: Completion';
     }
@@ -98,11 +114,16 @@ export const useInstallationNavigation = ({
   const shouldShowPreflightModal = () => {
     if (currentStep !== 'preflights') return false;
     
-    const hasFailures = Object.values(validationResults).some(
+    // Don't show modal if there are strict failures (user can't proceed anyway)
+    if (hasStrictPreflightFailures()) {
+      return false;
+    }
+    
+    const hasNonStrictFailures = Object.values(validationResults).some(
       (result) => result && !result.success
     );
     
-    return hasFailures && !prototypeSettings.blockOnAppPreflights;
+    return hasNonStrictFailures && !prototypeSettings.blockOnAppPreflights;
   };
 
   return {

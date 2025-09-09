@@ -1,6 +1,12 @@
 import { ClusterConfig } from '../contexts/ConfigContext';
 import { ValidationStatus, ValidationResult, HostPreflightStatus } from '../types';
 
+// Define which checks are strict (must pass to proceed)
+const STRICT_PREFLIGHT_CHECKS = new Set([
+  'kubernetes',
+  'permissions'
+]);
+
 export const validateEnvironment = async (config: ClusterConfig): Promise<ValidationStatus> => {
   const validationStatus: ValidationStatus = {
     kubernetes: null,
@@ -33,16 +39,19 @@ export const validateEnvironment = async (config: ClusterConfig): Promise<Valida
     validationStatus.storage = {
       success: false,
       message: `Storage class "${config.storageClass}" not found. Please create the storage class or select a different one.`,
+      isStrict: false
     };
 
     validationStatus.networking = {
       success: false,
       message: 'Ingress controller not detected. Install an ingress controller (e.g., nginx-ingress) to enable external access.',
+      isStrict: false
     };
 
     validationStatus.permissions = {
-      success: true,
-      message: 'The current user has sufficient permissions in the namespace',
+      success: false,
+      message: 'Insufficient RBAC permissions. The current user lacks required cluster-admin privileges to install WordPress Enterprise.',
+      isStrict: true
     };
   } else {
     validationStatus.helm = {
@@ -53,16 +62,19 @@ export const validateEnvironment = async (config: ClusterConfig): Promise<Valida
     validationStatus.storage = {
       success: true,
       message: `Storage class "${config.storageClass}" is available with dynamic provisioning support`,
+      isStrict: false
     };
 
     validationStatus.networking = {
       success: true,
       message: 'All networking prerequisites verified successfully',
+      isStrict: false
     };
 
     validationStatus.permissions = {
       success: true,
       message: 'The current user has sufficient permissions in the namespace',
+      isStrict: true
     };
   }
 
