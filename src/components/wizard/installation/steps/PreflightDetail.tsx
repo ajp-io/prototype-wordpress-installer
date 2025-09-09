@@ -117,8 +117,8 @@ const PreflightDetail: React.FC<PreflightDetailProps> = ({
           
           <div className="space-y-3">
             {failedChecks.map(({ key, title, message, isStrict }) => (
-              <div key={key} className="flex items-start">
-                <div className="flex items-center space-x-2 mt-0.5 mr-3">
+              <div key={key} className="flex items-start space-x-3">
+                <div className="flex items-center space-x-2 mt-0.5">
                   <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
                   {isStrict && (
                     <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
@@ -126,7 +126,7 @@ const PreflightDetail: React.FC<PreflightDetailProps> = ({
                     </span>
                   )}
                 </div>
-                <div>
+                <div className="flex-1">
                   <h5 className="text-sm font-medium text-red-800">
                     {title}
                   </h5>

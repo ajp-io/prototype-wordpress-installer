@@ -95,16 +95,7 @@ export const useInstallationNavigation = ({
     } else if (currentStep === 'infrastructure') {
       return 'Retry Infrastructure Installation';
     } else if (currentStep === 'preflights') {
-      const hasStrictFailures = hasStrictPreflightFailures();
-      const hasNonStrictFailures = Object.values(validationResults).some(
-        (result) => result && !result.success
-      );
-      
-      if (hasStrictFailures) {
-        return 'Resolve Critical Issues';
-      }
-      
-      return hasNonStrictFailures ? 'Next: WordPress Enterprise Installation' : 'Next: WordPress Enterprise Installation';
+      return 'Next: WordPress Enterprise Installation';
     } else if (currentStep === 'application') {
       return 'Next: Completion';
     }
