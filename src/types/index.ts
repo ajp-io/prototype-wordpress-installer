@@ -2,6 +2,7 @@ export interface ValidationResult {
   success: boolean;
   message: string;
   details?: string;
+  isStrict?: boolean;
 }
 
 export interface ValidationStatus {
