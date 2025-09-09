@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Card from '../common/Card';
 import Button from '../common/Button';
 import Modal from '../common/Modal';
+import Tooltip from '../common/Tooltip';
 import { useWizardMode } from '../../contexts/WizardModeContext';
 import { useConfig } from '../../contexts/ConfigContext';
 import { ChevronRight, ChevronLeft, AlertTriangle } from 'lucide-react';
@@ -168,23 +169,18 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
         )}
         {isLinuxMode || currentStep !== 'preflights' ? <div></div> : null}
         {shouldShowNextButton() && (
-          <Button
-            onClick={handleNextClick}
-            disabled={!canProceed()}
-            icon={<ChevronRight className="w-5 h-5" />}
-            title={
-              !canProceed() && currentStep === 'preflights' 
-                ? 'Critical preflight checks must pass before proceeding' 
-                : undefined
-            }
-            title={
-              !canProceed() && currentStep === 'preflights' 
-                ? 'Critical preflight checks must pass before proceeding' 
-                : undefined
-            }
+          <Tooltip
+            content="Critical preflight checks must pass before proceeding"
+            disabled={!canProceed() && currentStep === 'preflights'}
           >
-            {getNextButtonText()}
-          </Button>
+            <Button
+              onClick={handleNextClick}
+              disabled={!canProceed()}
+              icon={<ChevronRight className="w-5 h-5" />}
+            >
+              {getNextButtonText()}
+            </Button>
+          </Tooltip>
         )}
       </div>
 
