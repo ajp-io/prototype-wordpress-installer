@@ -125,9 +125,11 @@ export const useInstallationFlow = () => {
     
     // For single-node successful installations, auto-proceed to infrastructure
     if (!hasFailures && !prototypeSettings.enableMultiNode) {
+      // Mark hosts as completed and auto-proceed to infrastructure
       updateStepStatus('hosts', { status: 'completed' });
-      // Immediately proceed to infrastructure installation
-      startInfrastructureInstallation();
+      setTimeout(() => {
+        startInfrastructureInstallation();
+      }, 100);
     } else {
       // For multi-node or failed installations, keep status as 'running' until user manually proceeds
       // Don't auto-proceed - let user manually click Next when ready
@@ -135,6 +137,8 @@ export const useInstallationFlow = () => {
   };
 
   const startInfrastructureInstallation = async () => {
+    // Mark hosts as completed when starting infrastructure
+    updateStepStatus('hosts', { status: 'completed' });
     updateStepStatus('infrastructure', { status: 'running' });
     setCurrentStep('infrastructure');
 
