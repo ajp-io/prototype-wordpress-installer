@@ -8,7 +8,7 @@ interface DashboardProps {
   onNavigate: (tab: 'history' | 'hosts') => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
   const { prototypeSettings } = useConfig();
   const themeColor = prototypeSettings.themeColor;
 

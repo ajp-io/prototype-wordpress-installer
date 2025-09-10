@@ -4,7 +4,7 @@ import { WordPressLogo } from '../components/common/Logo';
 import Card from '../components/common/Card';
 import { useConfig } from '../contexts/ConfigContext';
 import { LayoutDashboard, FileText, History, Server } from 'lucide-react';
-import Dashboard from '../components/console/Dashboard';
+import { Dashboard } from '../components/console/Dashboard';
 import DeploymentHistory from '../components/console/DeploymentHistory';
 
 type ConsoleTab = 'dashboard' | 'history' | 'hosts';
