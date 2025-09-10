@@ -30,8 +30,8 @@ export const useInstallationFlow = () => {
     },
     infrastructure: {
       status: 'pending',
-      title: isUpgrade ? 'Infrastructure Upgrade' : 'Infrastructure Installation',
-      description: isUpgrade ? 'Upgrading infrastructure components' : 'Installing infrastructure components',
+      title: 'Infrastructure Installation',
+      description: 'Installing infrastructure components',
       progress: 0
     },
     preflights: {
@@ -42,8 +42,8 @@ export const useInstallationFlow = () => {
     },
     application: {
       status: 'pending',
-      title: isUpgrade ? 'WordPress Enterprise Upgrade' : 'WordPress Enterprise Installation',
-      description: isUpgrade ? 'Upgrading WordPress Enterprise components' : 'Installing WordPress Enterprise components',
+      title: 'WordPress Enterprise Installation',
+      description: 'Installing WordPress Enterprise components',
       progress: 0
     }
   });
