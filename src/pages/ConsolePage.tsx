@@ -4,6 +4,7 @@ import Card from '../components/common/Card';
 import { useConfig } from '../contexts/ConfigContext';
 import { LayoutDashboard, FileText, History, Server } from 'lucide-react';
 import Dashboard from '../components/console/Dashboard';
+import LicenseInfo from '../components/console/LicenseInfo';
 
 type ConsoleTab = 'dashboard' | 'license' | 'history' | 'hosts';
 
@@ -31,12 +32,7 @@ const ConsolePage: React.FC = () => {
         );
       case 'license':
         return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">License Information</h2>
-            <Card>
-              <p className="text-gray-600">Detailed license information will be displayed here.</p>
-            </Card>
-          </div>
+          <LicenseInfo />
         );
       case 'history':
         return (
