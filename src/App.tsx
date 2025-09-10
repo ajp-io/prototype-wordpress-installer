@@ -6,6 +6,7 @@ import InstallWizard from './components/wizard/InstallWizard';
 import ConfigureOnly from './components/wizard/ConfigureOnly';
 import DryRun from './components/wizard/DryRun';
 import PrototypeSettings from './components/prototype/PrototypeSettings';
+import ConsolePage from './pages/ConsolePage';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
               } 
             />
             <Route path="/prototype" element={<PrototypeSettings />} />
+            <Route path="/console" element={<ConsolePage />} />
           </Routes>
         </ConfigProvider>
       </BrowserRouter>
