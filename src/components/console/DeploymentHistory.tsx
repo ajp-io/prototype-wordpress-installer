@@ -150,3 +150,5 @@ const DeploymentHistory: React.FC = () => {
 };
 
 export default DeploymentHistory;
+
+export default DeploymentHistory
