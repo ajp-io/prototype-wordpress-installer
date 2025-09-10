@@ -111,37 +111,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
         </Card>
       </div>
 
-      {/* Quick Actions Section */}
-      <Card>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-medium text-gray-900">Quick Actions</h3>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Button 
-            variant="outline" 
-            className="justify-start"
-            onClick={() => onNavigate('history')}
-          >
-            <Clock className="w-4 h-4 mr-2" />
-            View Deployment Logs
-          </Button>
-          <Button 
-            variant="outline" 
-            className="justify-start"
-            onClick={() => onNavigate('hosts')}
-          >
-            <Server className="w-4 h-4 mr-2" />
-            Monitor Hosts
-          </Button>
-          <Button 
-            variant="outline" 
-            className="justify-start"
-          >
-            <FileText className="w-4 h-4 mr-2" />
-            View Configuration
-          </Button>
-        </div>
-      </Card>
     </div>
   );
 }
