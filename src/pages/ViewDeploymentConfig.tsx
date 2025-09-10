@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { WordPressLogo } from '../components/common/Logo';
 import { ConfigProvider } from '../contexts/ConfigContext';
+import { WizardModeProvider } from '../contexts/WizardModeContext';
 import ConfigurationStep from '../components/wizard/configuration/ConfigurationStep';
 import { ArrowLeft } from 'lucide-react';
 import Button from '../components/common/Button';
@@ -57,12 +58,14 @@ const ViewDeploymentConfig: React.FC = () => {
           </div>
 
           <ConfigProvider>
-            <ConfigurationStep
-              config={config}
-              isReadOnly={true}
-              onNext={() => {}}
-              onBack={handleBack}
-            />
+            <WizardModeProvider mode="install" configureOnly={true}>
+              <ConfigurationStep
+                config={config}
+                isReadOnly={true}
+                onNext={() => {}}
+                onBack={handleBack}
+              />
+            </WizardModeProvider>
           </ConfigProvider>
         </div>
       </main>
