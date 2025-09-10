@@ -1,4 +1,3 @@
-```typescript
 import React, { useState } from 'react';
 import { WordPressLogo } from '../components/common/Logo';
 import { useConfig } from '../contexts/ConfigContext';
