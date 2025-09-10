@@ -48,6 +48,9 @@ function App() {
             />
             <Route path="/prototype" element={<PrototypeSettings />} />
             <Route path="/console" element={<ConsolePage />} />
+            <Route path="/console/dashboard" element={<ConsolePage />} />
+            <Route path="/console/history" element={<ConsolePage />} />
+            <Route path="/console/hosts" element={<ConsolePage />} />
           </Routes>
         </ConfigProvider>
       </BrowserRouter>

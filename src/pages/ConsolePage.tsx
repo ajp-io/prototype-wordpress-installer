@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { WordPressLogo } from '../components/common/Logo';
 import Card from '../components/common/Card';
 import { useConfig } from '../contexts/ConfigContext';
@@ -10,8 +11,18 @@ type ConsoleTab = 'dashboard' | 'history' | 'hosts';
 
 const ConsolePage: React.FC = () => {
   const { prototypeSettings } = useConfig();
+  const location = useLocation();
+  const navigate = useNavigate();
   const themeColor = prototypeSettings.themeColor;
-  const [activeTab, setActiveTab] = useState<ConsoleTab>('dashboard');
+  
+  // Determine active tab from URL
+  const getActiveTabFromPath = (pathname: string): ConsoleTab => {
+    if (pathname.includes('/history')) return 'history';
+    if (pathname.includes('/hosts')) return 'hosts';
+    return 'dashboard';
+  };
+  
+  const [activeTab, setActiveTab] = useState<ConsoleTab>(getActiveTabFromPath(location.pathname));
 
   const navigationItems = [
     { id: 'dashboard' as ConsoleTab, label: 'Dashboard', icon: LayoutDashboard },
@@ -20,6 +31,18 @@ const ConsolePage: React.FC = () => {
   ];
 
   const handleNavigateFromDashboard = (tab: 'history' | 'hosts') => {
+    const path = tab === 'history' ? '/console/history' : '/console/hosts';
+    navigate(path);
+    setActiveTab(tab);
+  };
+  
+  const handleTabChange = (tab: ConsoleTab) => {
+    const paths = {
+      dashboard: '/console/dashboard',
+      history: '/console/history',
+      hosts: '/console/hosts'
+    };
+    navigate(paths[tab]);
     setActiveTab(tab);
   };
 
@@ -74,7 +97,7 @@ const ConsolePage: React.FC = () => {
               return (
                 <button
                   key={item.id}
-                  onClick={() => setActiveTab(item.id)}
+                  onClick={() => handleTabChange(item.id)}
                   className="w-full flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium transition-colors"
                   style={{
                     backgroundColor: isActive ? `${themeColor}1A` : 'transparent',
