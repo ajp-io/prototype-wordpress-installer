@@ -4,6 +4,7 @@ import Card from '../components/common/Card';
 import { useConfig } from '../contexts/ConfigContext';
 import { LayoutDashboard, FileText, History, Server } from 'lucide-react';
 import Dashboard from '../components/console/Dashboard';
+import DeploymentHistory from '../components/console/DeploymentHistory';
 
 type ConsoleTab = 'dashboard' | 'history' | 'hosts';
 
@@ -30,12 +31,7 @@ const ConsolePage: React.FC = () => {
         );
       case 'history':
         return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">Deployment History</h2>
-            <Card>
-              <p className="text-gray-600">Detailed deployment history will be displayed here.</p>
-            </Card>
-          </div>
+          <DeploymentHistory />
         );
       case 'hosts':
         return (
