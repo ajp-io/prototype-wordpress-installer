@@ -144,3 +144,4 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       </Card>
     </div>
   );
+}
