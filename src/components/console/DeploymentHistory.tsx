@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../common/Card';
 import Button from '../common/Button';
-import Modal from '../common/Modal';
 import { useConfig } from '../../contexts/ConfigContext';
 import { CheckCircle, XCircle, Clock, FileText, Calendar, Tag, Activity, Settings } from 'lucide-react';
 
@@ -27,8 +27,8 @@ interface DeploymentRecord {
 
 const DeploymentHistory: React.FC = () => {
   const { prototypeSettings } = useConfig();
+  const navigate = useNavigate();
   const themeColor = prototypeSettings.themeColor;
-  const [selectedConfig, setSelectedConfig] = useState<DeploymentRecord['config'] | null>(null);
 
   // Mock deployment data
   const [deployments] = useState<DeploymentRecord[]>([
@@ -195,7 +195,13 @@ const DeploymentHistory: React.FC = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setSelectedConfig(deployment.config)}
+                      onClick={() => navigate(`/console/history/${deployment.id}/config`, {
+                        state: {
+                          config: deployment.config,
+                          version: deployment.version,
+                          date: deployment.date
+                        }
+                      })}
                       icon={<Settings className="w-4 h-4" />}
                     >
                       View Config
@@ -214,77 +220,6 @@ const DeploymentHistory: React.FC = () => {
           </div>
         </Card>
       )}
-
-      {/* Configuration Modal */}
-      <Modal
-        isOpen={!!selectedConfig}
-        onClose={() => setSelectedConfig(null)}
-        title="Deployment Configuration"
-        size="lg"
-      >
-        {selectedConfig && (
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Cluster Settings</h3>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="text-gray-500">Cluster Name:</span>
-                  <div className="font-medium text-gray-900">{selectedConfig.clusterName}</div>
-                </div>
-                <div>
-                  <span className="text-gray-500">Environment:</span>
-                  <div className="font-medium text-gray-900">{selectedConfig.environment}</div>
-                </div>
-                <div>
-                  <span className="text-gray-500">Deployment Mode:</span>
-                  <div className="font-medium text-gray-900">{selectedConfig.deploymentMode}</div>
-                </div>
-                <div>
-                  <span className="text-gray-500">Storage Class:</span>
-                  <div className="font-medium text-gray-900">{selectedConfig.storageClass}</div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Network & Database</h3>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="text-gray-500">Domain:</span>
-                  <div className="font-medium text-gray-900">{selectedConfig.domain}</div>
-                </div>
-                <div>
-                  <span className="text-gray-500">HTTPS:</span>
-                  <div className="font-medium text-gray-900">{selectedConfig.useHttps ? 'Enabled' : 'Disabled'}</div>
-                </div>
-                <div>
-                  <span className="text-gray-500">Database Type:</span>
-                  <div className="font-medium text-gray-900">{selectedConfig.databaseType}</div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Admin Account</h3>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="text-gray-500">Username:</span>
-                  <div className="font-medium text-gray-900">{selectedConfig.adminUsername}</div>
-                </div>
-                <div>
-                  <span className="text-gray-500">Email:</span>
-                  <div className="font-medium text-gray-900">{selectedConfig.adminEmail}</div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Description</h3>
-              <p className="text-sm text-gray-700">{selectedConfig.description}</p>
-            </div>
-          </div>
-        )}
-      </Modal>
     </div>
   );
 };

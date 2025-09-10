@@ -9,6 +9,7 @@ interface AdminConfigTabProps {
   config: ClusterConfig;
   errors: ValidationErrors;
   skipValidation: boolean;
+  isReadOnly?: boolean;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFileRemove: () => void;
@@ -18,6 +19,7 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
   config,
   errors,
   skipValidation,
+  isReadOnly = false,
   onInputChange,
   onFileChange,
   onFileRemove
@@ -47,6 +49,7 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
         error={errors.adminUsername}
         helpText="Username for the administrator account"
         defaultValue="wordpressadmin"
+        readOnly={isReadOnly}
       />
 
       <Input
@@ -60,6 +63,7 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
         error={errors.adminEmail}
         helpText="Email address for the administrator"
         defaultValue="admin@localhost"
+        readOnly={isReadOnly}
       />
 
       <Input
@@ -73,6 +77,7 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
         error={errors.adminPassword}
         helpText="Password must be at least 8 characters"
         defaultValue="(randomly generated)"
+        readOnly={isReadOnly}
       />
 
       <div className="space-y-1">
@@ -87,27 +92,37 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
             onChange={onFileChange}
             accept=".key,.txt"
             className="hidden"
+            disabled={isReadOnly}
           />
-          <Button
-            variant="outline"
-            onClick={handleFileSelect}
-            icon={<Upload className="w-4 h-4" />}
-            className="w-80"
-          >
-            Upload File
-          </Button>
+          {!isReadOnly && (
+            <Button
+              variant="outline"
+              onClick={handleFileSelect}
+              icon={<Upload className="w-4 h-4" />}
+              className="w-80"
+            >
+              Upload File
+            </Button>
+          )}
+          {isReadOnly && (
+            <div className="w-80 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 text-sm">
+              {config.licenseFileName || 'No license file uploaded'}
+            </div>
+          )}
           {config.licenseFileName && (
             <div className="flex items-center space-x-2 px-3 py-2 bg-green-50 border border-green-200 rounded-md group ml-3">
               <CheckCircle className="w-4 h-4 text-green-500" />
               <FileText className="w-4 h-4 text-green-600" />
               <span className="text-sm text-green-700 font-medium">{config.licenseFileName}</span>
-              <button
-                onClick={handleFileRemove}
-                className="ml-2 p-1 rounded-full hover:bg-green-100 transition-colors opacity-0 group-hover:opacity-100"
-                title="Remove file"
-              >
-                <X className="w-3 h-3 text-green-600 hover:text-green-800" />
-              </button>
+              {!isReadOnly && (
+                <button
+                  onClick={handleFileRemove}
+                  className="ml-2 p-1 rounded-full hover:bg-green-100 transition-colors opacity-0 group-hover:opacity-100"
+                  title="Remove file"
+                >
+                  <X className="w-3 h-3 text-green-600 hover:text-green-800" />
+                </button>
+              )}
             </div>
           )}
         </div>

@@ -17,15 +17,21 @@ import DatabaseConfigTab from './tabs/DatabaseConfigTab';
 interface ConfigurationStepProps {
   onNext: () => void;
   onBack: () => void;
+  config?: any;
+  isReadOnly?: boolean;
 }
 
-const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack }) => {
+const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, config: externalConfig, isReadOnly = false }) => {
   const { text, mode } = useWizardMode();
-  const { prototypeSettings } = useConfig();
+  const { prototypeSettings, config: contextConfig } = useConfig();
+  
+  // Use external config if provided (for read-only view), otherwise use context config
+  const config = externalConfig || contextConfig;
+  
   const { activeTab, setActiveTab } = useTabNavigation();
   const { errors, clearError, validateAndSetErrors, hasValidationErrors } = useConfigValidation();
   const {
-    config,
+    config: formConfig,
     configSaved,
     handleInputChange,
     handleSelectChange,
@@ -36,15 +42,19 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack })
     handleNext,
     handleSaveConfig
   } = useConfigForm({ onNext, validateAndSetErrors, hasValidationErrors, setActiveTab });
+  
+  // Use the appropriate config for form operations
+  const activeConfig = isReadOnly ? config : formConfig;
 
   const themeColor = prototypeSettings.themeColor;
 
   const renderActiveTab = () => {
     const commonProps = {
-      config,
+      config: activeConfig,
       errors,
       skipValidation: prototypeSettings.skipValidation,
-      themeColor
+      themeColor,
+      isReadOnly
     };
 
     switch (activeTab) {
@@ -105,20 +115,30 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack })
         {renderActiveTab()}
       </Card>
 
-      <div className="flex justify-between">
-        <Button variant="outline" onClick={onBack} icon={<ChevronLeft className="w-5 h-5" />}>
-          Back
-        </Button>
-        {mode === 'install' && window.location.pathname === '/configure' ? (
-          <Button onClick={handleSaveConfig} icon={<Save className="w-5 h-5" />}>
-            Save Configuration
+      {!isReadOnly && (
+        <div className="flex justify-between">
+          <Button variant="outline" onClick={onBack} icon={<ChevronLeft className="w-5 h-5" />}>
+            Back
           </Button>
-        ) : (
-          <Button onClick={handleNext} icon={<ChevronRight className="w-5 h-5" />}>
-            Next: Setup
+          {mode === 'install' && window.location.pathname === '/configure' ? (
+            <Button onClick={handleSaveConfig} icon={<Save className="w-5 h-5" />}>
+              Save Configuration
+            </Button>
+          ) : (
+            <Button onClick={handleNext} icon={<ChevronRight className="w-5 h-5" />}>
+              Next: Setup
+            </Button>
+          )}
+        </div>
+      )}
+      
+      {isReadOnly && (
+        <div className="flex justify-start">
+          <Button variant="outline" onClick={onBack} icon={<ChevronLeft className="w-5 h-5" />}>
+            Back to Deployment History
           </Button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

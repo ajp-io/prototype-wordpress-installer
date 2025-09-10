@@ -7,6 +7,7 @@ import ConfigureOnly from './components/wizard/ConfigureOnly';
 import DryRun from './components/wizard/DryRun';
 import PrototypeSettings from './components/prototype/PrototypeSettings';
 import ConsolePage from './pages/ConsolePage';
+import ViewDeploymentConfig from './pages/ViewDeploymentConfig';
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
             <Route path="/console" element={<ConsolePage />} />
             <Route path="/console/dashboard" element={<ConsolePage />} />
             <Route path="/console/history" element={<ConsolePage />} />
+            <Route path="/console/history/:deploymentId/config" element={<ViewDeploymentConfig />} />
             <Route path="/console/hosts" element={<ConsolePage />} />
           </Routes>
         </ConfigProvider>

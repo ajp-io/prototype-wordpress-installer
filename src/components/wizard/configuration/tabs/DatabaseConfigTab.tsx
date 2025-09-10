@@ -8,6 +8,7 @@ interface DatabaseConfigTabProps {
   config: ClusterConfig;
   errors: ValidationErrors;
   skipValidation: boolean;
+  isReadOnly?: boolean;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSelectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
@@ -16,6 +17,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
   config,
   errors,
   skipValidation,
+  isReadOnly = false,
   onInputChange,
   onSelectChange
 }) => {
@@ -33,6 +35,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
         required={!skipValidation}
         helpText="Choose between managed internal database or connect to your existing database"
         defaultValue="internal"
+        disabled={isReadOnly}
       />
 
       {config.databaseType === 'external' && (
@@ -51,6 +54,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             error={errors['databaseConfig.host']}
             helpText="Database server hostname or IP address"
             defaultValue="localhost"
+            readOnly={isReadOnly}
           />
 
           <Input
@@ -63,6 +67,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             required={true}
             helpText="Database server port"
             defaultValue="5432"
+            readOnly={isReadOnly}
           />
 
           <Input
@@ -75,6 +80,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             error={errors['databaseConfig.username']}
             helpText="Database username for authentication"
             defaultValue="postgres"
+            readOnly={isReadOnly}
           />
 
           <Input
@@ -88,6 +94,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             error={errors['databaseConfig.password']}
             helpText="Database password for authentication"
             defaultValue="(required)"
+            readOnly={isReadOnly}
           />
 
           <Input
@@ -100,6 +107,7 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
             error={errors['databaseConfig.database']}
             helpText="Name of the database to use"
             defaultValue="wordpress"
+            readOnly={isReadOnly}
           />
         </>
       )}

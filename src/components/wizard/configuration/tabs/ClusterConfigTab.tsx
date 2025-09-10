@@ -9,6 +9,7 @@ interface ClusterConfigTabProps {
   errors: ValidationErrors;
   skipValidation: boolean;
   themeColor: string;
+  isReadOnly?: boolean;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onSelectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onRadioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -19,6 +20,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
   errors,
   skipValidation,
   themeColor,
+  isReadOnly = false,
   onInputChange,
   onSelectChange,
   onRadioChange
@@ -50,6 +52,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         error={errors.clusterName}
         helpText="A unique name for your WordPress Enterprise installation"
         defaultValue="my-wordpress"
+        readOnly={isReadOnly}
       />
 
       <Input
@@ -61,6 +64,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         required={true}
         error={errors.storageClass}
         defaultValue="standard"
+        readOnly={isReadOnly}
       />
 
       <Select
@@ -77,6 +81,7 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
         ]}
         helpText="Select the deployment environment"
         defaultValue="production"
+        disabled={isReadOnly}
       />
 
       <div className="space-y-2">
@@ -93,13 +98,14 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
               value="standard"
               checked={(config.deploymentMode || 'standard') === 'standard'}
               onChange={onRadioChange}
+              disabled={isReadOnly}
               className="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-offset-2"
               style={{
                 accentColor: themeColor,
                 '--tw-ring-color': themeColor
               } as React.CSSProperties}
             />
-            <label htmlFor="mode-standard" className="ml-2 text-sm text-gray-700">
+            <label htmlFor="mode-standard" className={`ml-2 text-sm ${isReadOnly ? 'text-gray-500' : 'text-gray-700'}`}>
               Standard
             </label>
           </div>
@@ -111,13 +117,14 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
               value="ha"
               checked={(config.deploymentMode || 'standard') === 'ha'}
               onChange={onRadioChange}
+              disabled={isReadOnly}
               className="h-4 w-4 border-gray-300 focus:ring-2 focus:ring-offset-2"
               style={{
                 accentColor: themeColor,
                 '--tw-ring-color': themeColor
               } as React.CSSProperties}
             />
-            <label htmlFor="mode-ha" className="ml-2 text-sm text-gray-700">
+            <label htmlFor="mode-ha" className={`ml-2 text-sm ${isReadOnly ? 'text-gray-500' : 'text-gray-700'}`}>
               High Availability
             </label>
           </div>
@@ -140,9 +147,12 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
           value={config.description}
           onChange={onInputChange}
           rows={4}
+          readOnly={isReadOnly}
           className={`w-full max-w-2xl px-3 py-2 border ${
             errors.description ? 'border-red-500' : 'border-gray-300'
-          } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2`}
+          } rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+            isReadOnly ? 'bg-gray-50 text-gray-700 cursor-default' : ''
+          }`}
           style={{
             '--tw-ring-color': themeColor,
             '--tw-ring-offset-color': themeColor,
