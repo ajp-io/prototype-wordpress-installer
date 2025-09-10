@@ -3,6 +3,7 @@ import { WordPressLogo } from '../components/common/Logo';
 import Card from '../components/common/Card';
 import { useConfig } from '../contexts/ConfigContext';
 import { LayoutDashboard, FileText, History, Server } from 'lucide-react';
+import Dashboard from '../components/console/Dashboard';
 
 type ConsoleTab = 'dashboard' | 'license' | 'history' | 'hosts';
 
@@ -18,24 +19,15 @@ const ConsolePage: React.FC = () => {
     { id: 'hosts' as ConsoleTab, label: 'Hosts', icon: Server },
   ];
 
+  const handleNavigateFromDashboard = (tab: 'license' | 'history' | 'hosts') => {
+    setActiveTab(tab);
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
         return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card title="License Status">
-                <p className="text-gray-600">License information will be displayed here.</p>
-              </Card>
-              <Card title="Recent Deployments">
-                <p className="text-gray-600">Deployment history will be displayed here.</p>
-              </Card>
-              <Card title="Active Hosts">
-                <p className="text-gray-600">Host information will be displayed here.</p>
-              </Card>
-            </div>
-          </div>
+          <Dashboard onNavigate={handleNavigateFromDashboard} />
         );
       case 'license':
         return (
