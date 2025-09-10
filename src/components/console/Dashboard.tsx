@@ -5,7 +5,7 @@ import { useConfig } from '../../contexts/ConfigContext';
 import { CheckCircle, Clock, Server, FileText } from 'lucide-react';
 
 interface DashboardProps {
-  onNavigate: (tab: 'license' | 'history' | 'hosts') => void;
+  onNavigate: (tab: 'history' | 'hosts') => void;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
@@ -18,52 +18,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
       <p className="text-gray-600">Overview of your WordPress Enterprise installation</p>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* License Summary Card */}
-        <Card>
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center space-x-3">
-              <div 
-                className="w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: `${themeColor}1A` }}
-              >
-                <FileText className="w-5 h-5" style={{ color: themeColor }} />
-              </div>
-              <div>
-                <h3 className="text-lg font-medium text-gray-900">License</h3>
-                <p className="text-sm text-gray-500">Current status</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-1">
-              <CheckCircle className="w-4 h-4 text-green-500" />
-              <span className="text-sm font-medium text-green-600">Active</span>
-            </div>
-          </div>
-          
-          <div className="space-y-2 mb-4">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Type:</span>
-              <span className="text-gray-900">Enterprise</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Expires:</span>
-              <span className="text-gray-900">Dec 31, 2024</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Users:</span>
-              <span className="text-gray-900">Unlimited</span>
-            </div>
-          </div>
-          
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="w-full"
-            onClick={() => onNavigate('license')}
-          >
-            View Details
-          </Button>
-        </Card>
-
         {/* Deployment History Summary Card */}
         <Card>
           <div className="flex items-start justify-between mb-4">
@@ -166,14 +120,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           <Button 
             variant="outline" 
             className="justify-start"
-            onClick={() => onNavigate('license')}
-          >
-            <FileText className="w-4 h-4 mr-2" />
-            Manage License
-          </Button>
-          <Button 
-            variant="outline" 
-            className="justify-start"
             onClick={() => onNavigate('history')}
           >
             <Clock className="w-4 h-4 mr-2" />
@@ -186,6 +132,13 @@ const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           >
             <Server className="w-4 h-4 mr-2" />
             Monitor Hosts
+          </Button>
+          <Button 
+            variant="outline" 
+            className="justify-start"
+          >
+            <FileText className="w-4 h-4 mr-2" />
+            View Configuration
           </Button>
         </div>
       </Card>

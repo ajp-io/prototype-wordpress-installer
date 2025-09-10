@@ -4,9 +4,8 @@ import Card from '../components/common/Card';
 import { useConfig } from '../contexts/ConfigContext';
 import { LayoutDashboard, FileText, History, Server } from 'lucide-react';
 import Dashboard from '../components/console/Dashboard';
-import LicenseInfo from '../components/console/LicenseInfo';
 
-type ConsoleTab = 'dashboard' | 'license' | 'history' | 'hosts';
+type ConsoleTab = 'dashboard' | 'history' | 'hosts';
 
 const ConsolePage: React.FC = () => {
   const { prototypeSettings } = useConfig();
@@ -15,12 +14,11 @@ const ConsolePage: React.FC = () => {
 
   const navigationItems = [
     { id: 'dashboard' as ConsoleTab, label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'license' as ConsoleTab, label: 'License Information', icon: FileText },
     { id: 'history' as ConsoleTab, label: 'Deployment History', icon: History },
     { id: 'hosts' as ConsoleTab, label: 'Hosts', icon: Server },
   ];
 
-  const handleNavigateFromDashboard = (tab: 'license' | 'history' | 'hosts') => {
+  const handleNavigateFromDashboard = (tab: 'history' | 'hosts') => {
     setActiveTab(tab);
   };
 
@@ -29,10 +27,6 @@ const ConsolePage: React.FC = () => {
       case 'dashboard':
         return (
           <Dashboard onNavigate={handleNavigateFromDashboard} />
-        );
-      case 'license':
-        return (
-          <LicenseInfo />
         );
       case 'history':
         return (
