@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Card from '../common/Card';
 import Button from '../common/Button';
+import Modal from '../common/Modal';
 import { useConfig } from '../../contexts/ConfigContext';
-import { CheckCircle, XCircle, Clock, FileText, Calendar, Tag, Activity } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, FileText, Calendar, Tag, Activity, Settings } from 'lucide-react';
 
 interface DeploymentRecord {
   id: string;
@@ -10,11 +11,24 @@ interface DeploymentRecord {
   version: string;
   status: 'Success' | 'Failed' | 'In Progress';
   duration?: string;
+  config: {
+    clusterName: string;
+    environment: string;
+    deploymentMode: string;
+    storageClass: string;
+    domain: string;
+    useHttps: boolean;
+    databaseType: string;
+    adminUsername: string;
+    adminEmail: string;
+    description: string;
+  };
 }
 
 const DeploymentHistory: React.FC = () => {
   const { prototypeSettings } = useConfig();
   const themeColor = prototypeSettings.themeColor;
+  const [selectedConfig, setSelectedConfig] = useState<DeploymentRecord['config'] | null>(null);
 
   // Mock deployment data
   const [deployments] = useState<DeploymentRecord[]>([
@@ -24,6 +38,18 @@ const DeploymentHistory: React.FC = () => {
       version: '6.4.2',
       status: 'Success',
       duration: '12m 34s',
+      config: {
+        clusterName: 'wordpress-prod',
+        environment: 'production',
+        deploymentMode: 'ha',
+        storageClass: 'fast-ssd',
+        domain: 'wordpress.company.com',
+        useHttps: true,
+        databaseType: 'internal',
+        adminUsername: 'admin',
+        adminEmail: 'admin@company.com',
+        description: 'Production WordPress Enterprise deployment with high availability configuration'
+      }
     },
     {
       id: '2',
@@ -31,6 +57,18 @@ const DeploymentHistory: React.FC = () => {
       version: '6.4.1',
       status: 'Success',
       duration: '8m 12s',
+      config: {
+        clusterName: 'wordpress-prod',
+        environment: 'production',
+        deploymentMode: 'standard',
+        storageClass: 'standard',
+        domain: 'wordpress.company.com',
+        useHttps: true,
+        databaseType: 'internal',
+        adminUsername: 'admin',
+        adminEmail: 'admin@company.com',
+        description: 'Standard production deployment for WordPress Enterprise'
+      }
     },
     {
       id: '3',
@@ -38,6 +76,18 @@ const DeploymentHistory: React.FC = () => {
       version: '6.4.0',
       status: 'Failed',
       duration: '3m 45s',
+      config: {
+        clusterName: 'wordpress-prod',
+        environment: 'production',
+        deploymentMode: 'ha',
+        storageClass: 'fast-ssd',
+        domain: 'wordpress.company.com',
+        useHttps: true,
+        databaseType: 'external',
+        adminUsername: 'admin',
+        adminEmail: 'admin@company.com',
+        description: 'Failed deployment attempt with external database configuration'
+      }
     },
     {
       id: '4',
@@ -45,6 +95,18 @@ const DeploymentHistory: React.FC = () => {
       version: '6.3.8',
       status: 'Success',
       duration: '15m 22s',
+      config: {
+        clusterName: 'wordpress-prod',
+        environment: 'production',
+        deploymentMode: 'standard',
+        storageClass: 'standard',
+        domain: 'wordpress.company.com',
+        useHttps: false,
+        databaseType: 'internal',
+        adminUsername: 'admin',
+        adminEmail: 'admin@company.com',
+        description: 'Initial production deployment without HTTPS'
+      }
     }
   ]);
 
@@ -130,6 +192,14 @@ const DeploymentHistory: React.FC = () => {
 
                   {/* Actions */}
                   <div className="flex items-center space-x-2 ml-4">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSelectedConfig(deployment.config)}
+                      icon={<Settings className="w-4 h-4" />}
+                    >
+                      View Config
+                    </Button>
                     <Button
                       variant="outline"
                       size="sm"
