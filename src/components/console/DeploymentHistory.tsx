@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../common/Card';
 import Button from '../common/Button';
+import HelmLogsModal from './HelmLogsModal';
 import { useConfig } from '../../contexts/ConfigContext';
 import { CheckCircle, XCircle, Clock, FileText, Calendar, Tag, Activity, Settings } from 'lucide-react';
 
@@ -11,6 +12,7 @@ interface DeploymentRecord {
   version: string;
   status: 'Success' | 'Failed' | 'In Progress';
   duration?: string;
+  helmCharts: HelmChart[];
   config: {
     clusterName: string;
     environment: string;
@@ -49,7 +51,139 @@ const DeploymentHistory: React.FC = () => {
         adminUsername: 'admin',
         adminEmail: 'admin@company.com',
         description: 'Production WordPress Enterprise deployment with high availability configuration'
-      }
+      },
+      helmCharts: [
+        {
+          name: 'wordpress-postgresql',
+          namespace: 'wordpress',
+          version: '12.1.9',
+          status: 'deployed' as const,
+          revision: 1,
+          updated: '2024-12-15T14:25:10Z',
+          logs: [
+            'NAME: wordpress-postgresql',
+            'LAST DEPLOYED: Fri Dec 15 14:25:10 2024',
+            'NAMESPACE: wordpress',
+            'STATUS: deployed',
+            'REVISION: 1',
+            'TEST SUITE: None',
+            'NOTES:',
+            'CHART NAME: postgresql',
+            'CHART VERSION: 12.1.9',
+            'APP VERSION: 15.1.0',
+            '',
+            '** Please be patient while the chart is being deployed **',
+            '',
+            'PostgreSQL can be accessed via port 5432 on the following DNS names from within your cluster:',
+            '',
+            '    wordpress-postgresql.wordpress.svc.cluster.local - Read/Write connection',
+            '',
+            'To get the password for "postgres" run:',
+            '',
+            '    export POSTGRES_PASSWORD=$(kubectl get secret --namespace wordpress wordpress-postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)',
+            '',
+            'To connect to your database run the following command:',
+            '',
+            '    kubectl run wordpress-postgresql-client --rm --tty -i --restart=\'Never\' --namespace wordpress --image docker.io/bitnami/postgresql:15.1.0-debian-11-r0 --env="PGPASSWORD=$POSTGRES_PASSWORD" \\',
+            '      --command -- psql --host wordpress-postgresql --port 5432 -U postgres -d wordpress',
+            '',
+            'NOTE: If you are connecting to this database from outside the cluster, make sure to create the appropriate ingress rules or port-forward the service.',
+            '',
+            'WARNING: Rolling tag detected (bitnami/postgresql:15), please note that it is strongly recommended to avoid using rolling tags in a production environment.',
+            '+         Please use a specific tag instead.'
+          ]
+        },
+        {
+          name: 'wordpress-core',
+          namespace: 'wordpress',
+          version: '6.4.2',
+          status: 'deployed' as const,
+          revision: 1,
+          updated: '2024-12-15T14:28:45Z',
+          logs: [
+            'NAME: wordpress-core',
+            'LAST DEPLOYED: Fri Dec 15 14:28:45 2024',
+            'NAMESPACE: wordpress',
+            'STATUS: deployed',
+            'REVISION: 1',
+            'TEST SUITE: None',
+            'NOTES:',
+            'CHART NAME: wordpress-enterprise',
+            'CHART VERSION: 6.4.2',
+            'APP VERSION: 6.4.2',
+            '',
+            '1. Get the WordPress Enterprise URL:',
+            '',
+            '  You should be able to access your new WordPress Enterprise installation through',
+            '',
+            '  https://wordpress.company.com/',
+            '',
+            '2. Get your WordPress Enterprise login credentials by running:',
+            '',
+            '  echo Username: admin',
+            '  echo Password: $(kubectl get secret --namespace wordpress wordpress-core -o jsonpath="{.data.wordpress-password}" | base64 -d)',
+            '',
+            '3. The installation includes the following components:',
+            '   - WordPress Enterprise Core',
+            '   - WordPress Enterprise Admin Dashboard',
+            '   - WordPress Enterprise API',
+            '   - WordPress Enterprise Marketplace',
+            '',
+            'Happy WordPressing!'
+          ]
+        },
+        {
+          name: 'wordpress-ingress',
+          namespace: 'wordpress',
+          version: '4.4.2',
+          status: 'deployed' as const,
+          revision: 1,
+          updated: '2024-12-15T14:30:15Z',
+          logs: [
+            'NAME: wordpress-ingress',
+            'LAST DEPLOYED: Fri Dec 15 14:30:15 2024',
+            'NAMESPACE: wordpress',
+            'STATUS: deployed',
+            'REVISION: 1',
+            'TEST SUITE: None',
+            'NOTES:',
+            'CHART NAME: ingress-nginx',
+            'CHART VERSION: 4.4.2',
+            'APP VERSION: 1.5.1',
+            '',
+            'The ingress-nginx controller has been installed.',
+            'It may take a few minutes for the LoadBalancer IP to be available.',
+            'You can watch the status by running \'kubectl --namespace wordpress get services -o wide -w wordpress-ingress-controller\'',
+            '',
+            'An example Ingress that makes use of the controller:',
+            '  apiVersion: networking.k8s.io/v1',
+            '  kind: Ingress',
+            '  metadata:',
+            '    annotations:',
+            '      kubernetes.io/ingress.class: nginx',
+            '    name: example',
+            '    namespace: foo',
+            '  spec:',
+            '    ingressClassName: nginx',
+            '    rules:',
+            '      - host: www.example.com',
+            '        http:',
+            '          paths:',
+            '            - backend:',
+            '                service:',
+            '                  name: exampleService',
+            '                  port:',
+            '                    number: 80',
+            '              path: /',
+            '              pathType: Prefix',
+            '    # This section is only required if TLS is to be enabled for the Ingress',
+            '    tls:',
+            '      - hosts:',
+            '        - www.example.com',
+            '        secretName: example-tls'
+          ]
+        }
+      ]
     },
     {
       id: '2',
@@ -68,7 +202,43 @@ const DeploymentHistory: React.FC = () => {
         adminUsername: 'admin',
         adminEmail: 'admin@company.com',
         description: 'Standard production deployment for WordPress Enterprise'
-      }
+      },
+      helmCharts: [
+        {
+          name: 'wordpress-postgresql',
+          namespace: 'wordpress',
+          version: '12.1.8',
+          status: 'deployed' as const,
+          revision: 1,
+          updated: '2024-12-10T09:12:30Z',
+          logs: [
+            'NAME: wordpress-postgresql',
+            'LAST DEPLOYED: Tue Dec 10 09:12:30 2024',
+            'NAMESPACE: wordpress',
+            'STATUS: deployed',
+            'REVISION: 1',
+            'PostgreSQL installation completed successfully.',
+            'Database is ready for connections.'
+          ]
+        },
+        {
+          name: 'wordpress-core',
+          namespace: 'wordpress',
+          version: '6.4.1',
+          status: 'deployed' as const,
+          revision: 1,
+          updated: '2024-12-10T09:14:20Z',
+          logs: [
+            'NAME: wordpress-core',
+            'LAST DEPLOYED: Tue Dec 10 09:14:20 2024',
+            'NAMESPACE: wordpress',
+            'STATUS: deployed',
+            'REVISION: 1',
+            'WordPress Enterprise 6.4.1 installed successfully.',
+            'Application is ready at https://wordpress.company.com'
+          ]
+        }
+      ]
     },
     {
       id: '3',
@@ -87,7 +257,27 @@ const DeploymentHistory: React.FC = () => {
         adminUsername: 'admin',
         adminEmail: 'admin@company.com',
         description: 'Failed deployment attempt with external database configuration'
-      }
+      },
+      helmCharts: [
+        {
+          name: 'wordpress-postgresql',
+          namespace: 'wordpress',
+          version: '12.1.7',
+          status: 'failed' as const,
+          revision: 1,
+          updated: '2024-12-08T16:22:45Z',
+          logs: [
+            'NAME: wordpress-postgresql',
+            'LAST DEPLOYED: Sun Dec 08 16:22:45 2024',
+            'NAMESPACE: wordpress',
+            'STATUS: failed',
+            'REVISION: 1',
+            'Error: INSTALLATION FAILED: failed to create resource: admission webhook "validate.nginx.ingress.kubernetes.io" denied the request: host "wordpress.company.com" and path "/" is already defined in ingress wordpress/wordpress-ingress',
+            'Error: unable to build kubernetes objects from release manifest: unable to recognize "": no matches for kind "Ingress" in version "extensions/v1beta1"',
+            'Error: failed to install CRD crds/wordpress.yaml: unable to recognize "": no matches for kind "CustomResourceDefinition" in version "apiextensions.k8s.io/v1beta1"'
+          ]
+        }
+      ]
     },
     {
       id: '4',
@@ -106,7 +296,44 @@ const DeploymentHistory: React.FC = () => {
         adminUsername: 'admin',
         adminEmail: 'admin@company.com',
         description: 'Initial production deployment without HTTPS'
-      }
+      },
+      helmCharts: [
+        {
+          name: 'wordpress-postgresql',
+          namespace: 'wordpress',
+          version: '12.1.6',
+          status: 'deployed' as const,
+          revision: 1,
+          updated: '2024-12-05T11:42:15Z',
+          logs: [
+            'NAME: wordpress-postgresql',
+            'LAST DEPLOYED: Thu Dec 05 11:42:15 2024',
+            'NAMESPACE: wordpress',
+            'STATUS: deployed',
+            'REVISION: 1',
+            'PostgreSQL 12.1.6 deployed successfully.',
+            'Initial database setup completed.'
+          ]
+        },
+        {
+          name: 'wordpress-core',
+          namespace: 'wordpress',
+          version: '6.3.8',
+          status: 'deployed' as const,
+          revision: 1,
+          updated: '2024-12-05T11:44:50Z',
+          logs: [
+            'NAME: wordpress-core',
+            'LAST DEPLOYED: Thu Dec 05 11:44:50 2024',
+            'NAMESPACE: wordpress',
+            'STATUS: deployed',
+            'REVISION: 1',
+            'WordPress Enterprise 6.3.8 initial deployment.',
+            'HTTP-only configuration applied.',
+            'Application available at http://wordpress.company.com'
+          ]
+        }
+      ]
     }
   ]);
 
@@ -219,6 +446,16 @@ const DeploymentHistory: React.FC = () => {
             </div>
           </div>
         </Card>
+      )}
+      
+      {selectedLogsDeployment && (
+        <HelmLogsModal
+          isOpen={!!selectedLogsDeployment}
+          onClose={() => setSelectedLogsDeployment(null)}
+          deploymentVersion={deployments.find(d => d.id === selectedLogsDeployment)?.version || ''}
+          deploymentDate={deployments.find(d => d.id === selectedLogsDeployment)?.date || ''}
+          charts={deployments.find(d => d.id === selectedLogsDeployment)?.helmCharts || []}
+        />
       )}
     </div>
   );
