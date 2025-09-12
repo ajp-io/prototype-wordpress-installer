@@ -2,15 +2,29 @@ import { useState } from 'react';
 import { useConfig } from '../../../../contexts/ConfigContext';
 import { useWizardMode } from '../../../../contexts/WizardModeContext';
 import { TabName } from '../utils/validationUtils';
+import { ConfigStepStatus } from '../components/ConfigStepper';
 
 interface UseConfigFormProps {
   onNext: () => void;
   validateAndSetErrors: () => TabName | null;
   hasValidationErrors: () => boolean;
-  setActiveTab: (tab: TabName) => void;
+  currentConfigStep: TabName;
+  setCurrentConfigStep: (step: TabName) => void;
+  configStepStatuses: Record<TabName, ConfigStepStatus>;
+  updateConfigStepStatus: (step: TabName, status: ConfigStepStatus) => void;
+  configSteps: TabName[];
 }
 
-export const useConfigForm = ({ onNext, validateAndSetErrors, hasValidationErrors, setActiveTab }: UseConfigFormProps) => {
+export const useConfigForm = ({ 
+  onNext, 
+  validateAndSetErrors, 
+  hasValidationErrors, 
+  currentConfigStep,
+  setCurrentConfigStep,
+  configStepStatuses,
+  updateConfigStepStatus,
+  configSteps
+}: UseConfigFormProps) => {
   const { config, updateConfig, prototypeSettings } = useConfig();
   const { mode } = useWizardMode();
   const [configSaved, setConfigSaved] = useState(false);
@@ -56,18 +70,55 @@ export const useConfigForm = ({ onNext, validateAndSetErrors, hasValidationError
       licenseFileName: undefined
     });
   };
+
   const handleNext = () => {
     if (prototypeSettings.skipValidation) {
-      onNext();
+      const currentIndex = configSteps.indexOf(currentConfigStep);
+      if (currentIndex < configSteps.length - 1) {
+        // Move to next config step
+        updateConfigStepStatus(currentConfigStep, 'completed');
+        const nextStep = configSteps[currentIndex + 1];
+        updateConfigStepStatus(nextStep, 'current');
+        setCurrentConfigStep(nextStep);
+      } else {
+        // All config steps complete, proceed to main wizard next step
+        updateConfigStepStatus(currentConfigStep, 'completed');
+        onNext();
+      }
       return;
     }
 
     const nextTabWithErrors = validateAndSetErrors();
     if (nextTabWithErrors) {
-      setActiveTab(nextTabWithErrors);
+      updateConfigStepStatus(nextTabWithErrors, 'error');
+      setCurrentConfigStep(nextTabWithErrors);
     } else {
-      onNext();
+      const currentIndex = configSteps.indexOf(currentConfigStep);
+      if (currentIndex < configSteps.length - 1) {
+        // Move to next config step
+        updateConfigStepStatus(currentConfigStep, 'completed');
+        const nextStep = configSteps[currentIndex + 1];
+        updateConfigStepStatus(nextStep, 'current');
+        setCurrentConfigStep(nextStep);
+      } else {
+        // All config steps complete, proceed to main wizard next step
+        updateConfigStepStatus(currentConfigStep, 'completed');
+        onNext();
+      }
     }
+  };
+
+  const handleBack = () => {
+    const currentIndex = configSteps.indexOf(currentConfigStep);
+    if (currentIndex > 0) {
+      // Move to previous config step
+      updateConfigStepStatus(currentConfigStep, 'pending');
+      const prevStep = configSteps[currentIndex - 1];
+      updateConfigStepStatus(prevStep, 'current');
+      setCurrentConfigStep(prevStep);
+      return true; // Handled internally
+    }
+    return false; // Let parent handle
   };
 
   const handleSaveConfig = () => {
@@ -80,8 +131,24 @@ export const useConfigForm = ({ onNext, validateAndSetErrors, hasValidationError
     if (!nextTabWithErrors) {
       setConfigSaved(true);
     } else {
-      setActiveTab(nextTabWithErrors);
+      updateConfigStepStatus(nextTabWithErrors, 'error');
+      setCurrentConfigStep(nextTabWithErrors);
     }
+  };
+
+  const getNextButtonText = () => {
+    const currentIndex = configSteps.indexOf(currentConfigStep);
+    if (currentIndex < configSteps.length - 1) {
+      const nextStep = configSteps[currentIndex + 1];
+      const stepLabels = {
+        cluster: 'Cluster Settings',
+        network: 'Network',
+        admin: 'Admin Account',
+        database: 'Database'
+      };
+      return `Next: ${stepLabels[nextStep]}`;
+    }
+    return 'Next: Setup';
   };
 
   return {
@@ -94,6 +161,8 @@ export const useConfigForm = ({ onNext, validateAndSetErrors, hasValidationError
     handleFileChange,
     handleFileRemove,
     handleNext,
+    handleBack,
     handleSaveConfig
+    getNextButtonText
   };
 };

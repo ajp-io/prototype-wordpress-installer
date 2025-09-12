@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '../../common/Card';
 import Button from '../../common/Button';
 import { useWizardMode } from '../../../contexts/WizardModeContext';
 import { useConfig } from '../../../contexts/ConfigContext';
 import { ChevronLeft, ChevronRight, Save } from 'lucide-react';
-import { useTabNavigation } from './hooks/useTabNavigation';
 import { useConfigValidation } from './hooks/useConfigValidation';
 import { useConfigForm } from './hooks/useConfigForm';
-import TabNavigation from './components/TabNavigation';
+import ConfigStepper, { ConfigStep } from './components/ConfigStepper';
 import ConfigSaveSuccess from './components/ConfigSaveSuccess';
 import ClusterConfigTab from './tabs/ClusterConfigTab';
 import NetworkConfigTab from './tabs/NetworkConfigTab';
 import AdminConfigTab from './tabs/AdminConfigTab';
 import DatabaseConfigTab from './tabs/DatabaseConfigTab';
+import { TabName } from './utils/validationUtils';
 
 interface ConfigurationStepProps {
   onNext: () => void;
@@ -28,8 +28,18 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
   // Use external config if provided (for read-only view), otherwise use context config
   const config = externalConfig || contextConfig;
   
-  const { activeTab, setActiveTab } = useTabNavigation();
-  const { errors, clearError, validateAndSetErrors, hasValidationErrors } = useConfigValidation();
+  const configSteps: TabName[] = ['cluster', 'network', 'admin', 'database'];
+  const [currentConfigStep, setCurrentConfigStep] = useState<TabName>('cluster');
+  
+  const { 
+    errors, 
+    clearError, 
+    validateAndSetErrors, 
+    hasValidationErrors, 
+    configStepStatuses,
+    updateConfigStepStatus 
+  } = useConfigValidation();
+  
   const {
     config: formConfig,
     configSaved,
@@ -40,15 +50,63 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
     handleFileChange,
     handleFileRemove,
     handleNext,
-    handleSaveConfig
-  } = useConfigForm({ onNext, validateAndSetErrors, hasValidationErrors, setActiveTab });
+    handleBack: handleConfigBack,
+    handleSaveConfig,
+    getNextButtonText
+  } = useConfigForm({ 
+    onNext, 
+    validateAndSetErrors, 
+    hasValidationErrors, 
+    currentConfigStep,
+    setCurrentConfigStep,
+    configStepStatuses,
+    updateConfigStepStatus,
+    configSteps
+  });
   
   // Use the appropriate config for form operations
   const activeConfig = isReadOnly ? config : formConfig;
 
   const themeColor = prototypeSettings.themeColor;
 
-  const renderActiveTab = () => {
+  // Set initial step status
+  useEffect(() => {
+    if (!isReadOnly) {
+      updateConfigStepStatus('cluster', 'current');
+    }
+  }, []);
+
+  const handleStepClick = (step: TabName) => {
+    if (!isReadOnly) {
+      updateConfigStepStatus(currentConfigStep, 'pending');
+      updateConfigStepStatus(step, 'current');
+      setCurrentConfigStep(step);
+    }
+  };
+
+  const handleBackClick = () => {
+    const handled = handleConfigBack();
+    if (!handled) {
+      onBack();
+    }
+  };
+
+  const createConfigSteps = (): ConfigStep[] => {
+    const stepLabels = {
+      cluster: 'Cluster Settings',
+      network: 'Network',
+      admin: 'Admin Account',
+      database: 'Database'
+    };
+
+    return configSteps.map(stepId => ({
+      id: stepId,
+      label: stepLabels[stepId],
+      status: isReadOnly ? 'completed' : configStepStatuses[stepId]
+    }));
+  };
+
+  const renderCurrentStep = () => {
     const commonProps = {
       config: activeConfig,
       errors,
@@ -57,7 +115,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
       isReadOnly
     };
 
-    switch (activeTab) {
+    switch (currentConfigStep) {
       case 'cluster':
         return (
           <ClusterConfigTab
@@ -111,13 +169,20 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
           </p>
         </div>
 
-        <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
-        {renderActiveTab()}
+        {!isReadOnly && (
+          <ConfigStepper
+            steps={createConfigSteps()}
+            currentStep={currentConfigStep}
+            onStepClick={handleStepClick}
+            themeColor={themeColor}
+          />
+        )}
+        {renderCurrentStep()}
       </Card>
 
       {!isReadOnly && (
         <div className="flex justify-between">
-          <Button variant="outline" onClick={onBack} icon={<ChevronLeft className="w-5 h-5" />}>
+          <Button variant="outline" onClick={handleBackClick} icon={<ChevronLeft className="w-5 h-5" />}>
             Back
           </Button>
           {mode === 'install' && window.location.pathname === '/configure' ? (
@@ -126,7 +191,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
             </Button>
           ) : (
             <Button onClick={handleNext} icon={<ChevronRight className="w-5 h-5" />}>
-              Next: Setup
+              {getNextButtonText()}
             </Button>
           )}
         </div>
@@ -134,7 +199,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
       
       {isReadOnly && (
         <div className="flex justify-start">
-          <Button variant="outline" onClick={onBack} icon={<ChevronLeft className="w-5 h-5" />}>
+          <Button variant="outline" onClick={handleBackClick} icon={<ChevronLeft className="w-5 h-5" />}>
             Back to Deployment History
           </Button>
         </div>
