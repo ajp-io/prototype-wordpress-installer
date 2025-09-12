@@ -162,7 +162,7 @@ export const useConfigForm = ({
     handleFileRemove,
     handleNext,
     handleBack,
-    handleSaveConfig
+    handleSaveConfig,
     getNextButtonText
   };
 };
