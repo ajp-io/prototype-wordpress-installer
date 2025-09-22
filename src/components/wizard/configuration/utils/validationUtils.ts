@@ -12,10 +12,19 @@ export interface ValidationErrors {
   deploymentMode?: string;
   environment?: string;
   licenseKey?: string;
+  // Additional fields for extended config groups
+  monitoring?: string;
+  logging?: string;
+  backup?: string;
+  security?: string;
+  performance?: string;
+  integrations?: string;
+  notifications?: string;
+  customization?: string;
   [key: string]: string | undefined;
 }
 
-export type TabName = 'cluster' | 'network' | 'admin' | 'database';
+export type TabName = 'cluster' | 'network' | 'admin' | 'database' | 'monitoring' | 'logging' | 'backup' | 'security' | 'performance' | 'integrations' | 'notifications' | 'customization';
 
 export const validateClusterTab = (config: ClusterConfig, skipValidation: boolean): ValidationErrors => {
   if (skipValidation) return {};
@@ -69,17 +78,88 @@ export const validateDatabaseTab = (config: ClusterConfig, skipValidation: boole
   return errors;
 };
 
+export const validateMonitoringTab = (config: ClusterConfig, skipValidation: boolean): ValidationErrors => {
+  if (skipValidation) return {};
+  const errors: ValidationErrors = {};
+  // Add monitoring-specific validation if needed
+  return errors;
+};
+
+export const validateLoggingTab = (config: ClusterConfig, skipValidation: boolean): ValidationErrors => {
+  if (skipValidation) return {};
+  const errors: ValidationErrors = {};
+  // Add logging-specific validation if needed
+  return errors;
+};
+
+export const validateBackupTab = (config: ClusterConfig, skipValidation: boolean): ValidationErrors => {
+  if (skipValidation) return {};
+  const errors: ValidationErrors = {};
+  // Add backup-specific validation if needed
+  return errors;
+};
+
+export const validateSecurityTab = (config: ClusterConfig, skipValidation: boolean): ValidationErrors => {
+  if (skipValidation) return {};
+  const errors: ValidationErrors = {};
+  // Add security-specific validation if needed
+  return errors;
+};
+
+export const validatePerformanceTab = (config: ClusterConfig, skipValidation: boolean): ValidationErrors => {
+  if (skipValidation) return {};
+  const errors: ValidationErrors = {};
+  // Add performance-specific validation if needed
+  return errors;
+};
+
+export const validateIntegrationsTab = (config: ClusterConfig, skipValidation: boolean): ValidationErrors => {
+  if (skipValidation) return {};
+  const errors: ValidationErrors = {};
+  // Add integrations-specific validation if needed
+  return errors;
+};
+
+export const validateNotificationsTab = (config: ClusterConfig, skipValidation: boolean): ValidationErrors => {
+  if (skipValidation) return {};
+  const errors: ValidationErrors = {};
+  // Add notifications-specific validation if needed
+  return errors;
+};
+
+export const validateCustomizationTab = (config: ClusterConfig, skipValidation: boolean): ValidationErrors => {
+  if (skipValidation) return {};
+  const errors: ValidationErrors = {};
+  // Add customization-specific validation if needed
+  return errors;
+};
+
 export const validateAllTabs = (config: ClusterConfig, skipValidation: boolean): { [key in TabName]: ValidationErrors } => {
-  return {
+  const basicTabs = {
     cluster: validateClusterTab(config, skipValidation),
     network: validateNetworkTab(config, skipValidation),
     admin: validateAdminTab(config, skipValidation),
     database: validateDatabaseTab(config, skipValidation)
   };
+
+  const extendedTabs = {
+    monitoring: validateMonitoringTab(config, skipValidation),
+    logging: validateLoggingTab(config, skipValidation),
+    backup: validateBackupTab(config, skipValidation),
+    security: validateSecurityTab(config, skipValidation),
+    performance: validatePerformanceTab(config, skipValidation),
+    integrations: validateIntegrationsTab(config, skipValidation),
+    notifications: validateNotificationsTab(config, skipValidation),
+    customization: validateCustomizationTab(config, skipValidation)
+  };
+
+  return { ...basicTabs, ...extendedTabs } as { [key in TabName]: ValidationErrors };
 };
 
 export const findFirstTabWithErrors = (allTabErrors: { [key in TabName]: ValidationErrors }): TabName | null => {
-  const tabs: TabName[] = ['cluster', 'network', 'admin', 'database'];
+  const basicTabs: TabName[] = ['cluster', 'network', 'admin', 'database'];
+  const extendedTabs: TabName[] = ['monitoring', 'logging', 'backup', 'security', 'performance', 'integrations', 'notifications', 'customization'];
+  const tabs = [...basicTabs, ...extendedTabs];
   
   for (const tab of tabs) {
     if (Object.keys(allTabErrors[tab]).length > 0) {

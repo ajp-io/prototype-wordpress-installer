@@ -171,6 +171,28 @@ const PrototypeSettings: React.FC = () => {
             </div>
 
             <div className="border-t border-gray-200 pt-6">
+              <h2 className="text-lg font-medium text-gray-900 mb-4">Configuration Settings</h2>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="enableManyConfigGroups"
+                    checked={prototypeSettings.enableManyConfigGroups || false}
+                    onChange={(e) => updatePrototypeSettings({ enableManyConfigGroups: e.target.checked })}
+                    className="h-4 w-4 border-gray-300 rounded focus:ring-2 focus:ring-offset-2"
+                    style={{
+                      accentColor: prototypeSettings.themeColor,
+                      '--tw-ring-color': prototypeSettings.themeColor
+                    } as React.CSSProperties}
+                  />
+                  <label htmlFor="enableManyConfigGroups" className="text-sm text-gray-700">
+                    Enable many configuration groups (12 groups for testing)
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t border-gray-200 pt-6">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Validation Settings</h2>
               
               <div className="space-y-4">

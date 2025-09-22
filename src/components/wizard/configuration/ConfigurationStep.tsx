@@ -12,6 +12,16 @@ import ClusterConfigTab from './tabs/ClusterConfigTab';
 import NetworkConfigTab from './tabs/NetworkConfigTab';
 import AdminConfigTab from './tabs/AdminConfigTab';
 import DatabaseConfigTab from './tabs/DatabaseConfigTab';
+import { 
+  MonitoringConfigTab, 
+  LoggingConfigTab, 
+  BackupConfigTab, 
+  SecurityConfigTab, 
+  PerformanceConfigTab, 
+  IntegrationsConfigTab, 
+  NotificationsConfigTab, 
+  CustomizationConfigTab 
+} from './tabs/ExtendedConfigTabs';
 import { TabName } from './utils/validationUtils';
 
 interface ConfigurationStepProps {
@@ -28,7 +38,27 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
   // Use external config if provided (for read-only view), otherwise use context config
   const config = externalConfig || contextConfig;
   
-  const configSteps: TabName[] = ['cluster', 'network', 'admin', 'database'];
+  const getConfigSteps = (): TabName[] => {
+    const basicSteps: TabName[] = ['cluster', 'network', 'admin', 'database'];
+    
+    if (prototypeSettings.enableManyConfigGroups) {
+      return [
+        ...basicSteps,
+        'monitoring',
+        'logging', 
+        'backup',
+        'security',
+        'performance',
+        'integrations',
+        'notifications',
+        'customization'
+      ];
+    }
+    
+    return basicSteps;
+  };
+  
+  const configSteps = getConfigSteps();
   const [currentConfigStep, setCurrentConfigStep] = useState<TabName>('cluster');
   
   const { 
@@ -96,7 +126,15 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
       cluster: 'Cluster Settings',
       network: 'Network',
       admin: 'Admin Account',
-      database: 'Database'
+      database: 'Database',
+      monitoring: 'Monitoring',
+      logging: 'Logging',
+      backup: 'Backup',
+      security: 'Security',
+      performance: 'Performance',
+      integrations: 'Integrations',
+      notifications: 'Notifications',
+      customization: 'Customization'
     };
 
     return configSteps.map(stepId => ({
@@ -145,6 +183,71 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
       case 'database':
         return (
           <DatabaseConfigTab
+            {...commonProps}
+            onInputChange={handleInputChange}
+            onSelectChange={handleSelectChange}
+          />
+        );
+      case 'monitoring':
+        return (
+          <MonitoringConfigTab
+            {...commonProps}
+            onInputChange={handleInputChange}
+            onSelectChange={handleSelectChange}
+            onCheckboxChange={handleCheckboxChange}
+          />
+        );
+      case 'logging':
+        return (
+          <LoggingConfigTab
+            {...commonProps}
+            onInputChange={handleInputChange}
+            onSelectChange={handleSelectChange}
+          />
+        );
+      case 'backup':
+        return (
+          <BackupConfigTab
+            {...commonProps}
+            onInputChange={handleInputChange}
+            onSelectChange={handleSelectChange}
+          />
+        );
+      case 'security':
+        return (
+          <SecurityConfigTab
+            {...commonProps}
+            onInputChange={handleInputChange}
+            onCheckboxChange={handleCheckboxChange}
+          />
+        );
+      case 'performance':
+        return (
+          <PerformanceConfigTab
+            {...commonProps}
+            onInputChange={handleInputChange}
+            onSelectChange={handleSelectChange}
+          />
+        );
+      case 'integrations':
+        return (
+          <IntegrationsConfigTab
+            {...commonProps}
+            onInputChange={handleInputChange}
+            onCheckboxChange={handleCheckboxChange}
+          />
+        );
+      case 'notifications':
+        return (
+          <NotificationsConfigTab
+            {...commonProps}
+            onInputChange={handleInputChange}
+            onCheckboxChange={handleCheckboxChange}
+          />
+        );
+      case 'customization':
+        return (
+          <CustomizationConfigTab
             {...commonProps}
             onInputChange={handleInputChange}
             onSelectChange={handleSelectChange}

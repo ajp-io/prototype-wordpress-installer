@@ -56,6 +56,7 @@ interface PrototypeSettings {
     description: string;
   }>;
   useNodeRoles: boolean;
+  enableManyConfigGroups: boolean;
 }
 
 interface ConfigContextType {
@@ -109,7 +110,8 @@ const defaultPrototypeSettings: PrototypeSettings = {
     { name: 'wlan0', description: 'Wireless Interface' },
     { name: 'docker0', description: 'Docker Bridge Interface' }
   ],
-  useNodeRoles: false
+  useNodeRoles: false,
+  enableManyConfigGroups: false
 };
 
 const PROTOTYPE_SETTINGS_KEY = 'wordpress-prototype-settings';
