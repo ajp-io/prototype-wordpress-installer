@@ -13,6 +13,7 @@ export interface ConfigStep {
 interface ConfigStepperProps {
   steps: ConfigStep[];
   currentStep: TabName;
+  furthestReachedStep: TabName;
   onStepClick: (step: TabName) => void;
   themeColor: string;
 }
@@ -20,6 +21,7 @@ interface ConfigStepperProps {
 const ConfigStepper: React.FC<ConfigStepperProps> = ({
   steps,
   currentStep,
+  furthestReachedStep,
   onStepClick,
   themeColor
 }) => {
@@ -68,7 +70,11 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
   };
 
   const isStepClickable = (step: ConfigStep) => {
-    return step.status === 'completed' || step.status === 'error' || step.status === 'current';
+    // Allow clicking on any step up to the furthest reached step
+    const stepIds: TabName[] = ['cluster', 'network', 'admin', 'database'];
+    const stepIndex = stepIds.indexOf(step.id);
+    const furthestIndex = stepIds.indexOf(furthestReachedStep);
+    return stepIndex <= furthestIndex;
   };
 
   return (

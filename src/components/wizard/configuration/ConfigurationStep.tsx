@@ -111,6 +111,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
     validateAndSetErrors, 
     hasValidationErrors, 
     configStepStatuses,
+    furthestReachedStep,
     updateConfigStepStatus 
   } = useConfigValidation();
   
@@ -152,9 +153,16 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
 
   const handleStepClick = (step: TabName) => {
     if (!isReadOnly) {
-      updateConfigStepStatus(currentConfigStep, 'pending');
-      updateConfigStepStatus(step, 'current');
-      setCurrentConfigStep(step);
+      // Allow clicking on any step up to the furthest reached step
+      const steps: TabName[] = ['cluster', 'network', 'admin', 'database'];
+      const clickedIndex = steps.indexOf(step);
+      const furthestIndex = steps.indexOf(furthestReachedStep);
+      
+      if (clickedIndex <= furthestIndex) {
+        updateConfigStepStatus(currentConfigStep, 'pending');
+        updateConfigStepStatus(step, 'current');
+        setCurrentConfigStep(step);
+      }
     }
   };
 

@@ -7,6 +7,7 @@ export const useConfigValidation = () => {
   const { config, prototypeSettings } = useConfig();
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [allTabsValidated, setAllTabsValidated] = useState(false);
+  const [furthestReachedStep, setFurthestReachedStep] = useState<TabName>('cluster');
   const [configStepStatuses, setConfigStepStatuses] = useState<Record<TabName, ConfigStepStatus>>({
     cluster: 'pending',
     network: 'pending',
@@ -22,6 +23,16 @@ export const useConfigValidation = () => {
 
   const updateConfigStepStatus = (step: TabName, status: ConfigStepStatus) => {
     setConfigStepStatuses(prev => ({ ...prev, [step]: status }));
+    
+    // Update furthest reached step when a step becomes current
+    if (status === 'current') {
+      setFurthestReachedStep(prev => {
+        const steps: TabName[] = ['cluster', 'network', 'admin', 'database'];
+        const currentIndex = steps.indexOf(step);
+        const prevIndex = steps.indexOf(prev);
+        return currentIndex > prevIndex ? step : prev;
+      });
+    }
   };
 
   const validateAndSetErrors = (): TabName | null => {
@@ -65,6 +76,7 @@ export const useConfigValidation = () => {
     errors,
     allTabsValidated,
     configStepStatuses,
+    furthestReachedStep,
     clearError,
     updateConfigStepStatus,
     validateAndSetErrors,
