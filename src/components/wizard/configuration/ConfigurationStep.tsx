@@ -391,6 +391,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
         <ConfigStepper
           steps={createConfigSteps()}
           currentStep={currentConfigStep}
+          furthestReachedStep={furthestReachedStep}
           onStepClick={handleStepClick}
           themeColor={themeColor}
         />
