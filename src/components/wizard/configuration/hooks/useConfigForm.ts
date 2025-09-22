@@ -124,7 +124,67 @@ export const useConfigForm = ({
   const getNextButtonText = () => {
     const currentIndex = configSteps.indexOf(currentConfigStep);
     if (currentIndex < configSteps.length - 1) {
-      return 'Next';
+      const nextStep = configSteps[currentIndex + 1];
+      const stepLabels = {
+        cluster: 'Cluster Settings',
+        network: 'Network',
+        admin: 'Admin Account',
+        database: 'Database',
+        monitoring: 'Monitoring',
+        logging: 'Logging',
+        backup: 'Backup',
+        security: 'Security',
+        performance: 'Performance',
+        integrations: 'Integrations',
+        notifications: 'Notifications',
+        customization: 'Customization',
+        storage: 'Storage Management',
+        'networking-advanced': 'Advanced Networking',
+        certificates: 'SSL Certificates',
+        authentication: 'Authentication',
+        authorization: 'Authorization',
+        compliance: 'Compliance',
+        audit: 'Audit Logging',
+        analytics: 'Analytics',
+        reporting: 'Reporting',
+        maintenance: 'Maintenance',
+        scaling: 'Auto Scaling',
+        'load-balancing': 'Load Balancing',
+        'caching-advanced': 'Advanced Caching',
+        cdn: 'CDN Configuration',
+        dns: 'DNS Settings',
+        'ssl-tls': 'SSL/TLS Settings',
+        firewall: 'Firewall Rules',
+        vpn: 'VPN Configuration',
+        'proxy-advanced': 'Proxy Settings',
+        'api-gateway': 'API Gateway',
+        'service-mesh': 'Service Mesh',
+        observability: 'Observability',
+        tracing: 'Distributed Tracing',
+        profiling: 'Performance Profiling',
+        debugging: 'Debug Configuration',
+        testing: 'Testing Framework',
+        deployment: 'Deployment Strategy',
+        rollback: 'Rollback Policies',
+        canary: 'Canary Deployments',
+        'blue-green': 'Blue-Green Deployments',
+        'feature-flags': 'Feature Flags',
+        secrets: 'Secrets Management',
+        encryption: 'Encryption Settings',
+        'key-management': 'Key Management',
+        tokens: 'Token Configuration',
+        sessions: 'Session Management',
+        cookies: 'Cookie Settings',
+        cors: 'CORS Configuration',
+        headers: 'HTTP Headers',
+        middleware: 'Middleware Stack',
+        'plugins-advanced': 'Plugin Management',
+        extensions: 'Extensions',
+        themes: 'Theme Configuration',
+        localization: 'Localization',
+      };
+      const nextStepLabel = stepLabels[nextStep] || nextStep;
+      return `Next: ${nextStepLabel}`;
     }
     return 'Next: Setup';
   };
