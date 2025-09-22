@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRef } from 'react';
 import { CheckCircle, AlertTriangle, Clock } from 'lucide-react';
 import { TabName } from '../utils/validationUtils';
 
@@ -24,8 +23,6 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
   onStepClick,
   themeColor
 }) => {
-  const stepperRef = useRef<HTMLDivElement>(null);
-
   const getStepIcon = (step: ConfigStep, index: number) => {
     switch (step.status) {
       case 'completed':
