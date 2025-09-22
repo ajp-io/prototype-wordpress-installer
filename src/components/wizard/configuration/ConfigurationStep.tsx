@@ -298,6 +298,25 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
             onSelectChange={handleSelectChange}
           />
         );
+      // For all the additional config groups, we'll render a generic placeholder
+      default:
+        return (
+          <div className="space-y-6">
+            <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-sm text-gray-600">
+                Configure settings for {currentConfigStep.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).replace(/-/g, ' ')}.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <div className="p-8 text-center text-gray-500">
+                <h3 className="text-lg font-medium mb-2">
+                  {currentConfigStep.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).replace(/-/g, ' ')} Configuration
+                </h3>
+                <p>Configuration options for this section would appear here.</p>
+              </div>
+            </div>
+          </div>
+        );
       default:
         return null;
     }

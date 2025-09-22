@@ -72,7 +72,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
   };
 
   return (
-    <div className="w-80 bg-white border-r border-gray-200 p-6 overflow-y-auto">
+    <div className="w-80 bg-white border-r border-gray-200 p-6 overflow-y-auto max-h-screen">
       <div className="mb-6">
         <h3 className="text-lg font-medium text-gray-900">Configuration</h3>
         <p className="text-sm text-gray-500 mt-1">
@@ -80,7 +80,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
         </p>
       </div>
       
-      <div className="space-y-2">
+      <div ref={stepperRef} className="space-y-2">
         {steps.map((step, index) => {
           const isClickable = isStepClickable(step);
           
