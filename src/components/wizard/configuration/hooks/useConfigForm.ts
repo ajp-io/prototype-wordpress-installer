@@ -124,14 +124,7 @@ export const useConfigForm = ({
   const getNextButtonText = () => {
     const currentIndex = configSteps.indexOf(currentConfigStep);
     if (currentIndex < configSteps.length - 1) {
-      const nextStep = configSteps[currentIndex + 1];
-      const stepLabels = {
-        cluster: 'Cluster Settings',
-        network: 'Network',
-        admin: 'Admin Account',
-        database: 'Database'
-      };
-      return `Next: ${stepLabels[nextStep]}`;
+      return 'Next';
     }
     return 'Next: Setup';
   };
