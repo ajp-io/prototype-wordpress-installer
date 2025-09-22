@@ -211,7 +211,9 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
     'capacity-planning': 'Capacity Planning',
     'workflow-automation': 'Workflow Automation',
     'ci-cd': 'CI/CD Pipeline',
+  };
 
+  const createConfigSteps = () => {
     return configSteps.map(stepId => ({
       id: stepId,
       label: stepLabels[stepId]
