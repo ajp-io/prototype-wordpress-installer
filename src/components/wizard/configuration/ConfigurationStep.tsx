@@ -51,7 +51,51 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
         'performance',
         'integrations',
         'notifications',
-        'customization'
+        'customization',
+        'storage',
+        'networking-advanced',
+        'certificates',
+        'authentication',
+        'authorization',
+        'compliance',
+        'audit',
+        'analytics',
+        'reporting',
+        'maintenance',
+        'scaling',
+        'load-balancing',
+        'caching-advanced',
+        'cdn',
+        'dns',
+        'ssl-tls',
+        'firewall',
+        'vpn',
+        'proxy-advanced',
+        'api-gateway',
+        'service-mesh',
+        'observability',
+        'tracing',
+        'profiling',
+        'debugging',
+        'testing',
+        'deployment',
+        'rollback',
+        'canary',
+        'blue-green',
+        'feature-flags',
+        'secrets',
+        'encryption',
+        'key-management',
+        'tokens',
+        'sessions',
+        'cookies',
+        'cors',
+        'headers',
+        'middleware',
+        'plugins-advanced',
+        'extensions',
+        'themes',
+        'localization'
       ];
     }
     
@@ -134,7 +178,51 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
       performance: 'Performance',
       integrations: 'Integrations',
       notifications: 'Notifications',
-      customization: 'Customization'
+      customization: 'Customization',
+      storage: 'Storage Management',
+      'networking-advanced': 'Advanced Networking',
+      certificates: 'SSL Certificates',
+      authentication: 'Authentication',
+      authorization: 'Authorization',
+      compliance: 'Compliance',
+      audit: 'Audit Logging',
+      analytics: 'Analytics',
+      reporting: 'Reporting',
+      maintenance: 'Maintenance',
+      scaling: 'Auto Scaling',
+      'load-balancing': 'Load Balancing',
+      'caching-advanced': 'Advanced Caching',
+      cdn: 'CDN Configuration',
+      dns: 'DNS Settings',
+      'ssl-tls': 'SSL/TLS Settings',
+      firewall: 'Firewall Rules',
+      vpn: 'VPN Configuration',
+      'proxy-advanced': 'Proxy Settings',
+      'api-gateway': 'API Gateway',
+      'service-mesh': 'Service Mesh',
+      observability: 'Observability',
+      tracing: 'Distributed Tracing',
+      profiling: 'Performance Profiling',
+      debugging: 'Debug Configuration',
+      testing: 'Testing Framework',
+      deployment: 'Deployment Strategy',
+      rollback: 'Rollback Policies',
+      canary: 'Canary Deployments',
+      'blue-green': 'Blue-Green Deployments',
+      'feature-flags': 'Feature Flags',
+      secrets: 'Secrets Management',
+      encryption: 'Encryption Settings',
+      'key-management': 'Key Management',
+      tokens: 'Token Configuration',
+      sessions: 'Session Management',
+      cookies: 'Cookie Settings',
+      cors: 'CORS Configuration',
+      headers: 'HTTP Headers',
+      middleware: 'Middleware Stack',
+      'plugins-advanced': 'Plugin Management',
+      extensions: 'Extensions',
+      themes: 'Theme Configuration',
+      localization: 'Localization'
     };
 
     return configSteps.map(stepId => ({
@@ -254,7 +342,34 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
           />
         );
       default:
-        return null;
+        // For all the additional config groups, show a simple placeholder
+        return (
+          <div className="space-y-6">
+            <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-sm text-gray-600">
+                Configure settings for {stepLabels[currentConfigStep] || currentConfigStep}.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3">
+                <input
+                  type="checkbox"
+                  id={`enable-${currentConfigStep}`}
+                  checked={true}
+                  disabled={isReadOnly}
+                  className="h-4 w-4 border-gray-300 rounded focus:ring-2 focus:ring-offset-2"
+                  style={{
+                    accentColor: themeColor,
+                    '--tw-ring-color': themeColor,
+                  } as React.CSSProperties}
+                />
+                <label htmlFor={`enable-${currentConfigStep}`} className={`text-sm ${isReadOnly ? 'text-gray-500' : 'text-gray-700'}`}>
+                  Enable {stepLabels[currentConfigStep] || currentConfigStep}
+                </label>
+              </div>
+            </div>
+          </div>
+        );
     }
   };
 

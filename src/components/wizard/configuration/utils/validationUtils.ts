@@ -24,7 +24,7 @@ export interface ValidationErrors {
   [key: string]: string | undefined;
 }
 
-export type TabName = 'cluster' | 'network' | 'admin' | 'database' | 'monitoring' | 'logging' | 'backup' | 'security' | 'performance' | 'integrations' | 'notifications' | 'customization';
+export type TabName = 'cluster' | 'network' | 'admin' | 'database' | 'monitoring' | 'logging' | 'backup' | 'security' | 'performance' | 'integrations' | 'notifications' | 'customization' | 'storage' | 'networking-advanced' | 'certificates' | 'authentication' | 'authorization' | 'compliance' | 'audit' | 'analytics' | 'reporting' | 'maintenance' | 'scaling' | 'load-balancing' | 'caching-advanced' | 'cdn' | 'dns' | 'ssl-tls' | 'firewall' | 'vpn' | 'proxy-advanced' | 'api-gateway' | 'service-mesh' | 'observability' | 'tracing' | 'profiling' | 'debugging' | 'testing' | 'deployment' | 'rollback' | 'canary' | 'blue-green' | 'feature-flags' | 'secrets' | 'encryption' | 'key-management' | 'tokens' | 'sessions' | 'cookies' | 'cors' | 'headers' | 'middleware' | 'plugins-advanced' | 'extensions' | 'themes' | 'localization';
 
 export const validateClusterTab = (config: ClusterConfig, skipValidation: boolean): ValidationErrors => {
   if (skipValidation) return {};
@@ -150,7 +150,51 @@ export const validateAllTabs = (config: ClusterConfig, skipValidation: boolean):
     performance: validatePerformanceTab(config, skipValidation),
     integrations: validateIntegrationsTab(config, skipValidation),
     notifications: validateNotificationsTab(config, skipValidation),
-    customization: validateCustomizationTab(config, skipValidation)
+    customization: validateCustomizationTab(config, skipValidation),
+    storage: validateCustomizationTab(config, skipValidation),
+    'networking-advanced': validateCustomizationTab(config, skipValidation),
+    certificates: validateCustomizationTab(config, skipValidation),
+    authentication: validateCustomizationTab(config, skipValidation),
+    authorization: validateCustomizationTab(config, skipValidation),
+    compliance: validateCustomizationTab(config, skipValidation),
+    audit: validateCustomizationTab(config, skipValidation),
+    analytics: validateCustomizationTab(config, skipValidation),
+    reporting: validateCustomizationTab(config, skipValidation),
+    maintenance: validateCustomizationTab(config, skipValidation),
+    scaling: validateCustomizationTab(config, skipValidation),
+    'load-balancing': validateCustomizationTab(config, skipValidation),
+    'caching-advanced': validateCustomizationTab(config, skipValidation),
+    cdn: validateCustomizationTab(config, skipValidation),
+    dns: validateCustomizationTab(config, skipValidation),
+    'ssl-tls': validateCustomizationTab(config, skipValidation),
+    firewall: validateCustomizationTab(config, skipValidation),
+    vpn: validateCustomizationTab(config, skipValidation),
+    'proxy-advanced': validateCustomizationTab(config, skipValidation),
+    'api-gateway': validateCustomizationTab(config, skipValidation),
+    'service-mesh': validateCustomizationTab(config, skipValidation),
+    observability: validateCustomizationTab(config, skipValidation),
+    tracing: validateCustomizationTab(config, skipValidation),
+    profiling: validateCustomizationTab(config, skipValidation),
+    debugging: validateCustomizationTab(config, skipValidation),
+    testing: validateCustomizationTab(config, skipValidation),
+    deployment: validateCustomizationTab(config, skipValidation),
+    rollback: validateCustomizationTab(config, skipValidation),
+    canary: validateCustomizationTab(config, skipValidation),
+    'blue-green': validateCustomizationTab(config, skipValidation),
+    'feature-flags': validateCustomizationTab(config, skipValidation),
+    secrets: validateCustomizationTab(config, skipValidation),
+    encryption: validateCustomizationTab(config, skipValidation),
+    'key-management': validateCustomizationTab(config, skipValidation),
+    tokens: validateCustomizationTab(config, skipValidation),
+    sessions: validateCustomizationTab(config, skipValidation),
+    cookies: validateCustomizationTab(config, skipValidation),
+    cors: validateCustomizationTab(config, skipValidation),
+    headers: validateCustomizationTab(config, skipValidation),
+    middleware: validateCustomizationTab(config, skipValidation),
+    'plugins-advanced': validateCustomizationTab(config, skipValidation),
+    extensions: validateCustomizationTab(config, skipValidation),
+    themes: validateCustomizationTab(config, skipValidation),
+    localization: validateCustomizationTab(config, skipValidation)
   };
 
   return { ...basicTabs, ...extendedTabs } as { [key in TabName]: ValidationErrors };
@@ -158,7 +202,15 @@ export const validateAllTabs = (config: ClusterConfig, skipValidation: boolean):
 
 export const findFirstTabWithErrors = (allTabErrors: { [key in TabName]: ValidationErrors }): TabName | null => {
   const basicTabs: TabName[] = ['cluster', 'network', 'admin', 'database'];
-  const extendedTabs: TabName[] = ['monitoring', 'logging', 'backup', 'security', 'performance', 'integrations', 'notifications', 'customization'];
+  const extendedTabs: TabName[] = [
+    'monitoring', 'logging', 'backup', 'security', 'performance', 'integrations', 'notifications', 'customization',
+    'storage', 'networking-advanced', 'certificates', 'authentication', 'authorization', 'compliance', 'audit',
+    'analytics', 'reporting', 'maintenance', 'scaling', 'load-balancing', 'caching-advanced', 'cdn', 'dns',
+    'ssl-tls', 'firewall', 'vpn', 'proxy-advanced', 'api-gateway', 'service-mesh', 'observability', 'tracing',
+    'profiling', 'debugging', 'testing', 'deployment', 'rollback', 'canary', 'blue-green', 'feature-flags',
+    'secrets', 'encryption', 'key-management', 'tokens', 'sessions', 'cookies', 'cors', 'headers', 'middleware',
+    'plugins-advanced', 'extensions', 'themes', 'localization'
+  ];
   const tabs = [...basicTabs, ...extendedTabs];
   
   for (const tab of tabs) {
