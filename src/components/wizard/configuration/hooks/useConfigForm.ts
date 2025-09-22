@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useConfig } from '../../../../contexts/ConfigContext';
 import { useWizardMode } from '../../../../contexts/WizardModeContext';
 import { TabName } from '../utils/validationUtils';
-import { ConfigStepStatus } from '../components/ConfigStepper';
 
 interface UseConfigFormProps {
   onNext: () => void;
@@ -10,8 +9,6 @@ interface UseConfigFormProps {
   hasValidationErrors: () => boolean;
   currentConfigStep: TabName;
   setCurrentConfigStep: (step: TabName) => void;
-  configStepStatuses: Record<TabName, ConfigStepStatus>;
-  updateConfigStepStatus: (step: TabName, status: ConfigStepStatus) => void;
   configSteps: TabName[];
 }
 
@@ -21,8 +18,6 @@ export const useConfigForm = ({
   hasValidationErrors, 
   currentConfigStep,
   setCurrentConfigStep,
-  configStepStatuses,
-  updateConfigStepStatus,
   configSteps
 }: UseConfigFormProps) => {
   const { config, updateConfig, prototypeSettings } = useConfig();
@@ -76,13 +71,10 @@ export const useConfigForm = ({
       const currentIndex = configSteps.indexOf(currentConfigStep);
       if (currentIndex < configSteps.length - 1) {
         // Move to next config step
-        updateConfigStepStatus(currentConfigStep, 'completed');
         const nextStep = configSteps[currentIndex + 1];
-        updateConfigStepStatus(nextStep, 'current');
         setCurrentConfigStep(nextStep);
       } else {
         // All config steps complete, proceed to main wizard next step
-        updateConfigStepStatus(currentConfigStep, 'completed');
         onNext();
       }
       return;
@@ -90,19 +82,15 @@ export const useConfigForm = ({
 
     const nextTabWithErrors = validateAndSetErrors();
     if (nextTabWithErrors) {
-      updateConfigStepStatus(nextTabWithErrors, 'error');
       setCurrentConfigStep(nextTabWithErrors);
     } else {
       const currentIndex = configSteps.indexOf(currentConfigStep);
       if (currentIndex < configSteps.length - 1) {
         // Move to next config step
-        updateConfigStepStatus(currentConfigStep, 'completed');
         const nextStep = configSteps[currentIndex + 1];
-        updateConfigStepStatus(nextStep, 'current');
         setCurrentConfigStep(nextStep);
       } else {
         // All config steps complete, proceed to main wizard next step
-        updateConfigStepStatus(currentConfigStep, 'completed');
         onNext();
       }
     }
@@ -112,9 +100,7 @@ export const useConfigForm = ({
     const currentIndex = configSteps.indexOf(currentConfigStep);
     if (currentIndex > 0) {
       // Move to previous config step
-      updateConfigStepStatus(currentConfigStep, 'pending');
       const prevStep = configSteps[currentIndex - 1];
-      updateConfigStepStatus(prevStep, 'current');
       setCurrentConfigStep(prevStep);
       return true; // Handled internally
     }
@@ -131,7 +117,6 @@ export const useConfigForm = ({
     if (!nextTabWithErrors) {
       setConfigSaved(true);
     } else {
-      updateConfigStepStatus(nextTabWithErrors, 'error');
       setCurrentConfigStep(nextTabWithErrors);
     }
   };

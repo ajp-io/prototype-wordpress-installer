@@ -109,10 +109,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
     errors, 
     clearError, 
     validateAndSetErrors, 
-    hasValidationErrors, 
-    configStepStatuses,
-    furthestReachedStep,
-    updateConfigStepStatus 
+    hasValidationErrors
   } = useConfigValidation();
   
   const {
@@ -134,8 +131,6 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
     hasValidationErrors, 
     currentConfigStep,
     setCurrentConfigStep,
-    configStepStatuses,
-    updateConfigStepStatus,
     configSteps
   });
   
@@ -144,25 +139,9 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
 
   const themeColor = prototypeSettings.themeColor;
 
-  // Set initial step status
-  useEffect(() => {
-    if (!isReadOnly) {
-      updateConfigStepStatus('cluster', 'current');
-    }
-  }, []);
-
   const handleStepClick = (step: TabName) => {
     if (!isReadOnly) {
-      // Allow clicking on any step up to the furthest reached step
-      const steps: TabName[] = ['cluster', 'network', 'admin', 'database'];
-      const clickedIndex = steps.indexOf(step);
-      const furthestIndex = steps.indexOf(furthestReachedStep);
-      
-      if (clickedIndex <= furthestIndex) {
-        updateConfigStepStatus(currentConfigStep, 'pending');
-        updateConfigStepStatus(step, 'current');
-        setCurrentConfigStep(step);
-      }
+      setCurrentConfigStep(step);
     }
   };
 
@@ -235,8 +214,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
 
     return configSteps.map(stepId => ({
       id: stepId,
-      label: stepLabels[stepId],
-      status: isReadOnly ? 'completed' : configStepStatuses[stepId]
+      label: stepLabels[stepId]
     }));
   };
 
@@ -391,7 +369,6 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
         <ConfigStepper
           steps={createConfigSteps()}
           currentStep={currentConfigStep}
-          furthestReachedStep={furthestReachedStep}
           onStepClick={handleStepClick}
           themeColor={themeColor}
         />
