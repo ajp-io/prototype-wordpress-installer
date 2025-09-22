@@ -74,8 +74,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
   return (
     <div className="w-80 bg-white border-r border-gray-200 p-6 overflow-y-auto">
       <div className="mb-6">
-        <h3 className="text-lg font-medium text-gray-900">Configuration</h3>
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-gray-500">
           Complete each section to configure your installation
         </p>
       </div>
@@ -105,9 +104,6 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
                 <h4 className={`text-sm font-medium ${getStepTextColor(step)}`}>
                   {step.label}
                 </h4>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  Step {index + 1} of {steps.length}
-                </p>
               </div>
             </button>
           );
@@ -116,7 +112,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
 
       <div className="mt-6 pt-6 border-t border-gray-200">
         <div className="text-xs text-gray-500">
-          Progress: {steps.filter(s => s.status === 'completed').length} of {steps.length} completed
+          {steps.filter(s => s.status === 'completed').length} of {steps.length} sections completed
         </div>
       </div>
     </div>
