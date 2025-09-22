@@ -51,7 +51,6 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
         'performance',
         'integrations',
         'notifications',
-        'customization'
         'customization',
         'storage',
         'networking',
