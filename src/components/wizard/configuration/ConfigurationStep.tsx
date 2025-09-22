@@ -139,6 +139,15 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
 
   const themeColor = prototypeSettings.themeColor;
 
+  const handleBackClick = () => {
+    // Try to handle navigation within config steps first
+    const handled = handleConfigBack();
+    // If not handled internally, use the parent's onBack
+    if (!handled) {
+      onBack();
+    }
+  };
+
   const handleStepClick = (step: TabName) => {
     if (!isReadOnly) {
       setCurrentConfigStep(step);
