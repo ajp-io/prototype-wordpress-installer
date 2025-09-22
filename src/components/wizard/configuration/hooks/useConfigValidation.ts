@@ -1,11 +1,44 @@
 import { useState } from 'react';
 import { useConfig } from '../../../../contexts/ConfigContext';
-import { ValidationErrors, TabName, validateAllTabs, findFirstTabWithErrors } from '../utils/validationUtils';
+import { ValidationErrors, TabName, validateAllTabs, findFirstTabWithErrors, validateClusterTab, validateNetworkTab, validateAdminTab, validateDatabaseTab, validateMonitoringTab, validateLoggingTab, validateBackupTab, validateSecurityTab, validatePerformanceTab, validateIntegrationsTab, validateNotificationsTab, validateCustomizationTab } from '../utils/validationUtils';
 
 export const useConfigValidation = () => {
   const { config, prototypeSettings } = useConfig();
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [allTabsValidated, setAllTabsValidated] = useState(false);
+
+  const validateCurrentTab = (currentTab: TabName): ValidationErrors => {
+    if (prototypeSettings.skipValidation) return {};
+
+    switch (currentTab) {
+      case 'cluster':
+        return validateClusterTab(config, prototypeSettings.skipValidation);
+      case 'network':
+        return validateNetworkTab(config, prototypeSettings.skipValidation);
+      case 'admin':
+        return validateAdminTab(config, prototypeSettings.skipValidation);
+      case 'database':
+        return validateDatabaseTab(config, prototypeSettings.skipValidation);
+      case 'monitoring':
+        return validateMonitoringTab(config, prototypeSettings.skipValidation);
+      case 'logging':
+        return validateLoggingTab(config, prototypeSettings.skipValidation);
+      case 'backup':
+        return validateBackupTab(config, prototypeSettings.skipValidation);
+      case 'security':
+        return validateSecurityTab(config, prototypeSettings.skipValidation);
+      case 'performance':
+        return validatePerformanceTab(config, prototypeSettings.skipValidation);
+      case 'integrations':
+        return validateIntegrationsTab(config, prototypeSettings.skipValidation);
+      case 'notifications':
+        return validateNotificationsTab(config, prototypeSettings.skipValidation);
+      case 'customization':
+        return validateCustomizationTab(config, prototypeSettings.skipValidation);
+      default:
+        return {};
+    }
+  };
 
   const clearError = (field: string) => {
     if (!prototypeSettings.skipValidation && allTabsValidated) {
@@ -13,16 +46,26 @@ export const useConfigValidation = () => {
     }
   };
 
-  const validateAndSetErrors = (): TabName | null => {
+  const validateAndSetErrors = (currentTab?: TabName): TabName | null => {
     if (prototypeSettings.skipValidation) return null;
 
-    const allTabErrors = validateAllTabs(config, prototypeSettings.skipValidation);
-    const flatErrors = Object.values(allTabErrors).reduce((acc, tabErrors) => ({ ...acc, ...tabErrors }), {});
-    
-    setErrors(flatErrors);
-    setAllTabsValidated(true);
+    if (currentTab) {
+      // Only validate the current tab when navigating
+      const currentTabErrors = validateCurrentTab(currentTab);
+      setErrors(currentTabErrors);
+      
+      // If current tab has errors, return it; otherwise allow navigation
+      return Object.keys(currentTabErrors).length > 0 ? currentTab : null;
+    } else {
+      // Validate all tabs (for final submission)
+      const allTabErrors = validateAllTabs(config, prototypeSettings.skipValidation);
+      const flatErrors = Object.values(allTabErrors).reduce((acc, tabErrors) => ({ ...acc, ...tabErrors }), {});
+      
+      setErrors(flatErrors);
+      setAllTabsValidated(true);
 
-    return findFirstTabWithErrors(allTabErrors);
+      return findFirstTabWithErrors(allTabErrors);
+    }
   };
 
   const hasValidationErrors = (): boolean => {
@@ -37,6 +80,7 @@ export const useConfigValidation = () => {
     allTabsValidated,
     clearError,
     validateAndSetErrors,
-    hasValidationErrors
+    hasValidationErrors,
+    validateCurrentTab
   };
 };

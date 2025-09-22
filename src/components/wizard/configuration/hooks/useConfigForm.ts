@@ -80,7 +80,7 @@ export const useConfigForm = ({
       return;
     }
 
-    const nextTabWithErrors = validateAndSetErrors();
+    const nextTabWithErrors = validateAndSetErrors(currentConfigStep);
     if (nextTabWithErrors) {
       setCurrentConfigStep(nextTabWithErrors);
     } else {
