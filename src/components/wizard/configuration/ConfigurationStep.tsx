@@ -160,50 +160,59 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
   }
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">{text.configurationTitle}</h2>
-          <p className="text-gray-600 mt-1">
-            {text.configurationDescription}
-          </p>
-        </div>
-
-        {!isReadOnly && (
-          <ConfigStepper
-            steps={createConfigSteps()}
-            currentStep={currentConfigStep}
-            onStepClick={handleStepClick}
-            themeColor={themeColor}
-          />
-        )}
-        {renderCurrentStep()}
-      </Card>
-
+    <div className="flex min-h-[600px]">
       {!isReadOnly && (
-        <div className="flex justify-between">
-          <Button variant="outline" onClick={handleBackClick} icon={<ChevronLeft className="w-5 h-5" />}>
-            Back
-          </Button>
-          {mode === 'install' && window.location.pathname === '/configure' ? (
-            <Button onClick={handleSaveConfig} icon={<Save className="w-5 h-5" />}>
-              Save Configuration
-            </Button>
-          ) : (
-            <Button onClick={handleNext} icon={<ChevronRight className="w-5 h-5" />}>
-              {getNextButtonText()}
-            </Button>
-          )}
-        </div>
+        <ConfigStepper
+          steps={createConfigSteps()}
+          currentStep={currentConfigStep}
+          onStepClick={handleStepClick}
+          themeColor={themeColor}
+        />
       )}
       
-      {isReadOnly && (
-        <div className="flex justify-start">
-          <Button variant="outline" onClick={handleBackClick} icon={<ChevronLeft className="w-5 h-5" />}>
-            Back to Deployment History
-          </Button>
-        </div>
-      )}
+      <div className="flex-1 flex flex-col">
+        <Card className="flex-1 m-0 rounded-none border-0 shadow-none">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">{text.configurationTitle}</h2>
+            <p className="text-gray-600 mt-1">
+              {text.configurationDescription}
+            </p>
+          </div>
+          
+          <div className="flex-1">
+            {renderCurrentStep()}
+          </div>
+        </Card>
+
+        {!isReadOnly && (
+          <div className="border-t border-gray-200 p-6 bg-gray-50">
+            <div className="flex justify-between">
+              <Button variant="outline" onClick={handleBackClick} icon={<ChevronLeft className="w-5 h-5" />}>
+                Back
+              </Button>
+              {mode === 'install' && window.location.pathname === '/configure' ? (
+                <Button onClick={handleSaveConfig} icon={<Save className="w-5 h-5" />}>
+                  Save Configuration
+                </Button>
+              ) : (
+                <Button onClick={handleNext} icon={<ChevronRight className="w-5 h-5" />}>
+                  {getNextButtonText()}
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
+        
+        {isReadOnly && (
+          <div className="border-t border-gray-200 p-6 bg-gray-50">
+            <div className="flex justify-start">
+              <Button variant="outline" onClick={handleBackClick} icon={<ChevronLeft className="w-5 h-5" />}>
+                Back to Deployment History
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
