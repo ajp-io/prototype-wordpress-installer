@@ -80,7 +80,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
         </p>
       </div>
       
-      <div className="space-y-2">
+      <div className="space-y-2 overflow-y-auto max-h-[calc(100vh-200px)]">
         {steps.map((step, index) => {
           const isClickable = isStepClickable(step);
           

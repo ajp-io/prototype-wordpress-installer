@@ -186,7 +186,7 @@ const PrototypeSettings: React.FC = () => {
                     } as React.CSSProperties}
                   />
                   <label htmlFor="enableManyConfigGroups" className="text-sm text-gray-700">
-                    Enable many configuration groups (12 groups for testing)
+                    Enable many configuration groups (56 groups for testing)
                   </label>
                 </div>
               </div>
