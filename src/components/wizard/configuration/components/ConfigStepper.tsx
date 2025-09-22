@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { TabName } from '../utils/validationUtils';
 
 export interface ConfigStep {
@@ -19,10 +19,32 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
   onStepClick,
   themeColor
 }) => {
+  const stepRefs = useRef<Map<TabName, HTMLButtonElement>>(new Map());
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to current step when it changes
+  useEffect(() => {
+    const currentStepElement = stepRefs.current.get(currentStep);
+    if (currentStepElement) {
+      currentStepElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+      });
+    }
+  }, [currentStep]);
+
+  const setStepRef = (stepId: TabName, element: HTMLButtonElement | null) => {
+    if (element) {
+      stepRefs.current.set(stepId, element);
+    } else {
+      stepRefs.current.delete(stepId);
+    }
+  };
+
   const isCurrentStep = (step: ConfigStep) => step.id === currentStep;
 
   return (
-    <div className="w-80 bg-white border-r border-gray-200 p-6 overflow-y-auto">
+    <div ref={containerRef} className="w-80 bg-white border-r border-gray-200 p-6 overflow-y-auto">
       <div className="mb-6">
         <p className="text-sm text-gray-500">
           Complete each section to configure your installation
@@ -35,6 +57,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
           
           return (
             <button
+              ref={(el) => setStepRef(step.id, el)}
               key={step.id}
               onClick={() => onStepClick(step.id)}
               className={`w-full flex items-center space-x-3 p-3 rounded-lg text-left transition-colors ${
