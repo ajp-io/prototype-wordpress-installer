@@ -107,11 +107,6 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
                         Required
                       </span>
                     )}
-                    {isComplete && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
-                        Complete
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
