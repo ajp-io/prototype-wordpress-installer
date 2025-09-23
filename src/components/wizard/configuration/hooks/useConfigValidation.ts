@@ -167,23 +167,54 @@ export const useConfigValidation = (currentConfigStep: TabName) => {
   };
 
   const clearError = (field: string) => {
-    // Always clear the specific field error
+    // Clear the specific field error
     setErrors(prev => ({ ...prev, [field]: undefined }));
+  };
+
+  const revalidateCurrentTab = () => {
+    // Re-validate the current tab to check if it still has errors
+    const currentTabErrors = validateCurrentTab(currentConfigStep);
     
-    // Always re-validate the current tab to see if it still has errors
-    // Use a timeout to allow the state update to complete first
-    setTimeout(() => {
-      const currentTabErrors = validateCurrentTab(currentConfigStep);
+    // Update the errors for the current tab
+    setErrors(prev => {
+      const newErrors = { ...prev };
       
-      // If no errors remain in this tab, remove it from tabsWithErrors
+      // Clear all errors for the current tab first
+      Object.keys(newErrors).forEach(key => {
+        if (isFieldFromCurrentTab(key, currentConfigStep)) {
+          delete newErrors[key];
+        }
+      });
+      
+      // Add the new errors for the current tab
+      return { ...newErrors, ...currentTabErrors };
+    });
+    
+    // Update tabsWithErrors based on whether the tab has errors
+    setTabsWithErrors(prev => {
+      const newSet = new Set(prev);
       if (Object.keys(currentTabErrors).length === 0) {
-        setTabsWithErrors(prev => {
-          const newSet = new Set(prev);
-          newSet.delete(currentConfigStep);
-          return newSet;
-        });
+        newSet.delete(currentConfigStep);
+      } else {
+        newSet.add(currentConfigStep);
       }
-    }, 0);
+      return newSet;
+    });
+  };
+
+  const isFieldFromCurrentTab = (fieldName: string, tabName: TabName): boolean => {
+    switch (tabName) {
+      case 'cluster':
+        return ['clusterName', 'storageClass', 'description', 'deploymentMode', 'environment'].includes(fieldName);
+      case 'network':
+        return ['domain'].includes(fieldName);
+      case 'admin':
+        return ['adminUsername', 'adminPassword', 'adminEmail', 'licenseKey'].includes(fieldName);
+      case 'database':
+        return ['databaseConfig.host', 'databaseConfig.username', 'databaseConfig.password', 'databaseConfig.database'].includes(fieldName);
+      default:
+        return false;
+    }
   };
 
   const validateAndSetErrors = (currentTab?: TabName): TabName | null => {
@@ -254,6 +285,7 @@ export const useConfigValidation = (currentConfigStep: TabName) => {
     visitedTabs,
     currentConfigStep,
     clearError,
+    revalidateCurrentTab,
     validateAndSetErrors,
     hasValidationErrors,
     validateCurrentTab,

@@ -11,6 +11,7 @@ interface UseConfigFormProps {
   setCurrentConfigStep: (step: TabName) => void;
   configSteps: TabName[];
   markTabAsVisited: (tab: TabName) => void;
+  revalidateCurrentTab: () => void;
 }
 
 export const useConfigForm = ({ 
@@ -20,7 +21,8 @@ export const useConfigForm = ({
   currentConfigStep,
   setCurrentConfigStep,
   configSteps,
-  markTabAsVisited
+  markTabAsVisited,
+  revalidateCurrentTab
 }: UseConfigFormProps) => {
   const { config, updateConfig, prototypeSettings } = useConfig();
   const { mode } = useWizardMode();
@@ -64,6 +66,11 @@ export const useConfigForm = ({
     if (clearError) {
       clearError(name);
     }
+    
+    // Re-validate the current tab after a brief delay to allow state to update
+    setTimeout(() => {
+      revalidateCurrentTab();
+    }, 0);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +83,11 @@ export const useConfigForm = ({
           licenseKey: content as string,
           licenseFileName: file.name
         });
+        
+        // Re-validate the current tab after a brief delay to allow state to update
+        setTimeout(() => {
+          revalidateCurrentTab();
+        }, 0);
       };
       reader.readAsText(file);
     }
