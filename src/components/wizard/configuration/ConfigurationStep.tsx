@@ -126,9 +126,9 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
     handleFileChange,
     handleFileRemove,
     handleNext,
-    handleBack: handleConfigBack,
+    handleConfigGroupNext,
+    handleConfigGroupBack,
     handleSaveConfig,
-    getNextButtonText
   } = useConfigForm({ 
     onNext, 
     validateAndSetErrors, 
@@ -144,15 +144,6 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
   const activeConfig = isReadOnly ? config : formConfig;
 
   const themeColor = prototypeSettings.themeColor;
-
-  const handleBackClick = () => {
-    // Try to handle navigation within config steps first
-    const handled = handleConfigBack();
-    // If not handled internally, use the parent's onBack
-    if (!handled) {
-      onBack();
-    }
-  };
 
   const handleStepClick = (step: TabName) => {
     if (!isReadOnly) {
@@ -414,13 +405,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
               <div className="flex space-x-3">
                 <Button 
                   variant="outline" 
-                  onClick={() => {
-                    const currentIndex = configSteps.indexOf(currentConfigStep);
-                    if (currentIndex > 0) {
-                      const prevStep = configSteps[currentIndex - 1];
-                      setCurrentConfigStep(prevStep);
-                    }
-                  }}
+                  onClick={handleConfigGroupBack}
                   disabled={configSteps.indexOf(currentConfigStep) === 0}
                   icon={<ChevronLeft className="w-5 h-5" />}
                 >
@@ -428,13 +413,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
                 </Button>
                 <Button 
                   variant="outline" 
-                  onClick={() => {
-                    const currentIndex = configSteps.indexOf(currentConfigStep);
-                    if (currentIndex < configSteps.length - 1) {
-                      const nextStep = configSteps[currentIndex + 1];
-                      setCurrentConfigStep(nextStep);
-                    }
-                  }}
+                  onClick={handleConfigGroupNext}
                   disabled={configSteps.indexOf(currentConfigStep) === configSteps.length - 1}
                   icon={<ChevronRight className="w-5 h-5" />}
                 >
@@ -455,11 +434,11 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
             </div>
           </div>
         )}
-        
+                  Continue to Setup
         {isReadOnly && (
           <div className="border-t border-gray-200 p-6 bg-gray-50">
             <div className="flex justify-start">
-              <Button variant="outline" onClick={handleBackClick} icon={<ChevronLeft className="w-5 h-5" />}>
+              <Button variant="outline" onClick={onBack} icon={<ChevronLeft className="w-5 h-5" />}>
                 Back
               </Button>
             </div>
