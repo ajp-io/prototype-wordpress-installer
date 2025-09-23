@@ -88,7 +88,6 @@ export const useConfigValidation = () => {
   };
 
   const isTabComplete = (tab: TabName): boolean => {
-    if (prototypeSettings.skipValidation) return true;
     if (!visitedTabs.has(tab)) return false;
     
     const tabErrors = validateCurrentTab(tab);
