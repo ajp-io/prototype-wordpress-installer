@@ -6,6 +6,7 @@ import { CheckCircle, ExternalLink, Copy, ClipboardCheck } from 'lucide-react';
 
 const CompletionStep: React.FC = () => {
   const { config, prototypeSettings } = useConfig();
+  const { text } = useWizardMode();
   const [copied, setCopied] = useState(false);
   const themeColor = prototypeSettings.themeColor;
 
@@ -29,9 +30,9 @@ const CompletionStep: React.FC = () => {
           <div className="w-16 h-16 rounded-full flex items-center justify-center mb-6" style={{ backgroundColor: `${themeColor}1A` }}>
             <CheckCircle className="w-10 h-10" style={{ color: themeColor }} />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Install Complete!</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">{text.completionTitle}</h2>
           <p className="text-xl text-gray-600 max-w-2xl mb-8">
-            WordPress Enterprise is installed successfully.
+            {text.completionDescription}
           </p>
           
           <Button

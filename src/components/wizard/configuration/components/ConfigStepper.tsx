@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { TabName } from '../utils/validationUtils';
 import { CheckCircle2, Circle } from 'lucide-react';
+import { useWizardMode } from '../../../../contexts/WizardModeContext';
 
 export interface ConfigStep {
   id: TabName;
@@ -24,6 +25,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
   isTabComplete,
   isTabRequired
 }) => {
+  const { text } = useWizardMode();
   const stepRefs = useRef<Map<TabName, HTMLButtonElement>>(new Map());
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -51,9 +53,9 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
   return (
     <div ref={containerRef} className="w-80 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto">
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Groups</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">{text.configStepperTitle}</h3>
         <p className="text-sm text-gray-600">
-          Complete each group to configure your installation
+          {text.configStepperDescription}
         </p>
       </div>
       

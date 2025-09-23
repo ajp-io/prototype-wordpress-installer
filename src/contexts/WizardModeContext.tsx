@@ -12,6 +12,8 @@ interface WizardText {
   setupDescription: string;
   configurationTitle: string;
   configurationDescription: string;
+  configStepperTitle: string;
+  configStepperDescription: string;
   installationTitle: string;
   installationDescription: string;
   completionTitle: string;
@@ -34,8 +36,10 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
     setupDescription: 'Configure the setup parameters for this installation.',
     configurationTitle: 'Configuration',
     configurationDescription: 'Configure your WordPress Enterprise installation by providing the information below.',
-    installationTitle: 'Installation',
-    installationDescription: '',
+    configStepperTitle: 'Groups',
+    configStepperDescription: 'Complete each group to configure your installation',
+    installationTitle: 'Install',
+    installationDescription: 'Please wait while we install WordPress Enterprise.',
     completionTitle: isDryRun ? 'Configuration Complete' : 'Installation Complete!',
     completionDescription: isDryRun ? 'Your configuration is ready to use.' : 'WordPress Enterprise has been installed successfully.',
     welcomeButtonText: isDryRun ? 'Start Configuration' : 'Continue',
@@ -50,8 +54,10 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
     setupDescription: 'Set up the hosts for this installation.',
     configurationTitle: 'Upgrade Configuration',
     configurationDescription: 'Configure your WordPress Enterprise installation by providing the information below.',
-    installationTitle: 'Installation',
-    installationDescription: '',
+    configStepperTitle: 'Groups',
+    configStepperDescription: 'Complete each group to configure your upgrade',
+    installationTitle: 'Upgrade',
+    installationDescription: 'Please wait while we upgrade WordPress Enterprise.',
     completionTitle: 'Upgrade Complete!',
     completionDescription: 'WordPress Enterprise has been successfully upgraded.',
     welcomeButtonText: 'Start Upgrade',

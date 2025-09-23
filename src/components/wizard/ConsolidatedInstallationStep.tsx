@@ -136,6 +136,14 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
           />
           
           <div className="flex-1">
+            <div className="p-8 pb-0">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">{text.installationTitle}</h2>
+                <p className="text-gray-600 mt-1">
+                  {text.installationDescription}
+                </p>
+              </div>
+            </div>
             <StepDetailPanel
               selectedStep={selectedStep}
               stepData={steps[selectedStep]}
