@@ -6,8 +6,8 @@ export const useConfigValidation = () => {
   const { config, prototypeSettings } = useConfig();
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [allTabsValidated, setAllTabsValidated] = useState(false);
-  const [allTabErrors, setAllTabErrors] = useState<{ [key in TabName]: ValidationErrors }>({} as { [key in TabName]: ValidationErrors });
-  const [allTabsValidatedOnce, setAllTabsValidatedOnce] = useState(false);
+  const [allTabErrors, setAllTabErrors] = useState<{ [key in TabName]: ValidationErrors }>(() => ({} as { [key in TabName]: ValidationErrors }));
+  const [allTabsValidatedOnce, setAllTabsValidatedOnce] = useState(() => false);
   const [visitedTabs, setVisitedTabs] = useState<Set<TabName>>(new Set());
 
   const isTabRequired = (tab: TabName): boolean => {
@@ -207,8 +207,10 @@ export const useConfigValidation = () => {
   };
 
   const hasErrorsInTab = (tab: TabName): boolean => {
-    // Only show errors if we've done a full validation attempt
-    return allTabsValidatedOnce && Object.keys(allTabErrors[tab] || {}).length > 0;
+    // NEVER show errors until user attempts to submit the entire configuration
+    return allTabsValidatedOnce === true && 
+           allTabErrors[tab] !== undefined && 
+           Object.keys(allTabErrors[tab]).length > 0;
   };
 
   return {
