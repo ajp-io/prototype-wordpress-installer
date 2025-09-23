@@ -90,16 +90,10 @@ export const useInstallationNavigation = ({
   };
 
   const getNextButtonText = () => {
-    if (currentStep === 'hosts') {
-      return 'Next: Infrastructure Installation';
-    } else if (currentStep === 'infrastructure') {
+    if (currentStep === 'infrastructure' && steps.infrastructure.status === 'failed') {
       return 'Retry Infrastructure Installation';
-    } else if (currentStep === 'preflights') {
-      return 'Next: WordPress Enterprise Installation';
-    } else if (currentStep === 'application') {
-      return 'Next: Completion';
     }
-    return 'Next';
+    return 'Next: Completion';
   };
 
   const shouldShowPreflightModal = () => {
