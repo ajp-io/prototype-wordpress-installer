@@ -90,6 +90,13 @@ export const useConfigValidation = () => {
       if (!config.databaseConfig?.database) errors['databaseConfig.database'] = 'Database name is required';
     }
     return errors;
+    if (config.databaseType === 'external') {
+      if (!config.databaseConfig?.host) errors['databaseConfig.host'] = 'Database host is required';
+      if (!config.databaseConfig?.username) errors['databaseConfig.username'] = 'Database username is required';
+      if (!config.databaseConfig?.password) errors['databaseConfig.password'] = 'Database password is required';
+      if (!config.databaseConfig?.database) errors['databaseConfig.database'] = 'Database name is required';
+    }
+    return errors;
   };
 
   const validateMonitoringTabForUI = (config: ClusterConfig): ValidationErrors => {
