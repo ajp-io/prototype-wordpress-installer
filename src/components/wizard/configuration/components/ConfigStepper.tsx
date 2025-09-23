@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { TabName } from '../utils/validationUtils';
-import { CheckCircle2, Circle } from 'lucide-react';
+import { CheckCircle2, Circle, XCircle } from 'lucide-react';
 import { useWizardMode } from '../../../../contexts/WizardModeContext';
 
 export interface ConfigStep {
@@ -15,6 +15,7 @@ interface ConfigStepperProps {
   themeColor: string;
   isTabComplete: (step: TabName) => boolean;
   isTabRequired: (step: TabName) => boolean;
+  hasErrorsInTab: (step: TabName) => boolean;
 }
 
 const ConfigStepper: React.FC<ConfigStepperProps> = ({
@@ -23,7 +24,8 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
   onStepClick,
   themeColor,
   isTabComplete,
-  isTabRequired
+  isTabRequired,
+  hasErrorsInTab
 }) => {
   const { text } = useWizardMode();
   const stepRefs = useRef<Map<TabName, HTMLButtonElement>>(new Map());
@@ -64,6 +66,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
           const isCurrent = isCurrentStep(step);
           const isComplete = isTabComplete(step.id);
           const isRequired = isTabRequired(step.id);
+          const hasErrors = hasErrorsInTab(step.id);
           
           return (
             <button
@@ -91,7 +94,9 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
                   </div>
                   
                   <div className="flex-shrink-0">
-                    {isComplete ? (
+                    {hasErrors ? (
+                      <XCircle className="w-5 h-5 text-red-500" />
+                    ) : isComplete ? (
                       <CheckCircle2 
                         className="w-5 h-5" 
                         style={{ color: themeColor }}
@@ -107,6 +112,11 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
                     {isRequired && (
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200">
                         Required
+                      </span>
+                    )}
+                    {hasErrors && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200">
+                        Has Errors
                       </span>
                     )}
                   </div>

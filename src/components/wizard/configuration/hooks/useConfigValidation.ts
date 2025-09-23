@@ -6,6 +6,8 @@ export const useConfigValidation = () => {
   const { config, prototypeSettings } = useConfig();
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [allTabsValidated, setAllTabsValidated] = useState(false);
+  const [allTabErrors, setAllTabErrors] = useState<{ [key in TabName]: ValidationErrors }>({} as { [key in TabName]: ValidationErrors });
+  const [allTabsValidatedOnce, setAllTabsValidatedOnce] = useState(false);
   const [visitedTabs, setVisitedTabs] = useState<Set<TabName>>(new Set());
 
   const isTabRequired = (tab: TabName): boolean => {
@@ -176,6 +178,8 @@ export const useConfigValidation = () => {
       
       setErrors(flatErrors);
       setAllTabsValidated(true);
+      setAllTabErrors(allTabErrors);
+      setAllTabsValidatedOnce(true);
 
       return findFirstTabWithErrors(allTabErrors);
     }
@@ -191,16 +195,29 @@ export const useConfigValidation = () => {
   };
 
   const isTabComplete = (tab: TabName): boolean => {
-    if (!visitedTabs.has(tab)) return false;
-    // Always check if the tab has any required fields by running validation
-    // regardless of skipValidation setting (for visual indicators)
-    const tabErrors = validateCurrentTabForRequired(tab);
-    return Object.keys(tabErrors).length === 0;
+    if (allTabsValidatedOnce) {
+      // After full validation, use the stored results
+      return Object.keys(allTabErrors[tab] || {}).length === 0;
+    } else {
+      // Before full validation, use the visited + current validation approach
+      if (!visitedTabs.has(tab)) return false;
+      const tabErrors = validateCurrentTabForRequired(tab);
+      return Object.keys(tabErrors).length === 0;
+    }
+  };
+
+  const hasErrorsInTab = (tab: TabName): boolean => {
+    if (allTabsValidatedOnce) {
+      return Object.keys(allTabErrors[tab] || {}).length > 0;
+    }
+    return false;
   };
 
   return {
     errors,
     allTabsValidated,
+    allTabErrors,
+    allTabsValidatedOnce,
     visitedTabs,
     clearError,
     validateAndSetErrors,
@@ -208,6 +225,7 @@ export const useConfigValidation = () => {
     validateCurrentTab,
     markTabAsVisited,
     isTabComplete,
-    isTabRequired
+    isTabRequired,
+    hasErrorsInTab
   };
 };
