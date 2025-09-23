@@ -112,7 +112,8 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
     validateAndSetErrors, 
     hasValidationErrors,
     markTabAsVisited,
-    isTabComplete
+    isTabComplete,
+    isTabRequired
   } = useConfigValidation();
   
   const {
@@ -389,6 +390,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
           onStepClick={handleStepClick}
           themeColor={themeColor}
           isTabComplete={isTabComplete}
+          isTabRequired={isTabRequired}
         />
       )}
       

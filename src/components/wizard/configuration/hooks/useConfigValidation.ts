@@ -8,6 +8,13 @@ export const useConfigValidation = () => {
   const [allTabsValidated, setAllTabsValidated] = useState(false);
   const [visitedTabs, setVisitedTabs] = useState<Set<TabName>>(new Set());
 
+  const isTabRequired = (tab: TabName): boolean => {
+    if (prototypeSettings.skipValidation) return false;
+    
+    // Check if the tab has any required fields by running validation
+    const tabErrors = validateCurrentTab(tab);
+    return Object.keys(tabErrors).length > 0;
+  };
   const validateCurrentTab = (currentTab: TabName): ValidationErrors => {
     if (prototypeSettings.skipValidation) return {};
 
@@ -98,5 +105,6 @@ export const useConfigValidation = () => {
     validateCurrentTab,
     markTabAsVisited,
     isTabComplete
+    isTabRequired
   };
 };

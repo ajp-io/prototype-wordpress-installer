@@ -12,6 +12,7 @@ interface ConfigStepperProps {
   onStepClick: (step: TabName) => void;
   themeColor: string;
   isTabComplete: (step: TabName) => boolean;
+  isTabRequired: (step: TabName) => boolean;
 }
 
 const ConfigStepper: React.FC<ConfigStepperProps> = ({
@@ -19,7 +20,8 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
   currentStep,
   onStepClick,
   themeColor,
-  isTabComplete
+  isTabComplete,
+  isTabRequired
 }) => {
   const stepRefs = useRef<Map<TabName, HTMLButtonElement>>(new Map());
   const containerRef = useRef<HTMLDivElement>(null);
@@ -57,6 +59,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
         {steps.map((step, index) => {
           const isCurrent = isCurrentStep(step);
           const isComplete = isTabComplete(step.id);
+          const isRequired = isTabRequired(step.id);
           
           return (
             <button
@@ -85,6 +88,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
               <div className="flex-grow min-w-0">
                 <h4 className={`text-sm font-medium ${isCurrent ? 'text-gray-900' : 'text-gray-700'}`}>
                   {step.label}
+                  {isRequired && <span className="text-red-500 ml-1">*</span>}
                 </h4>
               </div>
             </button>
