@@ -427,7 +427,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
                   </Button>
                 ) : (
                   <Button onClick={handleNext} icon={<ChevronRight className="w-5 h-5" />}>
-                    Continue to Setup
+                    Next: Setup
                   </Button>
                 )}
               </div>
