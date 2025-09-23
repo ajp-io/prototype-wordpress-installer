@@ -443,7 +443,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
               </div>
               <div className="flex space-x-3">
                 <Button variant="outline" onClick={handleBackClick} icon={<ChevronLeft className="w-5 h-5" />}>
-                  Back to Setup
+                  Back
                 </Button>
                 {mode === 'install' && window.location.pathname === '/configure' ? (
                   <Button onClick={handleSaveConfig} icon={<Save className="w-5 h-5" />}>
@@ -463,7 +463,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
           <div className="border-t border-gray-200 p-6 bg-gray-50">
             <div className="flex justify-start">
               <Button variant="outline" onClick={handleBackClick} icon={<ChevronLeft className="w-5 h-5" />}>
-                Back to Deployment History
+                Back
               </Button>
             </div>
           </div>
