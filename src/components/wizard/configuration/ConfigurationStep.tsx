@@ -233,7 +233,8 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
       errors,
       skipValidation: prototypeSettings.skipValidation,
       themeColor,
-      isReadOnly
+      isReadOnly,
+      clearError
     };
 
     switch (currentConfigStep) {
@@ -241,24 +242,24 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
         return (
           <ClusterConfigTab
             {...commonProps}
-            onInputChange={handleInputChange}
-            onSelectChange={handleSelectChange}
-            onRadioChange={handleRadioChange}
+            onInputChange={(e) => handleInputChange(e, clearError)}
+            onSelectChange={(e) => handleSelectChange(e, clearError)}
+            onRadioChange={(e) => handleRadioChange(e, clearError)}
           />
         );
       case 'network':
         return (
           <NetworkConfigTab
             {...commonProps}
-            onInputChange={handleInputChange}
-            onCheckboxChange={handleCheckboxChange}
+            onInputChange={(e) => handleInputChange(e, clearError)}
+            onCheckboxChange={(e) => handleCheckboxChange(e, clearError)}
           />
         );
       case 'admin':
         return (
           <AdminConfigTab
             {...commonProps}
-            onInputChange={handleInputChange}
+            onInputChange={(e) => handleInputChange(e, clearError)}
             onFileChange={handleFileChange}
             onFileRemove={handleFileRemove}
           />
@@ -267,73 +268,73 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
         return (
           <DatabaseConfigTab
             {...commonProps}
-            onInputChange={handleInputChange}
-            onSelectChange={handleSelectChange}
+            onInputChange={(e) => handleInputChange(e, clearError)}
+            onSelectChange={(e) => handleSelectChange(e, clearError)}
           />
         );
       case 'monitoring':
         return (
           <MonitoringConfigTab
             {...commonProps}
-            onInputChange={handleInputChange}
-            onSelectChange={handleSelectChange}
-            onCheckboxChange={handleCheckboxChange}
+            onInputChange={(e) => handleInputChange(e, clearError)}
+            onSelectChange={(e) => handleSelectChange(e, clearError)}
+            onCheckboxChange={(e) => handleCheckboxChange(e, clearError)}
           />
         );
       case 'logging':
         return (
           <LoggingConfigTab
             {...commonProps}
-            onInputChange={handleInputChange}
-            onSelectChange={handleSelectChange}
+            onInputChange={(e) => handleInputChange(e, clearError)}
+            onSelectChange={(e) => handleSelectChange(e, clearError)}
           />
         );
       case 'backup':
         return (
           <BackupConfigTab
             {...commonProps}
-            onInputChange={handleInputChange}
-            onSelectChange={handleSelectChange}
+            onInputChange={(e) => handleInputChange(e, clearError)}
+            onSelectChange={(e) => handleSelectChange(e, clearError)}
           />
         );
       case 'security':
         return (
           <SecurityConfigTab
             {...commonProps}
-            onInputChange={handleInputChange}
-            onCheckboxChange={handleCheckboxChange}
+            onInputChange={(e) => handleInputChange(e, clearError)}
+            onCheckboxChange={(e) => handleCheckboxChange(e, clearError)}
           />
         );
       case 'performance':
         return (
           <PerformanceConfigTab
             {...commonProps}
-            onInputChange={handleInputChange}
-            onSelectChange={handleSelectChange}
+            onInputChange={(e) => handleInputChange(e, clearError)}
+            onSelectChange={(e) => handleSelectChange(e, clearError)}
           />
         );
       case 'integrations':
         return (
           <IntegrationsConfigTab
             {...commonProps}
-            onInputChange={handleInputChange}
-            onCheckboxChange={handleCheckboxChange}
+            onInputChange={(e) => handleInputChange(e, clearError)}
+            onCheckboxChange={(e) => handleCheckboxChange(e, clearError)}
           />
         );
       case 'notifications':
         return (
           <NotificationsConfigTab
             {...commonProps}
-            onInputChange={handleInputChange}
-            onCheckboxChange={handleCheckboxChange}
+            onInputChange={(e) => handleInputChange(e, clearError)}
+            onCheckboxChange={(e) => handleCheckboxChange(e, clearError)}
           />
         );
       case 'customization':
         return (
           <CustomizationConfigTab
             {...commonProps}
-            onInputChange={handleInputChange}
-            onSelectChange={handleSelectChange}
+            onInputChange={(e) => handleInputChange(e, clearError)}
+            onSelectChange={(e) => handleSelectChange(e, clearError)}
           />
         );
       default:

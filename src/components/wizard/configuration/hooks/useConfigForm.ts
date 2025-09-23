@@ -26,24 +26,44 @@ export const useConfigForm = ({
   const { mode } = useWizardMode();
   const [configSaved, setConfigSaved] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, clearError?: (field: string) => void) => {
     const { id, value } = e.target;
     updateConfig({ [id]: value });
+    
+    // Clear the error for this field if clearError function is provided
+    if (clearError) {
+      clearError(id);
+    }
   };
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>, clearError?: (field: string) => void) => {
     const { id, value } = e.target;
     updateConfig({ [id]: value });
+    
+    // Clear the error for this field if clearError function is provided
+    if (clearError) {
+      clearError(id);
+    }
   };
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, clearError?: (field: string) => void) => {
     const { id, checked } = e.target;
     updateConfig({ [id]: checked });
+    
+    // Clear the error for this field if clearError function is provided
+    if (clearError) {
+      clearError(id);
+    }
   };
 
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>, clearError?: (field: string) => void) => {
     const { name, value } = e.target;
     updateConfig({ [name]: value });
+    
+    // Clear the error for this field if clearError function is provided
+    if (clearError) {
+      clearError(name);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -11,18 +11,18 @@ export const useConfigValidation = () => {
   const [tabsMarkedAsRequired, setTabsMarkedAsRequired] = useState<Set<TabName>>(new Set());
 
   const isTabRequired = (tab: TabName): boolean => {
-    // Once a tab has been marked as required (due to validation failure), 
-    // it should always show "Required" label
+    // Always show "Required" if the tab was marked as required due to validation failure
     if (tabsMarkedAsRequired.has(tab)) {
       return true;
     }
     
-    // If validation hasn't run yet, check if tab has required fields
+    // Before any validation attempt, show "Required" if tab has required fields
     if (!allTabsValidated) {
       const tabErrors = validateCurrentTabForRequired(tab);
       return Object.keys(tabErrors).length > 0;
     }
     
+    // After validation, don't show "Required" unless it was marked as such
     return false;
   };
 
@@ -167,11 +167,15 @@ export const useConfigValidation = () => {
   };
 
   const clearError = (field: string) => {
+    // Always clear the specific field error
+    setErrors(prev => ({ ...prev, [field]: undefined }));
+    
+    // If we've done full validation before, check if current tab still has errors
     if (allTabsValidated) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
-      
-      // Check if this tab still has errors after clearing this field
+      // Re-validate the current tab to see if it still has errors
       const currentTabErrors = validateCurrentTab(currentConfigStep);
+      
+      // If no errors remain in this tab, remove it from tabsWithErrors
       if (Object.keys(currentTabErrors).length === 0) {
         setTabsWithErrors(prev => {
           const newSet = new Set(prev);
@@ -230,9 +234,12 @@ export const useConfigValidation = () => {
   };
 
   const isTabComplete = (tab: TabName): boolean => {
-    if (!visitedTabs.has(tab)) return false;
-    // Always check if the tab has any required fields by running validation
-    // regardless of skipValidation setting (for visual indicators)
+    // Only show as complete if:
+    // 1. The tab has been visited AND
+    // 2. The user has navigated away from it (it's not the current tab) AND  
+    // 3. It has no validation errors
+    if (!visitedTabs.has(tab) || tab === currentConfigStep) return false;
+    
     const tabErrors = validateCurrentTabForRequired(tab);
     return Object.keys(tabErrors).length === 0;
   };
@@ -245,6 +252,7 @@ export const useConfigValidation = () => {
     errors,
     allTabsValidated,
     visitedTabs,
+    currentConfigStep,
     clearError,
     validateAndSetErrors,
     hasValidationErrors,
