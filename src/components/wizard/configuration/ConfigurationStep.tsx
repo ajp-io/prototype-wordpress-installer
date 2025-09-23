@@ -394,6 +394,8 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
             </p>
           </div>
           
+          <div className="border-b border-gray-200 mb-6"></div>
+          
           <div className="flex-1">
             {renderCurrentStep()}
           </div>
