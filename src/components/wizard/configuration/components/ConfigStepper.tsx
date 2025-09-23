@@ -74,12 +74,14 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
               key={step.id}
               onClick={() => onStepClick(step.id)}
               className={`w-full text-left transition-all duration-200 rounded-lg border-2 ${
-                isCurrent 
-                  ? 'bg-white shadow-md border-transparent' 
-                  : 'bg-white hover:bg-gray-50 border-gray-100 hover:border-gray-200 hover:shadow-sm'
+                hasErrors
+                  ? 'bg-white border-red-300 shadow-sm'
+                  : isCurrent 
+                    ? 'bg-white shadow-md border-transparent' 
+                    : 'bg-white hover:bg-gray-50 border-gray-100 hover:border-gray-200 hover:shadow-sm'
               }`}
               style={{
-                borderLeftColor: isCurrent ? themeColor : undefined,
+                borderLeftColor: hasErrors ? '#ef4444' : isCurrent ? themeColor : undefined,
                 borderLeftWidth: isCurrent ? '4px' : '2px',
               }}
             >
@@ -112,11 +114,6 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
                     {isRequired && (
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200">
                         Required
-                      </span>
-                    )}
-                    {hasErrors && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200">
-                        Has Errors
                       </span>
                     )}
                   </div>

@@ -207,10 +207,8 @@ export const useConfigValidation = () => {
   };
 
   const hasErrorsInTab = (tab: TabName): boolean => {
-    if (allTabsValidatedOnce) {
-      return Object.keys(allTabErrors[tab] || {}).length > 0;
-    }
-    return false;
+    // Only show errors if we've done a full validation attempt
+    return allTabsValidatedOnce && Object.keys(allTabErrors[tab] || {}).length > 0;
   };
 
   return {
