@@ -90,7 +90,7 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
             type="file"
             ref={fileInputRef}
             onChange={onFileChange}
-            accept=".key,.txt"
+            accept=".key,.txt,.pem,.crt,.cer,.license,.lic,*"
             className="hidden"
             disabled={isReadOnly}
           />
