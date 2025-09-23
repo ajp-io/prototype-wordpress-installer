@@ -68,6 +68,14 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
           const isRequired = isTabRequired(step.id);
           const hasErrors = hasErrorsInTab(step.id);
           
+          // Debug logging
+          console.log(`Step ${step.id}:`, {
+            isCurrent,
+            isComplete,
+            isRequired,
+            hasErrors
+          });
+          
           return (
             <button
               ref={(el) => setStepRef(step.id, el)}
