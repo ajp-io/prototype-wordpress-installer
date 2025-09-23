@@ -113,10 +113,6 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
                       </span>
                     )}
                   </div>
-                  
-                  {isCurrent && (
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: themeColor }} />
-                  )}
                 </div>
               </div>
             </button>
