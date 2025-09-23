@@ -59,7 +59,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
         {steps.map((step, index) => {
           const isCurrent = isCurrentStep(step);
           const isComplete = isTabComplete(step.id);
-          const isRequired = isTabRequired(step.id);
+          const isRequired = isTabRequired(step.id) && !isComplete;
           
           return (
             <button
