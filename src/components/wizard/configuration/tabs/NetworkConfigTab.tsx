@@ -24,13 +24,6 @@ const NetworkConfigTab: React.FC<NetworkConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Network</h2>
-        <p className="text-gray-600 mt-1">
-          Configure network settings and connectivity options.
-        </p>
-      </div>
-
       <Input
         id="domain"
         label="Domain"

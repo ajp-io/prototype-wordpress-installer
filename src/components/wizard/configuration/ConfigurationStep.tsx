@@ -387,6 +387,13 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
       
       <div className="flex-1 flex flex-col">
         <Card className="flex-1 m-0 rounded-none border-0 shadow-none">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">{text.configurationTitle}</h2>
+            <p className="text-gray-600 mt-1">
+              {text.configurationDescription}
+            </p>
+          </div>
+          
           <div className="flex-1">
             {renderCurrentStep()}
           </div>

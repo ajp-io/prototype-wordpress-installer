@@ -39,13 +39,6 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
   };
   return (
     <div className="space-y-6">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Admin Account</h2>
-        <p className="text-gray-600 mt-1">
-          Set up the administrator account and license for your WordPress Enterprise installation.
-        </p>
-      </div>
-
       <Input
         id="adminUsername"
         label="Admin Username"
