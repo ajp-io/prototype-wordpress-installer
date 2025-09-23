@@ -104,7 +104,7 @@ export const useConfigValidation = () => {
     hasValidationErrors,
     validateCurrentTab,
     markTabAsVisited,
-    isTabComplete
+    isTabComplete,
     isTabRequired
   };
 };
