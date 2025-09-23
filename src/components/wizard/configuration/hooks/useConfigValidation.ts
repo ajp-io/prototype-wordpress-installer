@@ -170,9 +170,9 @@ export const useConfigValidation = (currentConfigStep: TabName) => {
     // Always clear the specific field error
     setErrors(prev => ({ ...prev, [field]: undefined }));
     
-    // If we've done full validation before, check if current tab still has errors
-    if (allTabsValidated) {
-      // Re-validate the current tab to see if it still has errors
+    // Always re-validate the current tab to see if it still has errors
+    // Use a timeout to allow the state update to complete first
+    setTimeout(() => {
       const currentTabErrors = validateCurrentTab(currentConfigStep);
       
       // If no errors remain in this tab, remove it from tabsWithErrors
@@ -183,7 +183,7 @@ export const useConfigValidation = (currentConfigStep: TabName) => {
           return newSet;
         });
       }
-    }
+    }, 0);
   };
 
   const validateAndSetErrors = (currentTab?: TabName): TabName | null => {
