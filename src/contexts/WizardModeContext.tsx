@@ -39,7 +39,7 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
     configStepperTitle: 'Groups',
     configStepperDescription: 'Complete each group to configure your installation',
     installationTitle: 'Install',
-    installationDescription: 'Please wait while we install WordPress Enterprise.',
+    installationDescription: 'Install the WordPress Enterprise components.',
     completionTitle: isDryRun ? 'Configuration Complete' : 'Installation Complete!',
     completionDescription: isDryRun ? 'Your configuration is ready to use.' : 'WordPress Enterprise has been installed successfully.',
     welcomeButtonText: isDryRun ? 'Start Configuration' : 'Continue',
