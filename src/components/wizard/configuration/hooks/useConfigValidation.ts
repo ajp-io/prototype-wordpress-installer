@@ -10,15 +10,13 @@ export const useConfigValidation = () => {
 
   const isTabRequired = (tab: TabName): boolean => {
     // Show "Required" label based purely on whether the tab contains required fields
-    // This is independent of validation state or skipValidation settings
+    // Always show it if the tab has required fields, regardless of completion status
     switch (tab) {
       case 'cluster':
       case 'network':
       case 'admin':
-        return true; // These tabs contain required fields
       case 'database':
-        // Database tab contains required fields only when external database is selected
-        return config.databaseType === 'external';
+        return true; // These tabs contain required fields
       default:
         return false; // Extended config tabs don't contain required fields
     }
