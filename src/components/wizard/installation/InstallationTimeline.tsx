@@ -57,7 +57,7 @@ const InstallationTimeline: React.FC<InstallationTimelineProps> = ({
   return (
     <div className="w-80 bg-gray-50 border-r border-gray-200 p-6">
       <h3 className="text-lg font-medium text-gray-900 mb-6">
-        {isUpgrade ? 'Upgrade Progress' : 'Installation Progress'}
+        {isUpgrade ? 'Upgrade Progress' : 'Install Progress'}
       </h3>
       
       <div className="space-y-6">

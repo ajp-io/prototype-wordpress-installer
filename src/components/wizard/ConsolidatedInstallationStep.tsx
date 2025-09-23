@@ -143,7 +143,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
               preflightResults={validationResults}
               applicationStatus={applicationStatus}
               themeColor={themeColor}
-              onHostsComplete={handleHostsComplete}
+              isUpgrade={mode === 'upgrade'}
             />
           </div>
         </div>

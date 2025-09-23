@@ -23,14 +23,14 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
     if (configureOnly) {
       return [
         { id: 'welcome', name: 'Welcome', icon: ClipboardList },
-        { id: 'configuration', name: 'Configuration', icon: Server }
+        { id: 'configuration', name: 'Configure', icon: Server }
       ];
     }
     
     if (dryRun) {
       return [
         { id: 'welcome', name: 'Welcome', icon: ClipboardList },
-        { id: 'configuration', name: 'Configuration', icon: Server },
+        { id: 'configuration', name: 'Configure', icon: Server },
         { id: 'setup', name: 'Setup', icon: Settings },
         { id: 'completion', name: 'Commands', icon: Terminal }
       ];
@@ -38,10 +38,10 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
 
     return [
       { id: 'welcome', name: 'Welcome', icon: ClipboardList },
-      { id: 'configuration', name: 'Configuration', icon: Server },
+      { id: 'configuration', name: 'Configure', icon: Server },
       { id: 'setup', name: 'Setup', icon: Settings },
-      { id: 'installation', name: mode === 'upgrade' ? 'Upgrade' : 'Installation', icon: Download },
-      { id: 'completion', name: 'Completion', icon: CheckCircle }
+      { id: 'installation', name: mode === 'upgrade' ? 'Upgrade' : 'Install', icon: Download },
+      { id: 'completion', name: 'Finish', icon: CheckCircle }
     ];
   };
 

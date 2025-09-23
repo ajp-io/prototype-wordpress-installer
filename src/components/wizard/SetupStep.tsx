@@ -124,9 +124,9 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
     <div className="space-y-6">
       <Card>
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">{text.setupTitle}</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Setup</h2>
           <p className="text-gray-600 mt-1">
-            {text.setupDescription}
+            Configure the setup parameters for this installation.
           </p>
         </div>
 
