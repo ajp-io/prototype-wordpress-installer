@@ -389,6 +389,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
         <Card className="flex-1 m-0 rounded-none border-0 shadow-none">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-gray-900">{text.configurationTitle}</h2>
+            <h3 className="text-lg font-medium text-gray-700 mt-2">{stepLabels[currentConfigStep]}</h3>
             <p className="text-gray-600 mt-1">
               {text.configurationDescription}
             </p>
