@@ -9,42 +9,112 @@ export const useConfigValidation = () => {
   const [visitedTabs, setVisitedTabs] = useState<Set<TabName>>(new Set());
 
   const isTabRequired = (tab: TabName): boolean => {
-    // Always check if the tab has any required fields by running validation
-    // regardless of skipValidation setting (for visual indicators)
-    const tabErrors = validateCurrentTab(tab, false); // Always validate for required check
+    // Always check if the tab has any required fields for visual indicators
+    // Use a special validation that ignores skipValidation for UI display purposes
+    const tabErrors = validateCurrentTabForRequired(tab);
     return Object.keys(tabErrors).length > 0;
   };
 
-  const validateCurrentTabForRequired = (currentTab: TabName): ValidationErrors => {
-    // Always validate with skipValidation=false to determine if fields are required
-    switch (currentTab) {
+  const validateCurrentTabForRequired = (tab: TabName): ValidationErrors => {
+    // This function is specifically for determining UI state (required indicators)
+    // It should always return validation errors regardless of skipValidation setting
+    switch (tab) {
       case 'cluster':
-        return validateClusterTab(config, false);
+        return validateClusterTabForUI(config);
       case 'network':
-        return validateNetworkTab(config, false);
+        return validateNetworkTabForUI(config);
       case 'admin':
-        return validateAdminTab(config, false);
+        return validateAdminTabForUI(config);
       case 'database':
-        return validateDatabaseTab(config, false);
+        return validateDatabaseTabForUI(config);
       case 'monitoring':
-        return validateMonitoringTab(config, false);
+        return validateMonitoringTabForUI(config);
       case 'logging':
-        return validateLoggingTab(config, false);
+        return validateLoggingTabForUI(config);
       case 'backup':
-        return validateBackupTab(config, false);
+        return validateBackupTabForUI(config);
       case 'security':
-        return validateSecurityTab(config, false);
+        return validateSecurityTabForUI(config);
       case 'performance':
-        return validatePerformanceTab(config, false);
+        return validatePerformanceTabForUI(config);
       case 'integrations':
-        return validateIntegrationsTab(config, false);
+        return validateIntegrationsTabForUI(config);
       case 'notifications':
-        return validateNotificationsTab(config, false);
+        return validateNotificationsTabForUI(config);
       case 'customization':
-        return validateCustomizationTab(config, false);
+        return validateCustomizationTabForUI(config);
       default:
         return {};
     }
+  };
+
+  // UI-specific validation functions that always return required field errors
+  const validateClusterTabForUI = (config: ClusterConfig): ValidationErrors => {
+    const errors: ValidationErrors = {};
+    if (!config.clusterName) errors.clusterName = 'Cluster name is required';
+    if (!config.storageClass) errors.storageClass = 'Storage class is required';
+    if (!config.description) errors.description = 'Description is required';
+    if (!config.deploymentMode) errors.deploymentMode = 'Deployment mode is required';
+    if (!config.environment) errors.environment = 'Environment is required';
+    return errors;
+  };
+
+  const validateNetworkTabForUI = (config: ClusterConfig): ValidationErrors => {
+    const errors: ValidationErrors = {};
+    if (!config.domain) errors.domain = 'Domain is required';
+    return errors;
+  };
+
+  const validateAdminTabForUI = (config: ClusterConfig): ValidationErrors => {
+    const errors: ValidationErrors = {};
+    if (!config.adminUsername) errors.adminUsername = 'Admin username is required';
+    if (!config.adminPassword) errors.adminPassword = 'Admin password is required';
+    if (!config.adminEmail) errors.adminEmail = 'Admin email is required';
+    if (!config.licenseKey) errors.licenseKey = 'License key is required';
+    return errors;
+  };
+
+  const validateDatabaseTabForUI = (config: ClusterConfig): ValidationErrors => {
+    const errors: ValidationErrors = {};
+    if (config.databaseType === 'external') {
+      if (!config.databaseConfig?.host) errors['databaseConfig.host'] = 'Database host is required';
+      if (!config.databaseConfig?.username) errors['databaseConfig.username'] = 'Database username is required';
+      if (!config.databaseConfig?.password) errors['databaseConfig.password'] = 'Database password is required';
+      if (!config.databaseConfig?.database) errors['databaseConfig.database'] = 'Database name is required';
+    }
+    return errors;
+  };
+
+  const validateMonitoringTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for monitoring
+  };
+
+  const validateLoggingTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for logging
+  };
+
+  const validateBackupTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for backup
+  };
+
+  const validateSecurityTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for security
+  };
+
+  const validatePerformanceTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for performance
+  };
+
+  const validateIntegrationsTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for integrations
+  };
+
+  const validateNotificationsTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for notifications
+  };
+
+  const validateCustomizationTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for customization
   };
 
   const validateCurrentTab = (currentTab: TabName): ValidationErrors => {
