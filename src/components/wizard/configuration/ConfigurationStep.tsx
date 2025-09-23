@@ -113,7 +113,8 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
     hasValidationErrors,
     markTabAsVisited,
     isTabComplete,
-    isTabRequired
+    isTabRequired,
+    hasTabErrors
   } = useConfigValidation();
   
   const {

@@ -7,6 +7,7 @@ export const useConfigValidation = () => {
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [allTabsValidated, setAllTabsValidated] = useState(false);
   const [visitedTabs, setVisitedTabs] = useState<Set<TabName>>(new Set());
+  const [tabsWithErrors, setTabsWithErrors] = useState<Set<TabName>>(new Set());
 
   const isTabRequired = (tab: TabName): boolean => {
     // Show "Required" label based on whether the tab actually has required fields
@@ -158,6 +159,16 @@ export const useConfigValidation = () => {
   const clearError = (field: string) => {
     if (allTabsValidated) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
+      
+      // Check if this tab still has errors after clearing this field
+      const currentTabErrors = validateCurrentTab(currentConfigStep);
+      if (Object.keys(currentTabErrors).length === 0) {
+        setTabsWithErrors(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(currentConfigStep);
+          return newSet;
+        });
+      }
     }
   };
 
@@ -176,6 +187,15 @@ export const useConfigValidation = () => {
       
       setErrors(flatErrors);
       setAllTabsValidated(true);
+      
+      // Track which tabs have errors for visual highlighting
+      const tabsWithErrorsSet = new Set<TabName>();
+      Object.entries(allTabErrors).forEach(([tabName, tabErrors]) => {
+        if (Object.keys(tabErrors).length > 0) {
+          tabsWithErrorsSet.add(tabName as TabName);
+        }
+      });
+      setTabsWithErrors(tabsWithErrorsSet);
 
       return findFirstTabWithErrors(allTabErrors);
     }
@@ -197,6 +217,10 @@ export const useConfigValidation = () => {
     const tabErrors = validateCurrentTabForRequired(tab);
     return Object.keys(tabErrors).length === 0;
   };
+  
+  const hasTabErrors = (tab: TabName): boolean => {
+    return tabsWithErrors.has(tab);
+  };
 
   return {
     errors,
@@ -208,6 +232,7 @@ export const useConfigValidation = () => {
     validateCurrentTab,
     markTabAsVisited,
     isTabComplete,
-    isTabRequired
+    isTabRequired,
+    hasTabErrors
   };
 };
