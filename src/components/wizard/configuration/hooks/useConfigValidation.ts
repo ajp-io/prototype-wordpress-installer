@@ -9,17 +9,10 @@ export const useConfigValidation = () => {
   const [visitedTabs, setVisitedTabs] = useState<Set<TabName>>(new Set());
 
   const isTabRequired = (tab: TabName): boolean => {
-    // Show "Required" label based purely on whether the tab contains required fields
-    // Always show it if the tab has required fields, regardless of completion status
-    switch (tab) {
-      case 'cluster':
-      case 'network':
-      case 'admin':
-      case 'database':
-        return true; // These tabs contain required fields
-      default:
-        return false; // Extended config tabs don't contain required fields
-    }
+    // Show "Required" label based on whether the tab actually has required fields
+    // that need to be filled out in the current configuration
+    const tabErrors = validateCurrentTabForRequired(tab);
+    return Object.keys(tabErrors).length > 0;
   };
 
   const validateCurrentTabForRequired = (tab: TabName): ValidationErrors => {
