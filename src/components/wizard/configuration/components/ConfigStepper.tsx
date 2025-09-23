@@ -77,7 +77,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
               <div className="flex-grow min-w-0">
                 <h4 className={`text-sm font-medium ${isCurrent ? 'text-gray-900' : 'text-gray-700'}`}>
                   {step.label}
-                  {isRequired && !isComplete && <span className="text-xs text-red-600 ml-2 font-normal">Required</span>}
+                  {isRequired && <span className="text-xs text-red-600 ml-2 font-normal">Required</span>}
                 </h4>
               </div>
               <div className="flex-shrink-0">
