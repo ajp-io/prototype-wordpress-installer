@@ -392,7 +392,6 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
             <p className="text-gray-600 mt-1">
               {text.configurationDescription}
             </p>
-            <h3 className="text-lg font-medium text-gray-700 mt-4">{stepLabels[currentConfigStep]}</h3>
           </div>
           
           <div className="flex-1">

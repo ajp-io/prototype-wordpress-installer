@@ -23,6 +23,13 @@ const DatabaseConfigTab: React.FC<DatabaseConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
+      <div className="border-b border-gray-200 pb-4 mb-8">
+        <h3 className="text-xl font-semibold text-gray-900 mb-2">Database</h3>
+        <p className="text-gray-600">
+          Choose between using an internal managed database or connecting to your existing external database.
+        </p>
+      </div>
+
       <Select
         id="databaseType"
         label="Database Type"
