@@ -6,16 +6,7 @@ export const useConfigValidation = () => {
   const { config, prototypeSettings } = useConfig();
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [allTabsValidated, setAllTabsValidated] = useState(false);
-  const [allTabErrors, setAllTabErrors] = useState<{ [key in TabName]: ValidationErrors }>(() => ({} as { [key in TabName]: ValidationErrors }));
-  const [allTabsValidatedOnce, setAllTabsValidatedOnce] = useState(() => false);
   const [visitedTabs, setVisitedTabs] = useState<Set<TabName>>(new Set());
-
-  // Debug logging
-  console.log('useConfigValidation render:', {
-    allTabsValidatedOnce,
-    allTabErrorsKeys: Object.keys(allTabErrors),
-    hasAnyErrors: Object.values(allTabErrors).some(errors => Object.keys(errors).length > 0)
-  });
 
   const isTabRequired = (tab: TabName): boolean => {
     // Show "Required" label based on whether the tab actually has required fields
@@ -185,8 +176,6 @@ export const useConfigValidation = () => {
       
       setErrors(flatErrors);
       setAllTabsValidated(true);
-      setAllTabErrors(allTabErrors);
-      setAllTabsValidatedOnce(true);
 
       return findFirstTabWithErrors(allTabErrors);
     }
@@ -202,38 +191,16 @@ export const useConfigValidation = () => {
   };
 
   const isTabComplete = (tab: TabName): boolean => {
-    if (allTabsValidatedOnce) {
-      // After full validation, use the stored results
-      return Object.keys(allTabErrors[tab] || {}).length === 0;
-    } else {
-      // Before full validation, use the visited + current validation approach
-      if (!visitedTabs.has(tab)) return false;
-      const tabErrors = validateCurrentTabForRequired(tab);
-      return Object.keys(tabErrors).length === 0;
-    }
-  };
-
-  const hasErrorsInTab = (tab: TabName): boolean => {
-    // NEVER show errors until user attempts to submit the entire configuration
-    const result = allTabsValidatedOnce === true && 
-                   allTabErrors[tab] !== undefined && 
-                   Object.keys(allTabErrors[tab]).length > 0;
-    
-    console.log(`hasErrorsInTab(${tab}):`, {
-      allTabsValidatedOnce,
-      hasTabErrors: allTabErrors[tab] !== undefined,
-      errorCount: Object.keys(allTabErrors[tab] || {}).length,
-      result
-    });
-    
-    return result;
+    if (!visitedTabs.has(tab)) return false;
+    // Always check if the tab has any required fields by running validation
+    // regardless of skipValidation setting (for visual indicators)
+    const tabErrors = validateCurrentTabForRequired(tab);
+    return Object.keys(tabErrors).length === 0;
   };
 
   return {
     errors,
     allTabsValidated,
-    allTabErrors,
-    allTabsValidatedOnce,
     visitedTabs,
     clearError,
     validateAndSetErrors,
@@ -241,7 +208,6 @@ export const useConfigValidation = () => {
     validateCurrentTab,
     markTabAsVisited,
     isTabComplete,
-    isTabRequired,
-    hasErrorsInTab
+    isTabRequired
   };
 };

@@ -382,7 +382,6 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
           themeColor={themeColor}
           isTabComplete={isTabComplete}
           isTabRequired={isTabRequired}
-            hasErrorsInTab={hasValidationErrors}
         />
       )}
       

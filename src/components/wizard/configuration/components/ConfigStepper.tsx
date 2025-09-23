@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { TabName } from '../utils/validationUtils';
-import { CheckCircle2, Circle, XCircle } from 'lucide-react';
+import { CheckCircle2, Circle } from 'lucide-react';
 import { useWizardMode } from '../../../../contexts/WizardModeContext';
 
 export interface ConfigStep {
@@ -15,7 +15,6 @@ interface ConfigStepperProps {
   themeColor: string;
   isTabComplete: (step: TabName) => boolean;
   isTabRequired: (step: TabName) => boolean;
-  hasErrorsInTab: (step: TabName) => boolean;
 }
 
 const ConfigStepper: React.FC<ConfigStepperProps> = ({
@@ -24,8 +23,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
   onStepClick,
   themeColor,
   isTabComplete,
-  isTabRequired,
-  hasErrorsInTab
+  isTabRequired
 }) => {
   const { text } = useWizardMode();
   const stepRefs = useRef<Map<TabName, HTMLButtonElement>>(new Map());
@@ -66,15 +64,6 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
           const isCurrent = isCurrentStep(step);
           const isComplete = isTabComplete(step.id);
           const isRequired = isTabRequired(step.id);
-          const hasErrors = hasErrorsInTab(step.id);
-          
-          // Debug logging
-          console.log(`Step ${step.id}:`, {
-            isCurrent,
-            isComplete,
-            isRequired,
-            hasErrors
-          });
           
           return (
             <button
@@ -82,14 +71,12 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
               key={step.id}
               onClick={() => onStepClick(step.id)}
               className={`w-full text-left transition-all duration-200 rounded-lg border-2 ${
-                hasErrors
-                  ? 'bg-white border-red-300 shadow-sm'
-                  : isCurrent 
-                    ? 'bg-white shadow-md border-transparent' 
-                    : 'bg-white hover:bg-gray-50 border-gray-100 hover:border-gray-200 hover:shadow-sm'
+                isCurrent 
+                  ? 'bg-white shadow-md border-transparent' 
+                  : 'bg-white hover:bg-gray-50 border-gray-100 hover:border-gray-200 hover:shadow-sm'
               }`}
               style={{
-                borderLeftColor: hasErrors ? '#ef4444' : isCurrent ? themeColor : undefined,
+                borderLeftColor: isCurrent ? themeColor : undefined,
                 borderLeftWidth: isCurrent ? '4px' : '2px',
               }}
             >
@@ -104,9 +91,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
                   </div>
                   
                   <div className="flex-shrink-0">
-                    {hasErrors ? (
-                      <XCircle className="w-5 h-5 text-red-500" />
-                    ) : isComplete ? (
+                    {isComplete ? (
                       <CheckCircle2 
                         className="w-5 h-5" 
                         style={{ color: themeColor }}
