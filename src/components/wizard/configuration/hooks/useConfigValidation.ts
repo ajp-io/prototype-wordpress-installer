@@ -8,12 +8,22 @@ export const useConfigValidation = () => {
   const [allTabsValidated, setAllTabsValidated] = useState(false);
   const [visitedTabs, setVisitedTabs] = useState<Set<TabName>>(new Set());
   const [tabsWithErrors, setTabsWithErrors] = useState<Set<TabName>>(new Set());
+  const [tabsMarkedAsRequired, setTabsMarkedAsRequired] = useState<Set<TabName>>(new Set());
 
   const isTabRequired = (tab: TabName): boolean => {
-    // Show "Required" label based on whether the tab actually has required fields
-    // that need to be filled out in the current configuration
-    const tabErrors = validateCurrentTabForRequired(tab);
-    return Object.keys(tabErrors).length > 0;
+    // Once a tab has been marked as required (due to validation failure), 
+    // it should always show "Required" label
+    if (tabsMarkedAsRequired.has(tab)) {
+      return true;
+    }
+    
+    // If validation hasn't run yet, check if tab has required fields
+    if (!allTabsValidated) {
+      const tabErrors = validateCurrentTabForRequired(tab);
+      return Object.keys(tabErrors).length > 0;
+    }
+    
+    return false;
   };
 
   const validateCurrentTabForRequired = (tab: TabName): ValidationErrors => {
@@ -190,12 +200,21 @@ export const useConfigValidation = () => {
       
       // Track which tabs have errors for visual highlighting
       const tabsWithErrorsSet = new Set<TabName>();
+      const tabsWithRequiredFieldsSet = new Set<TabName>();
+      
       Object.entries(allTabErrors).forEach(([tabName, tabErrors]) => {
         if (Object.keys(tabErrors).length > 0) {
           tabsWithErrorsSet.add(tabName as TabName);
+          tabsWithRequiredFieldsSet.add(tabName as TabName);
         }
       });
+      
       setTabsWithErrors(tabsWithErrorsSet);
+      setTabsMarkedAsRequired(prev => {
+        const newSet = new Set(prev);
+        tabsWithRequiredFieldsSet.forEach(tab => newSet.add(tab));
+        return newSet;
+      });
 
       return findFirstTabWithErrors(allTabErrors);
     }
