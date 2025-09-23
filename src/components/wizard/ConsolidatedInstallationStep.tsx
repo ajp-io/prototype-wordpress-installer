@@ -167,7 +167,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       </Card>
 
       <div className="flex justify-between">
-        {!isLinuxMode && currentStep === 'preflights' && (
+        {(!isLinuxMode && currentStep === 'preflights') || (isLinuxMode && currentStep === 'hosts') ? (
           <Button
             variant="outline"
             onClick={onBack}
@@ -175,8 +175,9 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
           >
             Back
           </Button>
+        ) : (
+          <div></div>
         )}
-        {isLinuxMode || currentStep !== 'preflights' ? <div></div> : null}
         {shouldShowNextButton() && (
           <Tooltip
             content="Critical preflight checks must pass before proceeding"

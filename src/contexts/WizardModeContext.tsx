@@ -20,6 +20,7 @@ interface WizardText {
   completionDescription: string;
   welcomeButtonText: string;
   nextButtonText: string;
+  nextButtonText: string;
 }
 
 const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false, isDryRun: boolean = false): Record<WizardMode, WizardText> => ({
@@ -43,6 +44,7 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
     completionTitle: isDryRun ? 'Configuration Complete' : 'Installation Complete!',
     completionDescription: isDryRun ? 'Your configuration is ready to use.' : 'WordPress Enterprise has been installed successfully.',
     welcomeButtonText: isDryRun ? 'Start Configuration' : 'Continue',
+    nextButtonText: isDryRun ? 'Next: Review Commands' : 'Next: Install',
     nextButtonText: isDryRun ? 'Next: Review Commands' : 'Next: Start Installation',
   },
   upgrade: {
@@ -61,6 +63,7 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
     completionTitle: 'Upgrade Complete!',
     completionDescription: 'WordPress Enterprise has been successfully upgraded.',
     welcomeButtonText: 'Start Upgrade',
+    nextButtonText: 'Next: Start Upgrade',
     nextButtonText: 'Next: Start Upgrade',
   },
 });
