@@ -165,7 +165,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
             onClick={onBack}
             icon={<ChevronLeft className="w-5 h-5" />}
           >
-            Next: Completion
+            Back
           </Button>
         )}
         {isLinuxMode || currentStep !== 'preflights' ? <div></div> : null}

@@ -427,14 +427,14 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
                   </Button>
                 ) : (
                   <Button onClick={handleNext} icon={<ChevronRight className="w-5 h-5" />}>
-                    Next: Setup
+                    Continue to Setup
                   </Button>
                 )}
               </div>
             </div>
           </div>
         )}
-                  Next: Setup
+                  Continue to Setup
         {isReadOnly && (
           <div className="border-t border-gray-200 p-6 bg-gray-50">
             <div className="flex justify-start">

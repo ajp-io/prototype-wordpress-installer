@@ -66,7 +66,7 @@ const WelcomeStep: React.FC<WelcomeStepProps> = ({ onNext }) => {
               className="w-full mt-4"
               icon={<ChevronRight className="w-5 h-5" />}
             >
-              Next: Configuration
+              {text.welcomeButtonText}
             </Button>
           </div>
         </div>
