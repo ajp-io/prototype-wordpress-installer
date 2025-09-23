@@ -115,7 +115,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
     isTabComplete,
     isTabRequired,
     hasTabErrors
-  } = useConfigValidation();
+  } = useConfigValidation(currentConfigStep);
   
   const {
     config: formConfig,

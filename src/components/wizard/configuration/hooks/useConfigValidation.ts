@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useConfig } from '../../../../contexts/ConfigContext';
 import { ValidationErrors, TabName, validateAllTabs, findFirstTabWithErrors, validateClusterTab, validateNetworkTab, validateAdminTab, validateDatabaseTab, validateMonitoringTab, validateLoggingTab, validateBackupTab, validateSecurityTab, validatePerformanceTab, validateIntegrationsTab, validateNotificationsTab, validateCustomizationTab } from '../utils/validationUtils';
 
-export const useConfigValidation = () => {
+export const useConfigValidation = (currentConfigStep: TabName) => {
   const { config, prototypeSettings } = useConfig();
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [allTabsValidated, setAllTabsValidated] = useState(false);
