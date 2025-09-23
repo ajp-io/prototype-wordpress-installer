@@ -10,6 +10,7 @@ interface UseConfigFormProps {
   currentConfigStep: TabName;
   setCurrentConfigStep: (step: TabName) => void;
   configSteps: TabName[];
+  markTabAsVisited: (tab: TabName) => void;
 }
 
 export const useConfigForm = ({ 
@@ -18,7 +19,8 @@ export const useConfigForm = ({
   hasValidationErrors, 
   currentConfigStep,
   setCurrentConfigStep,
-  configSteps
+  configSteps,
+  markTabAsVisited
 }: UseConfigFormProps) => {
   const { config, updateConfig, prototypeSettings } = useConfig();
   const { mode } = useWizardMode();
@@ -68,6 +70,7 @@ export const useConfigForm = ({
 
   const handleNext = () => {
     if (prototypeSettings.skipValidation) {
+      markTabAsVisited(currentConfigStep);
       const currentIndex = configSteps.indexOf(currentConfigStep);
       if (currentIndex < configSteps.length - 1) {
         // Move to next config step
@@ -84,6 +87,7 @@ export const useConfigForm = ({
     if (nextTabWithErrors) {
       setCurrentConfigStep(nextTabWithErrors);
     } else {
+      markTabAsVisited(currentConfigStep);
       const currentIndex = configSteps.indexOf(currentConfigStep);
       if (currentIndex < configSteps.length - 1) {
         // Move to next config step
@@ -97,6 +101,7 @@ export const useConfigForm = ({
   };
 
   const handleBack = () => {
+    markTabAsVisited(currentConfigStep);
     const currentIndex = configSteps.indexOf(currentConfigStep);
     if (currentIndex > 0) {
       // Move to previous config step

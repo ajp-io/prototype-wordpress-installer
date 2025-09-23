@@ -6,6 +6,7 @@ export const useConfigValidation = () => {
   const { config, prototypeSettings } = useConfig();
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [allTabsValidated, setAllTabsValidated] = useState(false);
+  const [visitedTabs, setVisitedTabs] = useState<Set<TabName>>(new Set());
 
   const validateCurrentTab = (currentTab: TabName): ValidationErrors => {
     if (prototypeSettings.skipValidation) return {};
@@ -75,12 +76,27 @@ export const useConfigValidation = () => {
     return findFirstTabWithErrors(allTabErrors) !== null;
   };
 
+  const markTabAsVisited = (tab: TabName) => {
+    setVisitedTabs(prev => new Set([...prev, tab]));
+  };
+
+  const isTabComplete = (tab: TabName): boolean => {
+    if (prototypeSettings.skipValidation) return true;
+    if (!visitedTabs.has(tab)) return false;
+    
+    const tabErrors = validateCurrentTab(tab);
+    return Object.keys(tabErrors).length === 0;
+  };
+
   return {
     errors,
     allTabsValidated,
+    visitedTabs,
     clearError,
     validateAndSetErrors,
     hasValidationErrors,
-    validateCurrentTab
+    validateCurrentTab,
+    markTabAsVisited,
+    isTabComplete
   };
 };

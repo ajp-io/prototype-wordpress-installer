@@ -107,9 +107,12 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
   
   const { 
     errors, 
+    visitedTabs,
     clearError, 
     validateAndSetErrors, 
-    hasValidationErrors
+    hasValidationErrors,
+    markTabAsVisited,
+    isTabComplete
   } = useConfigValidation();
   
   const {
@@ -131,7 +134,9 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
     hasValidationErrors, 
     currentConfigStep,
     setCurrentConfigStep,
-    configSteps
+    configSteps,
+    configSteps,
+    markTabAsVisited
   });
   
   // Use the appropriate config for form operations
@@ -150,6 +155,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
 
   const handleStepClick = (step: TabName) => {
     if (!isReadOnly) {
+      markTabAsVisited(currentConfigStep);
       setCurrentConfigStep(step);
     }
   };
@@ -382,6 +388,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
           currentStep={currentConfigStep}
           onStepClick={handleStepClick}
           themeColor={themeColor}
+          isTabComplete={isTabComplete}
         />
       )}
       
