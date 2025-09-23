@@ -27,9 +27,16 @@ const ClusterConfigTab: React.FC<ClusterConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">Cluster Settings</h2>
+        <p className="text-gray-600 mt-1">
+          Configure the basic settings for your WordPress Enterprise installation.
+        </p>
+      </div>
+
       <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-600">
-          Configure the basic settings for your WordPress Enterprise installation. These settings define how your application will be deployed and identified within your environment.
+          These settings define how your application will be deployed and identified within your environment.
         </p>
       </div>
 

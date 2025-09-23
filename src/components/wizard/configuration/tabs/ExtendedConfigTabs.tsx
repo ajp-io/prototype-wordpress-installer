@@ -27,9 +27,16 @@ export const MonitoringConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">Monitoring</h2>
+        <p className="text-gray-600 mt-1">
+          Configure monitoring and observability settings for your WordPress Enterprise installation.
+        </p>
+      </div>
+
       <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-600">
-          Configure monitoring and observability settings for your WordPress Enterprise installation.
+          Set up monitoring levels and metrics collection for your installation.
         </p>
       </div>
 
@@ -80,9 +87,16 @@ export const LoggingConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">Logging</h2>
+        <p className="text-gray-600 mt-1">
+          Configure logging settings and log retention policies.
+        </p>
+      </div>
+
       <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-600">
-          Configure logging settings and log retention policies.
+          Set up log levels and retention for your WordPress Enterprise installation.
         </p>
       </div>
 
@@ -128,9 +142,16 @@ export const BackupConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">Backup</h2>
+        <p className="text-gray-600 mt-1">
+          Configure backup schedules and retention policies for your WordPress data.
+        </p>
+      </div>
+
       <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-600">
-          Configure backup schedules and retention policies for your WordPress data.
+          Set up automated backups and data retention for your installation.
         </p>
       </div>
 
@@ -175,9 +196,16 @@ export const SecurityConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">Security</h2>
+        <p className="text-gray-600 mt-1">
+          Configure security settings including authentication and access controls.
+        </p>
+      </div>
+
       <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-600">
-          Configure security settings including authentication and access controls.
+          Set up authentication, access controls, and security policies.
         </p>
       </div>
 
@@ -225,9 +253,16 @@ export const PerformanceConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">Performance</h2>
+        <p className="text-gray-600 mt-1">
+          Configure performance optimization settings and resource limits.
+        </p>
+      </div>
+
       <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-600">
-          Configure performance optimization settings and resource limits.
+          Optimize resource allocation and caching for better performance.
         </p>
       </div>
 
@@ -272,9 +307,16 @@ export const IntegrationsConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">Integrations</h2>
+        <p className="text-gray-600 mt-1">
+          Configure third-party integrations and external services.
+        </p>
+      </div>
+
       <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-600">
-          Configure third-party integrations and external services.
+          Set up connections to external services and third-party tools.
         </p>
       </div>
 
@@ -320,9 +362,16 @@ export const NotificationsConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">Notifications</h2>
+        <p className="text-gray-600 mt-1">
+          Configure notification preferences and alert settings.
+        </p>
+      </div>
+
       <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-600">
-          Configure notification preferences and alert settings.
+          Set up email notifications and system alerts for your installation.
         </p>
       </div>
 
@@ -369,9 +418,16 @@ export const CustomizationConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">Customization</h2>
+        <p className="text-gray-600 mt-1">
+          Configure custom themes, branding, and user interface preferences.
+        </p>
+      </div>
+
       <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
         <p className="text-sm text-gray-600">
-          Configure custom themes, branding, and user interface preferences.
+          Customize the appearance and branding of your WordPress installation.
         </p>
       </div>
 
