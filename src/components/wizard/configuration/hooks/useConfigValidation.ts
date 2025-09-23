@@ -9,10 +9,44 @@ export const useConfigValidation = () => {
   const [visitedTabs, setVisitedTabs] = useState<Set<TabName>>(new Set());
 
   const isTabRequired = (tab: TabName): boolean => {
-    // Check if the tab has any required fields by running validation
-    const tabErrors = validateCurrentTab(tab);
+    // Always check if the tab has any required fields by running validation
+    // regardless of skipValidation setting (for visual indicators)
+    const tabErrors = validateCurrentTab(tab, false); // Always validate for required check
     return Object.keys(tabErrors).length > 0;
   };
+
+  const validateCurrentTabForRequired = (currentTab: TabName): ValidationErrors => {
+    // Always validate with skipValidation=false to determine if fields are required
+    switch (currentTab) {
+      case 'cluster':
+        return validateClusterTab(config, false);
+      case 'network':
+        return validateNetworkTab(config, false);
+      case 'admin':
+        return validateAdminTab(config, false);
+      case 'database':
+        return validateDatabaseTab(config, false);
+      case 'monitoring':
+        return validateMonitoringTab(config, false);
+      case 'logging':
+        return validateLoggingTab(config, false);
+      case 'backup':
+        return validateBackupTab(config, false);
+      case 'security':
+        return validateSecurityTab(config, false);
+      case 'performance':
+        return validatePerformanceTab(config, false);
+      case 'integrations':
+        return validateIntegrationsTab(config, false);
+      case 'notifications':
+        return validateNotificationsTab(config, false);
+      case 'customization':
+        return validateCustomizationTab(config, false);
+      default:
+        return {};
+    }
+  };
+
   const validateCurrentTab = (currentTab: TabName): ValidationErrors => {
     switch (currentTab) {
       case 'cluster':
@@ -81,8 +115,9 @@ export const useConfigValidation = () => {
 
   const isTabComplete = (tab: TabName): boolean => {
     if (!visitedTabs.has(tab)) return false;
-    
-    const tabErrors = validateCurrentTab(tab);
+    // Always check if the tab has any required fields by running validation
+    // regardless of skipValidation setting (for visual indicators)
+    const tabErrors = validateCurrentTabForRequired(tab);
     return Object.keys(tabErrors).length === 0;
   };
 
