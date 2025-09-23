@@ -33,7 +33,7 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
         ? `This wizard will guide you through configuring WordPress Enterprise for your ${isEmbedded ? 'Linux machine' : 'Kubernetes cluster'}.`
         : `This wizard will guide you through installing WordPress Enterprise on your ${isEmbedded ? 'Linux machine' : 'Kubernetes cluster'}.`,
     setupTitle: 'Setup',
-    setupDescription: 'Setup the host configuration and environment settings for your installation.',
+    setupDescription: 'Setup the environment settings for your installation.',
     configurationTitle: 'Configuration',
     configurationDescription: 'Configure your WordPress Enterprise installation by providing the information below.',
     configStepperTitle: 'Groups',
@@ -51,7 +51,7 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
     welcomeTitle: 'Welcome to WordPress Enterprise',
     welcomeDescription: `This wizard will guide you through upgrading WordPress Enterprise on your ${isEmbedded ? 'Linux machine' : 'Kubernetes cluster'}.`,
     setupTitle: 'Setup',
-    setupDescription: 'Setup the host configuration and environment settings for your upgrade.',
+    setupDescription: 'Setup the environment settings for your upgrade.',
     configurationTitle: 'Upgrade Configuration',
     configurationDescription: 'Configure your WordPress Enterprise installation by providing the information below.',
     configStepperTitle: 'Groups',
