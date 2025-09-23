@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { TabName } from '../utils/validationUtils';
+import { CheckCircle2, Circle } from 'lucide-react';
 
 export interface ConfigStep {
   id: TabName;
@@ -48,14 +49,15 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
   const isCurrentStep = (step: ConfigStep) => step.id === currentStep;
 
   return (
-    <div ref={containerRef} className="w-80 bg-white border-r border-gray-200 p-6 overflow-y-auto">
+    <div ref={containerRef} className="w-80 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto">
       <div className="mb-6">
-        <p className="text-sm text-gray-500">
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Configuration</h3>
+        <p className="text-sm text-gray-600">
           Complete each section to configure your installation
         </p>
       </div>
       
-      <div className="space-y-2 overflow-y-auto max-h-[calc(100vh-200px)]">
+      <div className="space-y-3 overflow-y-auto max-h-[calc(100vh-200px)]">
         {steps.map((step, index) => {
           const isCurrent = isCurrentStep(step);
           const isComplete = isTabComplete(step.id);
@@ -66,30 +68,56 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
               ref={(el) => setStepRef(step.id, el)}
               key={step.id}
               onClick={() => onStepClick(step.id)}
-              className={`w-full flex items-center space-x-3 p-3 rounded-lg text-left transition-colors ${
-                'hover:bg-gray-50 cursor-pointer'
+              className={`w-full text-left transition-all duration-200 rounded-lg border-2 ${
+                isCurrent 
+                  ? 'bg-white shadow-md border-transparent' 
+                  : 'bg-white hover:bg-gray-50 border-gray-100 hover:border-gray-200 hover:shadow-sm'
               }`}
               style={{
-                backgroundColor: isCurrent ? `${themeColor}10` : 'transparent',
-                borderLeft: isCurrent ? `3px solid ${themeColor}` : '3px solid transparent',
+                borderLeftColor: isCurrent ? themeColor : undefined,
+                borderLeftWidth: isCurrent ? '4px' : '2px',
               }}
             >
-              <div className="flex-grow min-w-0">
-                <h4 className={`text-sm font-medium ${isCurrent ? 'text-gray-900' : 'text-gray-700'}`}>
-                  {step.label}
-                  {isRequired && <span className="text-xs text-red-600 ml-2 font-normal">Required</span>}
-                </h4>
-              </div>
-              <div className="flex-shrink-0">
-                {isComplete ? (
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: themeColor }}>
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+              <div className="p-4">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex-grow min-w-0 pr-3">
+                    <h4 className={`text-sm font-medium leading-tight ${
+                      isCurrent ? 'text-gray-900' : 'text-gray-700'
+                    }`}>
+                      {step.label}
+                    </h4>
                   </div>
-                ) : (
-                  <div className="w-5 h-5 rounded-full border-2 border-gray-300"></div>
-                )}
+                  
+                  <div className="flex-shrink-0">
+                    {isComplete ? (
+                      <CheckCircle2 
+                        className="w-5 h-5" 
+                        style={{ color: themeColor }}
+                      />
+                    ) : (
+                      <Circle className="w-5 h-5 text-gray-300" />
+                    )}
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    {isRequired && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200">
+                        Required
+                      </span>
+                    )}
+                    {isComplete && (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+                        Complete
+                      </span>
+                    )}
+                  </div>
+                  
+                  {isCurrent && (
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: themeColor }} />
+                  )}
+                </div>
               </div>
             </button>
           );
