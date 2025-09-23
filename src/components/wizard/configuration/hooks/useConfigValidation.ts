@@ -9,15 +9,11 @@ export const useConfigValidation = () => {
   const [visitedTabs, setVisitedTabs] = useState<Set<TabName>>(new Set());
 
   const isTabRequired = (tab: TabName): boolean => {
-    if (prototypeSettings.skipValidation) return false;
-    
     // Check if the tab has any required fields by running validation
     const tabErrors = validateCurrentTab(tab);
     return Object.keys(tabErrors).length > 0;
   };
   const validateCurrentTab = (currentTab: TabName): ValidationErrors => {
-    if (prototypeSettings.skipValidation) return {};
-
     switch (currentTab) {
       case 'cluster':
         return validateClusterTab(config, prototypeSettings.skipValidation);
@@ -49,14 +45,12 @@ export const useConfigValidation = () => {
   };
 
   const clearError = (field: string) => {
-    if (!prototypeSettings.skipValidation && allTabsValidated) {
+    if (allTabsValidated) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
   };
 
   const validateAndSetErrors = (currentTab?: TabName): TabName | null => {
-    if (prototypeSettings.skipValidation) return null;
-
     if (currentTab) {
       // Only validate the current tab when navigating
       const currentTabErrors = validateCurrentTab(currentTab);
@@ -77,8 +71,6 @@ export const useConfigValidation = () => {
   };
 
   const hasValidationErrors = (): boolean => {
-    if (prototypeSettings.skipValidation) return false;
-    
     const allTabErrors = validateAllTabs(config, prototypeSettings.skipValidation);
     return findFirstTabWithErrors(allTabErrors) !== null;
   };
