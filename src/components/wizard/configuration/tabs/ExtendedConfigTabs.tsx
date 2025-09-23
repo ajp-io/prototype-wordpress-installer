@@ -124,7 +124,7 @@ export const BackupConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="border-b border-gray-200 pb-4 mb-8">
+      <div className="pb-4 mb-8">
         <h3 className="text-xl font-semibold text-gray-900 mb-2">Backup</h3>
         <p className="text-gray-600">
           Configure backup schedules and retention policies for your WordPress data.
@@ -172,7 +172,7 @@ export const SecurityConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="border-b border-gray-200 pb-4 mb-8">
+      <div className="pb-4 mb-8">
         <h3 className="text-xl font-semibold text-gray-900 mb-2">Security</h3>
         <p className="text-gray-600">
           Configure security settings including authentication and access controls.
@@ -223,7 +223,7 @@ export const PerformanceConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="border-b border-gray-200 pb-4 mb-8">
+      <div className="pb-4 mb-8">
         <h3 className="text-xl font-semibold text-gray-900 mb-2">Performance</h3>
         <p className="text-gray-600">
           Configure performance optimization settings and resource limits.
@@ -271,7 +271,7 @@ export const IntegrationsConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="border-b border-gray-200 pb-4 mb-8">
+      <div className="pb-4 mb-8">
         <h3 className="text-xl font-semibold text-gray-900 mb-2">Integrations</h3>
         <p className="text-gray-600">
           Configure third-party integrations and external services.
@@ -320,7 +320,7 @@ export const NotificationsConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="border-b border-gray-200 pb-4 mb-8">
+      <div className="pb-4 mb-8">
         <h3 className="text-xl font-semibold text-gray-900 mb-2">Notifications</h3>
         <p className="text-gray-600">
           Configure notification preferences and alert settings.
@@ -370,7 +370,7 @@ export const CustomizationConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="border-b border-gray-200 pb-4 mb-8">
+      <div className="pb-4 mb-8">
         <h3 className="text-xl font-semibold text-gray-900 mb-2">Customization</h3>
         <p className="text-gray-600">
           Configure custom themes, branding, and user interface preferences.
