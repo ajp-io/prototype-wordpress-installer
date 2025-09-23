@@ -27,11 +27,9 @@ export const MonitoringConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <p className="text-sm text-gray-600">
-          Configure monitoring and observability settings for your WordPress Enterprise installation.
-        </p>
-      </div>
+      <p className="text-gray-600 mb-6">
+        Configure monitoring and observability settings for your WordPress Enterprise installation.
+      </p>
 
       <Select
         id="monitoringLevel"
@@ -80,11 +78,9 @@ export const LoggingConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <p className="text-sm text-gray-600">
-          Configure logging settings and log retention policies.
-        </p>
-      </div>
+      <p className="text-gray-600 mb-6">
+        Configure logging settings and log retention policies.
+      </p>
 
       <Select
         id="logLevel"
@@ -128,11 +124,9 @@ export const BackupConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <p className="text-sm text-gray-600">
-          Configure backup schedules and retention policies for your WordPress data.
-        </p>
-      </div>
+      <p className="text-gray-600 mb-6">
+        Configure backup schedules and retention policies for your WordPress data.
+      </p>
 
       <Select
         id="backupFrequency"
@@ -175,11 +169,9 @@ export const SecurityConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <p className="text-sm text-gray-600">
-          Configure security settings including authentication and access controls.
-        </p>
-      </div>
+      <p className="text-gray-600 mb-6">
+        Configure security settings including authentication and access controls.
+      </p>
 
       <div className="flex items-center space-x-3">
         <input
@@ -225,11 +217,9 @@ export const PerformanceConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <p className="text-sm text-gray-600">
-          Configure performance optimization settings and resource limits.
-        </p>
-      </div>
+      <p className="text-gray-600 mb-6">
+        Configure performance optimization settings and resource limits.
+      </p>
 
       <Input
         id="maxMemoryLimit"
@@ -272,11 +262,9 @@ export const IntegrationsConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <p className="text-sm text-gray-600">
-          Configure third-party integrations and external services.
-        </p>
-      </div>
+      <p className="text-gray-600 mb-6">
+        Configure third-party integrations and external services.
+      </p>
 
       <div className="flex items-center space-x-3">
         <input
@@ -320,11 +308,9 @@ export const NotificationsConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <p className="text-sm text-gray-600">
-          Configure notification preferences and alert settings.
-        </p>
-      </div>
+      <p className="text-gray-600 mb-6">
+        Configure notification preferences and alert settings.
+      </p>
 
       <div className="flex items-center space-x-3">
         <input
@@ -369,11 +355,9 @@ export const CustomizationConfigTab: React.FC<ExtendedConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <p className="text-sm text-gray-600">
-          Configure custom themes, branding, and user interface preferences.
-        </p>
-      </div>
+      <p className="text-gray-600 mb-6">
+        Configure custom themes, branding, and user interface preferences.
+      </p>
 
       <Select
         id="theme"
