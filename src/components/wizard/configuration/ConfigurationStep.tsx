@@ -136,7 +136,6 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
     currentConfigStep,
     setCurrentConfigStep,
     configSteps,
-    configSteps,
     markTabAsVisited
   });
   
@@ -368,11 +367,9 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
     }
   };
 
-  if (configSaved) {
-    return <ConfigSaveSuccess />;
-  }
-
-  return (
+  return configSaved ? (
+    <ConfigSaveSuccess />
+  ) : (
     <div className="flex min-h-[600px]">
       {!isReadOnly && (
         <ConfigStepper
