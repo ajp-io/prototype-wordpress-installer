@@ -51,7 +51,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
   return (
     <div ref={containerRef} className="w-80 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto">
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">Configuration</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Settings</h3>
         <p className="text-sm text-gray-600">
           Complete each section to configure your installation
         </p>
