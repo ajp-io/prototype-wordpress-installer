@@ -10,6 +10,13 @@ export const useConfigValidation = () => {
   const [allTabsValidatedOnce, setAllTabsValidatedOnce] = useState(() => false);
   const [visitedTabs, setVisitedTabs] = useState<Set<TabName>>(new Set());
 
+  // Debug logging
+  console.log('useConfigValidation render:', {
+    allTabsValidatedOnce,
+    allTabErrorsKeys: Object.keys(allTabErrors),
+    hasAnyErrors: Object.values(allTabErrors).some(errors => Object.keys(errors).length > 0)
+  });
+
   const isTabRequired = (tab: TabName): boolean => {
     // Show "Required" label based on whether the tab actually has required fields
     // that need to be filled out in the current configuration
@@ -208,9 +215,18 @@ export const useConfigValidation = () => {
 
   const hasErrorsInTab = (tab: TabName): boolean => {
     // NEVER show errors until user attempts to submit the entire configuration
-    return allTabsValidatedOnce === true && 
-           allTabErrors[tab] !== undefined && 
-           Object.keys(allTabErrors[tab]).length > 0;
+    const result = allTabsValidatedOnce === true && 
+                   allTabErrors[tab] !== undefined && 
+                   Object.keys(allTabErrors[tab]).length > 0;
+    
+    console.log(`hasErrorsInTab(${tab}):`, {
+      allTabsValidatedOnce,
+      hasTabErrors: allTabErrors[tab] !== undefined,
+      errorCount: Object.keys(allTabErrors[tab] || {}).length,
+      result
+    });
+    
+    return result;
   };
 
   return {
