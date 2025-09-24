@@ -320,8 +320,6 @@ const PrototypeSettings: React.FC = () => {
               </div>
             </div>
 
-            <div className="border-t border-gray-200 pt-
-  )
             <div className="border-t border-gray-200 pt-6">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Configuration Display Settings</h2>
               <div className="space-y-4">
@@ -355,5 +353,3 @@ const PrototypeSettings: React.FC = () => {
 };
 
 export default PrototypeSettings;
-  )
-}
