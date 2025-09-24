@@ -172,6 +172,11 @@ export const useConfigValidation = (currentConfigStep: TabName) => {
   };
 
   const revalidateCurrentTab = () => {
+    // Only re-validate if we've already attempted submission (allTabsValidated is true)
+    if (!allTabsValidated) {
+      return;
+    }
+    
     // Re-validate the current tab to check if it still has errors
     const currentTabErrors = validateCurrentTab(currentConfigStep);
     
@@ -266,8 +271,8 @@ export const useConfigValidation = (currentConfigStep: TabName) => {
 
   // Auto-revalidate current tab when config changes
   useEffect(() => {
-    // Only revalidate if the tab has been visited or all tabs have been validated
-    if (visitedTabs.has(currentConfigStep) || allTabsValidated) {
+    // Only revalidate if all tabs have been validated (i.e., after submission attempt)
+    if (allTabsValidated) {
       revalidateCurrentTab();
     }
   }, [config, currentConfigStep]);
