@@ -126,18 +126,30 @@ export const useInstallationFlow = () => {
       setAllRequiredNodesMet(true); // For non-role-based installations, always consider requirements met
     }
     
+    console.log('handleHostsComplete called:', { 
+      hasFailures, 
+      enableMultiNode: prototypeSettings.enableMultiNode,
+      skipNodeValidation: prototypeSettings.skipNodeValidation 
+    });
+    
     // Auto-proceed conditions:
-    // 1. Single-node successful installations
-    // 2. skipNodeValidation is enabled (regardless of failures)
-    if ((!hasFailures && !prototypeSettings.enableMultiNode) || prototypeSettings.skipNodeValidation) {
+    // 1. Single-node successful installations (no failures and single-node mode)
+    // 2. skipNodeValidation is enabled (regardless of failures or node count)
+    const shouldAutoProceed = (!hasFailures && !prototypeSettings.enableMultiNode) || prototypeSettings.skipNodeValidation;
+    
+    console.log('shouldAutoProceed:', shouldAutoProceed);
+    
+    if (shouldAutoProceed) {
       // Mark hosts as completed and auto-proceed to infrastructure
       updateStepStatus('hosts', { status: 'completed' });
+      console.log('Auto-proceeding to infrastructure installation');
       setTimeout(() => {
         startInfrastructureInstallation();
       }, 100);
     } else {
       // For multi-node or failed installations, keep status as 'running' until user manually proceeds
       // Don't auto-proceed - let user manually click Next when ready
+      console.log('Not auto-proceeding, waiting for manual action');
     }
   };
 
