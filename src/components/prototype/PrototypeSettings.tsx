@@ -355,3 +355,5 @@ const PrototypeSettings: React.FC = () => {
 };
 
 export default PrototypeSettings;
+  )
+}
