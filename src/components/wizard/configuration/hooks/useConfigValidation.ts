@@ -11,19 +11,9 @@ export const useConfigValidation = (currentConfigStep: TabName) => {
   const [tabsMarkedAsRequired, setTabsMarkedAsRequired] = useState<Set<TabName>>(new Set());
 
   const isTabRequired = (tab: TabName): boolean => {
-    // Always show "Required" if the tab was marked as required due to validation failure
-    if (tabsMarkedAsRequired.has(tab)) {
-      return true;
-    }
-    
-    // Before any validation attempt, show "Required" if tab has required fields
-    if (!allTabsValidated) {
-      const tabErrors = validateCurrentTabForRequired(tab);
-      return Object.keys(tabErrors).length > 0;
-    }
-    
-    // After validation, don't show "Required" unless it was marked as such
-    return false;
+    // Always show "Required" if the tab has required fields, regardless of validation state
+    const tabErrors = validateCurrentTabForRequired(tab);
+    return Object.keys(tabErrors).length > 0;
   };
 
   const validateCurrentTabForRequired = (tab: TabName): ValidationErrors => {
