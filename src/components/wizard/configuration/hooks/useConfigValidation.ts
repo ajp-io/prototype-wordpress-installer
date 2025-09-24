@@ -11,9 +11,15 @@ export const useConfigValidation = (currentConfigStep: TabName) => {
   const [tabsMarkedAsRequired, setTabsMarkedAsRequired] = useState<Set<TabName>>(new Set());
 
   const isTabRequired = (tab: TabName): boolean => {
-    // Always show "Required" if the tab has required fields, regardless of validation state
-    const tabErrors = validateCurrentTabForRequired(tab);
-    return Object.keys(tabErrors).length > 0;
+    // Static determination of which tabs have required fields
+    const tabsWithRequiredFields: Set<TabName> = new Set([
+      'cluster',
+      'network', 
+      'admin',
+      'database' // Only when external database is selected, but we'll show it always for simplicity
+    ]);
+    
+    return tabsWithRequiredFields.has(tab);
   };
 
   const validateCurrentTabForRequired = (tab: TabName): ValidationErrors => {
