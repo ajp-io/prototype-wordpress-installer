@@ -132,10 +132,8 @@ export const useInstallationFlow = () => {
       skipNodeValidation: prototypeSettings.skipNodeValidation 
     });
     
-    // Auto-proceed conditions:
-    // 1. Single-node successful installations (no failures and single-node mode)
-    // 2. skipNodeValidation is enabled (regardless of failures or node count)
-    const shouldAutoProceed = (!hasFailures && !prototypeSettings.enableMultiNode) || prototypeSettings.skipNodeValidation;
+    // Auto-proceed conditions - ONLY for single-node successful installations
+    const shouldAutoProceed = !hasFailures && !prototypeSettings.enableMultiNode;
     
     console.log('shouldAutoProceed:', shouldAutoProceed);
     
@@ -147,9 +145,10 @@ export const useInstallationFlow = () => {
         startInfrastructureInstallation();
       }, 100);
     } else {
-      // For multi-node or failed installations, keep status as 'running' until user manually proceeds
+      // For multi-node installations (regardless of skipNodeValidation) or failed single-node installations, 
+      // keep status as 'running' until user manually proceeds
       // Don't auto-proceed - let user manually click Next when ready
-      console.log('Not auto-proceeding, waiting for manual action');
+      console.log('Multi-node or failed installation - waiting for manual action');
     }
   };
 
