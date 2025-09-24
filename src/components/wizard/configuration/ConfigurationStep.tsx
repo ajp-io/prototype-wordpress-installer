@@ -138,6 +138,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
     setCurrentConfigStep,
     configSteps,
     markTabAsVisited
+  });
   
   // Use the appropriate config for form operations
   const activeConfig = isReadOnly ? config : formConfig;
