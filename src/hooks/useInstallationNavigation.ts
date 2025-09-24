@@ -87,7 +87,7 @@ export const useInstallationNavigation = ({
     } else if (currentStep === 'preflights') {
       return 'Next: WordPress Enterprise Installation';
     } else if (currentStep === 'application') {
-      return 'Next: Completion';
+      return 'Next: Finish';
     }
     return 'Next';
   };
