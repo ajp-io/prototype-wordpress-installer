@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Card from '../common/Card';
 import Button from '../common/Button';
 import { useConfig } from '../../contexts/ConfigContext';
+import { useWizardMode } from '../../contexts/WizardModeContext';
 import { CheckCircle, ExternalLink, Copy, ClipboardCheck } from 'lucide-react';
 
 const CompletionStep: React.FC = () => {
