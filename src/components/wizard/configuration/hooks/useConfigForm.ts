@@ -7,36 +7,66 @@ interface UseConfigFormProps {
   onNext: () => void;
   validateAndSetErrors: () => TabName | null;
   hasValidationErrors: () => boolean;
-  setActiveTab: (tab: TabName) => void;
+  currentConfigStep: TabName;
+  setCurrentConfigStep: (step: TabName) => void;
+  configSteps: TabName[];
+  markTabAsVisited: (tab: TabName) => void;
 }
 
-export const useConfigForm = ({ onNext, validateAndSetErrors, hasValidationErrors, setActiveTab }: UseConfigFormProps) => {
+export const useConfigForm = ({ 
+  onNext, 
+  validateAndSetErrors, 
+  hasValidationErrors, 
+  currentConfigStep,
+  setCurrentConfigStep,
+  configSteps,
+  markTabAsVisited
+}: UseConfigFormProps) => {
   const { config, updateConfig, prototypeSettings } = useConfig();
   const { mode } = useWizardMode();
   const [configSaved, setConfigSaved] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, clearError?: (field: string) => void) => {
     const { id, value } = e.target;
     updateConfig({ [id]: value });
+    
+    // Clear the error for this field if clearError function is provided
+    if (clearError) {
+      clearError(id);
+    }
   };
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>, clearError?: (field: string) => void) => {
     const { id, value } = e.target;
     updateConfig({ [id]: value });
+    
+    // Clear the error for this field if clearError function is provided
+    if (clearError) {
+      clearError(id);
+    }
   };
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, clearError?: (field: string) => void) => {
     const { id, checked } = e.target;
     updateConfig({ [id]: checked });
+    
+    // Clear the error for this field if clearError function is provided
+    if (clearError) {
+      clearError(id);
+    }
   };
 
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>, clearError?: (field: string) => void) => {
     const { name, value } = e.target;
     updateConfig({ [name]: value });
+    
+    // Clear the error for this field if clearError function is provided
+    if (clearError) {
+      clearError(name);
+    }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleFileChange = (file: File) => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -56,17 +86,41 @@ export const useConfigForm = ({ onNext, validateAndSetErrors, hasValidationError
       licenseFileName: undefined
     });
   };
-  const handleNext = () => {
-    if (prototypeSettings.skipValidation) {
-      onNext();
-      return;
-    }
 
-    const nextTabWithErrors = validateAndSetErrors();
-    if (nextTabWithErrors) {
-      setActiveTab(nextTabWithErrors);
-    } else {
+  const handleNext = () => {
+    // Always mark current tab as visited when trying to proceed
+    markTabAsVisited(currentConfigStep);
+    
+    if (prototypeSettings.skipValidation) {
+      // Skip validation, proceed to next wizard step
       onNext();
+    } else {
+      // Validate all tabs, not just current one
+      const nextTabWithErrors = validateAndSetErrors();
+      if (nextTabWithErrors) {
+        // Switch to the first tab with errors
+        setCurrentConfigStep(nextTabWithErrors);
+      } else {
+        // All validation passed, proceed to next wizard step
+        onNext();
+      }
+    }
+  };
+
+  const handleConfigGroupNext = () => {
+    markTabAsVisited(currentConfigStep);
+    const currentIndex = configSteps.indexOf(currentConfigStep);
+    if (currentIndex < configSteps.length - 1) {
+      const nextStep = configSteps[currentIndex + 1];
+      setCurrentConfigStep(nextStep);
+    }
+  };
+
+  const handleConfigGroupBack = () => {
+    const currentIndex = configSteps.indexOf(currentConfigStep);
+    if (currentIndex > 0) {
+      const prevStep = configSteps[currentIndex - 1];
+      setCurrentConfigStep(prevStep);
     }
   };
 
@@ -80,7 +134,7 @@ export const useConfigForm = ({ onNext, validateAndSetErrors, hasValidationError
     if (!nextTabWithErrors) {
       setConfigSaved(true);
     } else {
-      setActiveTab(nextTabWithErrors);
+      setCurrentConfigStep(nextTabWithErrors);
     }
   };
 
@@ -94,6 +148,8 @@ export const useConfigForm = ({ onNext, validateAndSetErrors, hasValidationError
     handleFileChange,
     handleFileRemove,
     handleNext,
-    handleSaveConfig
+    handleConfigGroupNext,
+    handleConfigGroupBack,
+    handleSaveConfig,
   };
 };

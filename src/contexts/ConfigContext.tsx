@@ -47,7 +47,6 @@ interface PrototypeSettings {
   makePreflightsStrict: boolean;
   clusterMode: 'existing' | 'embedded';
   themeColor: string;
-  skipNodeValidation: boolean;
   enableMultiNode: boolean;
   skipHostPreflights: boolean;
   configFormat: 'helm-values' | 'config-values';
@@ -55,7 +54,7 @@ interface PrototypeSettings {
     name: string;
     description: string;
   }>;
-  useNodeRoles: boolean;
+  enableManyConfigGroups: boolean;
 }
 
 interface ConfigContextType {
@@ -99,7 +98,6 @@ const defaultPrototypeSettings: PrototypeSettings = {
   makePreflightsStrict: false,
   clusterMode: 'existing',
   themeColor: '#316DE6',
-  skipNodeValidation: false,
   enableMultiNode: true,
   skipHostPreflights: false,
   configFormat: 'config-values',
@@ -109,7 +107,7 @@ const defaultPrototypeSettings: PrototypeSettings = {
     { name: 'wlan0', description: 'Wireless Interface' },
     { name: 'docker0', description: 'Docker Bridge Interface' }
   ],
-  useNodeRoles: false
+  enableManyConfigGroups: false
 };
 
 const PROTOTYPE_SETTINGS_KEY = 'wordpress-prototype-settings';

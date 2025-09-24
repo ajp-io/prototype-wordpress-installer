@@ -6,11 +6,11 @@ import { WordPressLogo } from '../common/Logo';
 import { ChevronRight, Lock } from 'lucide-react';
 import { useWizardMode } from '../../contexts/WizardModeContext';
 
-interface WelcomeStepProps {
+interface LoginStepProps {
   onNext: () => void;
 }
 
-const WelcomeStep: React.FC<WelcomeStepProps> = ({ onNext }) => {
+const LoginStep: React.FC<LoginStepProps> = ({ onNext }) => {
   const { text } = useWizardMode();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -39,9 +39,9 @@ const WelcomeStep: React.FC<WelcomeStepProps> = ({ onNext }) => {
       <Card>
         <div className="flex flex-col items-center text-center py-12">
           <WordPressLogo className="h-20 w-20 mb-6" />
-          <h2 className="text-3xl font-bold text-gray-900">{text.welcomeTitle}</h2>
+          <h2 className="text-3xl font-bold text-gray-900">{text.loginTitle}</h2>
           <p className="text-xl text-gray-600 max-w-2xl mb-8">
-            {text.welcomeDescription}
+            {text.loginDescription}
           </p>
           
 
@@ -66,7 +66,7 @@ const WelcomeStep: React.FC<WelcomeStepProps> = ({ onNext }) => {
               className="w-full mt-4"
               icon={<ChevronRight className="w-5 h-5" />}
             >
-              {text.welcomeButtonText}
+              {text.loginButtonText}
             </Button>
           </div>
         </div>
@@ -75,4 +75,4 @@ const WelcomeStep: React.FC<WelcomeStepProps> = ({ onNext }) => {
   );
 };
 
-export default WelcomeStep;
+export default LoginStep;

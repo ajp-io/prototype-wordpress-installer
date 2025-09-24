@@ -118,24 +118,30 @@ export const useInstallationFlow = () => {
     setHostsComplete(true);
     setHasHostFailures(hasFailures);
     
-    // For role-based installations, hasFailures indicates whether all required nodes are met
-    // (inverted logic: hasFailures = true means not all nodes are met)
-    if (prototypeSettings.useNodeRoles && prototypeSettings.enableMultiNode) {
-      setAllRequiredNodesMet(!hasFailures);
-    } else {
-      setAllRequiredNodesMet(true); // For non-role-based installations, always consider requirements met
-    }
+    setAllRequiredNodesMet(true);
     
-    // For single-node successful installations, auto-proceed to infrastructure
-    if (!hasFailures && !prototypeSettings.enableMultiNode) {
+    console.log('handleHostsComplete called:', { 
+      hasFailures, 
+      enableMultiNode: prototypeSettings.enableMultiNode
+    });
+    
+    // Auto-proceed conditions - ONLY for single-node successful installations
+    const shouldAutoProceed = !hasFailures && !prototypeSettings.enableMultiNode;
+    
+    console.log('shouldAutoProceed:', shouldAutoProceed);
+    
+    if (shouldAutoProceed) {
       // Mark hosts as completed and auto-proceed to infrastructure
       updateStepStatus('hosts', { status: 'completed' });
+      console.log('Auto-proceeding to infrastructure installation');
       setTimeout(() => {
         startInfrastructureInstallation();
       }, 100);
     } else {
-      // For multi-node or failed installations, keep status as 'running' until user manually proceeds
+      // For multi-node installations or failed single-node installations, 
+      // keep status as 'running' until user manually proceeds
       // Don't auto-proceed - let user manually click Next when ready
+      console.log('Multi-node or failed installation - waiting for manual action');
     }
   };
 
@@ -255,5 +261,6 @@ export const useInstallationFlow = () => {
     startInfrastructureInstallation,
     startPreflightChecks,
     startApplicationInstallation,
+    updateStepStatus,
   };
 };

@@ -41,6 +41,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     startInfrastructureInstallation,
     startPreflightChecks,
     startApplicationInstallation,
+    updateStepStatus,
   } = useInstallationFlow();
 
   const { allLogs, showLogs, addToAllLogs, toggleLogs } = useInstallationLogs();
@@ -96,7 +97,8 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
   const handleNextClick = () => {
     if (currentStep === 'hosts') {
-      // Mark hosts as completed when user clicks Next
+      // Mark hosts as completed when user clicks Next and proceed to infrastructure
+      updateStepStatus('hosts', { status: 'completed' });
       startInfrastructureInstallation();
     } else if (currentStep === 'infrastructure') {
       startPreflightChecks();
@@ -136,6 +138,14 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
           />
           
           <div className="flex-1">
+            <div className="p-8 pb-0">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">{text.installationTitle}</h2>
+                <p className="text-gray-600 mt-1">
+                  {text.installationDescription}
+                </p>
+              </div>
+            </div>
             <StepDetailPanel
               selectedStep={selectedStep}
               stepData={steps[selectedStep]}
@@ -143,6 +153,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
               preflightResults={validationResults}
               applicationStatus={applicationStatus}
               themeColor={themeColor}
+              isUpgrade={mode === 'upgrade'}
               onHostsComplete={handleHostsComplete}
             />
           </div>
@@ -159,7 +170,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
       </Card>
 
       <div className="flex justify-between">
-        {!isLinuxMode && currentStep === 'preflights' && (
+        {(!isLinuxMode && currentStep === 'preflights') || (isLinuxMode && currentStep === 'hosts') ? (
           <Button
             variant="outline"
             onClick={onBack}
@@ -167,8 +178,9 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
           >
             Back
           </Button>
+        ) : (
+          <div></div>
         )}
-        {isLinuxMode || currentStep !== 'preflights' ? <div></div> : null}
         {shouldShowNextButton() && (
           <Tooltip
             content="Critical preflight checks must pass before proceeding"

@@ -1,42 +1,305 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useConfig } from '../../../../contexts/ConfigContext';
-import { ValidationErrors, TabName, validateAllTabs, findFirstTabWithErrors } from '../utils/validationUtils';
+import { ValidationErrors, TabName, validateAllTabs, findFirstTabWithErrors, validateClusterTab, validateNetworkTab, validateAdminTab, validateDatabaseTab, validateMonitoringTab, validateLoggingTab, validateBackupTab, validateSecurityTab, validatePerformanceTab, validateIntegrationsTab, validateNotificationsTab, validateCustomizationTab } from '../utils/validationUtils';
 
-export const useConfigValidation = () => {
+export const useConfigValidation = (currentConfigStep: TabName) => {
   const { config, prototypeSettings } = useConfig();
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [allTabsValidated, setAllTabsValidated] = useState(false);
+  const [visitedTabs, setVisitedTabs] = useState<Set<TabName>>(new Set());
+  const [tabsWithErrors, setTabsWithErrors] = useState<Set<TabName>>(new Set());
+  const [tabsMarkedAsRequired, setTabsMarkedAsRequired] = useState<Set<TabName>>(new Set());
 
-  const clearError = (field: string) => {
-    if (!prototypeSettings.skipValidation && allTabsValidated) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+  const isTabRequired = (tab: TabName): boolean => {
+    // Static determination of which tabs have required fields
+    const tabsWithRequiredFields: Set<TabName> = new Set([
+      'cluster',
+      'network', 
+      'admin',
+      'database' // Only when external database is selected, but we'll show it always for simplicity
+    ]);
+    
+    return tabsWithRequiredFields.has(tab);
+  };
+
+  const validateCurrentTabForRequired = (tab: TabName): ValidationErrors => {
+    // This function is specifically for determining UI state (required indicators)
+    // It should always return validation errors regardless of skipValidation setting
+    switch (tab) {
+      case 'cluster':
+        return validateClusterTabForUI(config);
+      case 'network':
+        return validateNetworkTabForUI(config);
+      case 'admin':
+        return validateAdminTabForUI(config);
+      case 'database':
+        return validateDatabaseTabForUI(config);
+      case 'monitoring':
+        return validateMonitoringTabForUI(config);
+      case 'logging':
+        return validateLoggingTabForUI(config);
+      case 'backup':
+        return validateBackupTabForUI(config);
+      case 'security':
+        return validateSecurityTabForUI(config);
+      case 'performance':
+        return validatePerformanceTabForUI(config);
+      case 'integrations':
+        return validateIntegrationsTabForUI(config);
+      case 'notifications':
+        return validateNotificationsTabForUI(config);
+      case 'customization':
+        return validateCustomizationTabForUI(config);
+      default:
+        return {};
     }
   };
 
-  const validateAndSetErrors = (): TabName | null => {
-    if (prototypeSettings.skipValidation) return null;
+  // UI-specific validation functions that always return required field errors
+  const validateClusterTabForUI = (config: ClusterConfig): ValidationErrors => {
+    const errors: ValidationErrors = {};
+    if (!config.clusterName) errors.clusterName = 'Cluster name is required';
+    if (!config.storageClass) errors.storageClass = 'Storage class is required';
+    if (!config.description) errors.description = 'Description is required';
+    if (!config.deploymentMode) errors.deploymentMode = 'Deployment mode is required';
+    if (!config.environment) errors.environment = 'Environment is required';
+    return errors;
+  };
 
-    const allTabErrors = validateAllTabs(config, prototypeSettings.skipValidation);
-    const flatErrors = Object.values(allTabErrors).reduce((acc, tabErrors) => ({ ...acc, ...tabErrors }), {});
+  const validateNetworkTabForUI = (config: ClusterConfig): ValidationErrors => {
+    const errors: ValidationErrors = {};
+    if (!config.domain) errors.domain = 'Domain is required';
+    return errors;
+  };
+
+  const validateAdminTabForUI = (config: ClusterConfig): ValidationErrors => {
+    const errors: ValidationErrors = {};
+    if (!config.adminUsername) errors.adminUsername = 'Admin username is required';
+    if (!config.adminPassword) errors.adminPassword = 'Admin password is required';
+    if (!config.adminEmail) errors.adminEmail = 'Admin email is required';
+    if (!config.licenseKey) errors.licenseKey = 'License key is required';
+    return errors;
+  };
+
+  const validateDatabaseTabForUI = (config: ClusterConfig): ValidationErrors => {
+    const errors: ValidationErrors = {};
+    if (config.databaseType === 'external') {
+      if (!config.databaseConfig?.host) errors['databaseConfig.host'] = 'Database host is required';
+      if (!config.databaseConfig?.username) errors['databaseConfig.username'] = 'Database username is required';
+      if (!config.databaseConfig?.password) errors['databaseConfig.password'] = 'Database password is required';
+      if (!config.databaseConfig?.database) errors['databaseConfig.database'] = 'Database name is required';
+    }
+    return errors;
+    if (config.databaseType === 'external') {
+      if (!config.databaseConfig?.host) errors['databaseConfig.host'] = 'Database host is required';
+      if (!config.databaseConfig?.username) errors['databaseConfig.username'] = 'Database username is required';
+      if (!config.databaseConfig?.password) errors['databaseConfig.password'] = 'Database password is required';
+      if (!config.databaseConfig?.database) errors['databaseConfig.database'] = 'Database name is required';
+    }
+    return errors;
+  };
+
+  const validateMonitoringTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for monitoring
+  };
+
+  const validateLoggingTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for logging
+  };
+
+  const validateBackupTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for backup
+  };
+
+  const validateSecurityTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for security
+  };
+
+  const validatePerformanceTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for performance
+  };
+
+  const validateIntegrationsTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for integrations
+  };
+
+  const validateNotificationsTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for notifications
+  };
+
+  const validateCustomizationTabForUI = (config: ClusterConfig): ValidationErrors => {
+    return {}; // No required fields for customization
+  };
+
+  const validateCurrentTab = (currentTab: TabName): ValidationErrors => {
+    switch (currentTab) {
+      case 'cluster':
+        return validateClusterTab(config, prototypeSettings.skipValidation);
+      case 'network':
+        return validateNetworkTab(config, prototypeSettings.skipValidation);
+      case 'admin':
+        return validateAdminTab(config, prototypeSettings.skipValidation);
+      case 'database':
+        return validateDatabaseTab(config, prototypeSettings.skipValidation);
+      case 'monitoring':
+        return validateMonitoringTab(config, prototypeSettings.skipValidation);
+      case 'logging':
+        return validateLoggingTab(config, prototypeSettings.skipValidation);
+      case 'backup':
+        return validateBackupTab(config, prototypeSettings.skipValidation);
+      case 'security':
+        return validateSecurityTab(config, prototypeSettings.skipValidation);
+      case 'performance':
+        return validatePerformanceTab(config, prototypeSettings.skipValidation);
+      case 'integrations':
+        return validateIntegrationsTab(config, prototypeSettings.skipValidation);
+      case 'notifications':
+        return validateNotificationsTab(config, prototypeSettings.skipValidation);
+      case 'customization':
+        return validateCustomizationTab(config, prototypeSettings.skipValidation);
+      default:
+        return {};
+    }
+  };
+
+  const clearError = (field: string) => {
+    // Clear the specific field error
+    setErrors(prev => ({ ...prev, [field]: undefined }));
+  };
+
+  const revalidateCurrentTab = () => {
+    // Only re-validate if we've already attempted submission (allTabsValidated is true)
+    if (!allTabsValidated) {
+      return;
+    }
     
-    setErrors(flatErrors);
-    setAllTabsValidated(true);
+    // Re-validate the current tab to check if it still has errors
+    const currentTabErrors = validateCurrentTab(currentConfigStep);
+    
+    // Update the errors for the current tab
+    setErrors(prev => {
+      const newErrors = { ...prev };
+      
+      // Clear all errors for the current tab first
+      Object.keys(newErrors).forEach(key => {
+        if (isFieldFromCurrentTab(key, currentConfigStep)) {
+          delete newErrors[key];
+        }
+      });
+      
+      // Add the new errors for the current tab
+      return { ...newErrors, ...currentTabErrors };
+    });
+    
+    // Update tabsWithErrors based on whether the tab has errors
+    setTabsWithErrors(prev => {
+      const newSet = new Set(prev);
+      if (Object.keys(currentTabErrors).length === 0) {
+        newSet.delete(currentConfigStep);
+      } else {
+        newSet.add(currentConfigStep);
+      }
+      return newSet;
+    });
+  };
 
-    return findFirstTabWithErrors(allTabErrors);
+  const isFieldFromCurrentTab = (fieldName: string, tabName: TabName): boolean => {
+    switch (tabName) {
+      case 'cluster':
+        return ['clusterName', 'storageClass', 'description', 'deploymentMode', 'environment'].includes(fieldName);
+      case 'network':
+        return ['domain'].includes(fieldName);
+      case 'admin':
+        return ['adminUsername', 'adminPassword', 'adminEmail', 'licenseKey'].includes(fieldName);
+      case 'database':
+        return ['databaseConfig.host', 'databaseConfig.username', 'databaseConfig.password', 'databaseConfig.database'].includes(fieldName);
+      default:
+        return false;
+    }
+  };
+
+  const validateAndSetErrors = (currentTab?: TabName): TabName | null => {
+    if (currentTab) {
+      // Only validate the current tab when navigating
+      const currentTabErrors = validateCurrentTab(currentTab);
+      setErrors(currentTabErrors);
+      
+      // If current tab has errors, return it; otherwise allow navigation
+      return Object.keys(currentTabErrors).length > 0 ? currentTab : null;
+    } else {
+      // Validate all tabs (for final submission)
+      const allTabErrors = validateAllTabs(config, prototypeSettings.skipValidation);
+      const flatErrors = Object.values(allTabErrors).reduce((acc, tabErrors) => ({ ...acc, ...tabErrors }), {});
+      
+      setErrors(flatErrors);
+      setAllTabsValidated(true);
+      
+      // Track which tabs have errors for visual highlighting
+      const tabsWithErrorsSet = new Set<TabName>();
+      const tabsWithRequiredFieldsSet = new Set<TabName>();
+      
+      Object.entries(allTabErrors).forEach(([tabName, tabErrors]) => {
+        if (Object.keys(tabErrors).length > 0) {
+          tabsWithErrorsSet.add(tabName as TabName);
+          tabsWithRequiredFieldsSet.add(tabName as TabName);
+        }
+      });
+      
+      setTabsWithErrors(tabsWithErrorsSet);
+      setTabsMarkedAsRequired(prev => {
+        const newSet = new Set(prev);
+        tabsWithRequiredFieldsSet.forEach(tab => newSet.add(tab));
+        return newSet;
+      });
+
+      return findFirstTabWithErrors(allTabErrors);
+    }
   };
 
   const hasValidationErrors = (): boolean => {
-    if (prototypeSettings.skipValidation) return false;
-    
     const allTabErrors = validateAllTabs(config, prototypeSettings.skipValidation);
     return findFirstTabWithErrors(allTabErrors) !== null;
+  };
+
+  const markTabAsVisited = (tab: TabName) => {
+    setVisitedTabs(prev => new Set([...prev, tab]));
+  };
+
+  // Auto-revalidate current tab when config changes
+  useEffect(() => {
+    // Only revalidate if all tabs have been validated (i.e., after submission attempt)
+    if (allTabsValidated) {
+      revalidateCurrentTab();
+    }
+  }, [config, currentConfigStep]);
+
+  const isTabComplete = (tab: TabName): boolean => {
+    // Only show as complete if:
+    // 1. The tab has been visited AND
+    // 2. It has no validation errors
+    if (!visitedTabs.has(tab)) return false;
+    
+    const tabErrors = validateCurrentTabForRequired(tab);
+    return Object.keys(tabErrors).length === 0;
+  };
+  
+  const hasTabErrors = (tab: TabName): boolean => {
+    return tabsWithErrors.has(tab);
   };
 
   return {
     errors,
     allTabsValidated,
+    visitedTabs,
+    currentConfigStep,
     clearError,
+    revalidateCurrentTab,
     validateAndSetErrors,
-    hasValidationErrors
+    hasValidationErrors,
+    validateCurrentTab,
+    markTabAsVisited,
+    isTabComplete,
+    isTabRequired,
+    hasTabErrors
   };
 };

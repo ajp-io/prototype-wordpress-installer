@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import StepNavigation from './StepNavigation';
-import WelcomeStep from './WelcomeStep';
+import LoginStep from './WelcomeStep';
 import ConfigurationStep from './configuration/ConfigurationStep';
 import SetupStep from './SetupStep';
 import ConsolidatedInstallationStep from './ConsolidatedInstallationStep';
@@ -10,11 +10,11 @@ import { WordPressLogo } from '../common/Logo';
 import { useWizardMode } from '../../contexts/WizardModeContext';
 
 const InstallWizard: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState<WizardStep>('welcome');
+  const [currentStep, setCurrentStep] = useState<WizardStep>('login');
   const { text } = useWizardMode();
 
   const goToNextStep = () => {
-    const steps: WizardStep[] = ['welcome', 'configuration', 'setup', 'installation', 'completion'];
+    const steps: WizardStep[] = ['login', 'configuration', 'setup', 'installation', 'completion'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1]);
@@ -22,7 +22,7 @@ const InstallWizard: React.FC = () => {
   };
 
   const goToPreviousStep = () => {
-    const steps: WizardStep[] = ['welcome', 'configuration', 'setup', 'installation', 'completion'];
+    const steps: WizardStep[] = ['login', 'configuration', 'setup', 'installation', 'completion'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1]);
@@ -31,8 +31,8 @@ const InstallWizard: React.FC = () => {
 
   const renderStep = () => {
     switch (currentStep) {
-      case 'welcome':
-        return <WelcomeStep onNext={goToNextStep} />;
+      case 'login':
+        return <LoginStep onNext={goToNextStep} />;
       case 'configuration':
         return <ConfigurationStep onNext={goToNextStep} onBack={goToPreviousStep} />;
       case 'setup':

@@ -24,6 +24,13 @@ const NetworkConfigTab: React.FC<NetworkConfigTabProps> = ({
 }) => {
   return (
     <div className="space-y-6">
+      <div className="pb-4 mb-8">
+        <h3 className="text-xl font-semibold text-gray-900 mb-2">Network</h3>
+        <p className="text-gray-600">
+          Configure network settings including domain, proxy settings, and HTTPS options for your WordPress Enterprise installation.
+        </p>
+      </div>
+
       <Input
         id="domain"
         label="Domain"

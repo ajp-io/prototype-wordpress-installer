@@ -11,7 +11,7 @@ interface AdminConfigTabProps {
   skipValidation: boolean;
   isReadOnly?: boolean;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFileChange: (file: File) => void;
   onFileRemove: () => void;
 }
 
@@ -30,6 +30,13 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
     fileInputRef.current?.click();
   };
 
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      onFileChange(file);
+    }
+  };
+
   const handleFileRemove = () => {
     // Clear the file input
     if (fileInputRef.current) {
@@ -39,6 +46,13 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
   };
   return (
     <div className="space-y-6">
+      <div className="pb-4 mb-8">
+        <h3 className="text-xl font-semibold text-gray-900 mb-2">Admin Account</h3>
+        <p className="text-gray-600">
+          Set up the administrator account credentials and upload your WordPress Enterprise license key.
+        </p>
+      </div>
+
       <Input
         id="adminUsername"
         label="Admin Username"
@@ -89,8 +103,7 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
           <input
             type="file"
             ref={fileInputRef}
-            onChange={onFileChange}
-            accept=".key,.txt"
+            onChange={handleFileInputChange}
             className="hidden"
             disabled={isReadOnly}
           />
