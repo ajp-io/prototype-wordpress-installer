@@ -31,7 +31,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
       return [
         { id: 'login', name: 'Log In', icon: LogIn },
         { id: 'configuration', name: 'Configure', icon: Server },
-        { id: 'setup', name: 'Setup', icon: Settings },
+        { id: 'setup', name: 'Set Up', icon: Settings },
         { id: 'completion', name: 'Commands', icon: Terminal }
       ];
     }
@@ -39,7 +39,7 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
     return [
       { id: 'login', name: 'Log In', icon: LogIn },
       { id: 'configuration', name: 'Configure', icon: Server },
-      { id: 'setup', name: 'Setup', icon: Settings },
+      { id: 'setup', name: 'Set Up', icon: Settings },
       { id: 'installation', name: mode === 'upgrade' ? 'Upgrade' : 'Install', icon: Download },
       { id: 'completion', name: 'Finish', icon: CheckCircle }
     ];
