@@ -275,9 +275,8 @@ export const useConfigValidation = (currentConfigStep: TabName) => {
   const isTabComplete = (tab: TabName): boolean => {
     // Only show as complete if:
     // 1. The tab has been visited AND
-    // 2. The user has navigated away from it (it's not the current tab) AND  
-    // 3. It has no validation errors
-    if (!visitedTabs.has(tab) || tab === currentConfigStep) return false;
+    // 2. It has no validation errors
+    if (!visitedTabs.has(tab)) return false;
     
     const tabErrors = validateCurrentTabForRequired(tab);
     return Object.keys(tabErrors).length === 0;
