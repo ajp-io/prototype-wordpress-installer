@@ -322,7 +322,7 @@ const PrototypeSettings: React.FC = () => {
 
             <div className="border-t border-gray-200 pt-
   )
-}6">
+            <div className="border-t border-gray-200 pt-6">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Configuration Display Settings</h2>
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
