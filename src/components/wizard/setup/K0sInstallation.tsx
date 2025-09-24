@@ -20,7 +20,6 @@ const K0sInstallation: React.FC<K0sInstallationProps> = ({ onComplete }) => {
     nodeMetrics,
     pendingNodes,
     isMultiNode,
-    useNodeRoles,
     setSelectedRole,
     handleStartNodeJoin,
     REQUIRED_NODES_WITH_ROLES
@@ -34,7 +33,7 @@ const K0sInstallation: React.FC<K0sInstallationProps> = ({ onComplete }) => {
 
   return (
     <div className="space-y-6">
-      {status.phase === 'ready' && isMultiNode && useNodeRoles && (
+      {status.phase === 'ready' && isMultiNode && (
         <NodeJoinSection
           selectedRole={selectedRole}
           joinedNodes={joinedNodes}
@@ -44,8 +43,8 @@ const K0sInstallation: React.FC<K0sInstallationProps> = ({ onComplete }) => {
           onStartNodeJoin={handleStartNodeJoin}
           copied={copied}
           themeColor={themeColor}
-          skipNodeValidation={prototypeSettings.skipNodeValidation}
-          useNodeRoles={useNodeRoles}
+          skipNodeValidation={false}
+          useNodeRoles={false}
         />
       )}
       
@@ -53,7 +52,6 @@ const K0sInstallation: React.FC<K0sInstallationProps> = ({ onComplete }) => {
         nodes={nodeMetrics} 
         pendingNodes={pendingNodes}
         isMultiNode={isMultiNode}
-        useNodeRoles={useNodeRoles}
       />
     </div>
   );

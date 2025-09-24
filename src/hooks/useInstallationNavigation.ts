@@ -35,18 +35,8 @@ export const useInstallationNavigation = ({
     if (isLinuxMode) {
       // For Linux mode, check which step we're on
       if (currentStep === 'hosts') {
-        // If skipNodeValidation is enabled, can proceed as soon as hosts are complete
-        if (prototypeSettings.skipNodeValidation && hostsComplete) {
-          return true;
-        }
-        
-        if (prototypeSettings.useNodeRoles && prototypeSettings.enableMultiNode) {
-          // For role-based installations, can only proceed when all required nodes are met
-          return hostsComplete && allRequiredNodesMet;
-        } else {
-          // For non-role-based installations, can proceed if complete and no failures
-          return hostsComplete && !hasHostFailures;
-        }
+        // Can proceed if hosts are complete and either no failures or skip setting enabled
+        return hostsComplete && (!hasHostFailures || prototypeSettings.skipHostPreflights);
       } else if (currentStep === 'infrastructure') {
         return steps.infrastructure.status === 'completed';
       } else if (currentStep === 'preflights') {
@@ -74,18 +64,8 @@ export const useInstallationNavigation = ({
       // For single-node, never show Next button since it auto-proceeds
       // For multi-node, show Next button when complete and no failures
       if (prototypeSettings.enableMultiNode) {
-        // If skipNodeValidation is enabled, show button as soon as hosts are complete
-        if (prototypeSettings.skipNodeValidation && hostsComplete) {
-          return true;
-        }
-        
-        if (prototypeSettings.useNodeRoles) {
-          // For role-based installations, show button only when all required nodes are met
-          return hostsComplete && allRequiredNodesMet;
-        } else {
-          // For non-role-based installations, show button when complete and no failures
-          return hostsComplete && !hasHostFailures;
-        }
+        // Show button when hosts are complete
+        return hostsComplete;
       }
       return false; // Single-node never shows button
     } else if (currentStep === 'infrastructure') {

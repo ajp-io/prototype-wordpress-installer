@@ -51,14 +51,6 @@ const PrototypeSettings: React.FC = () => {
     updatePrototypeSettings({ skipHostPreflights: e.target.checked });
   };
 
-  const handleBlockOnAppPreflightsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updatePrototypeSettings({ blockOnAppPreflights: e.target.checked });
-  };
-
-  const handleUseNodeRolesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updatePrototypeSettings({ useNodeRoles: e.target.checked });
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b border-gray-200">
@@ -149,24 +141,6 @@ const PrototypeSettings: React.FC = () => {
                     Enable multi-node support for Linux installations
                   </label>
                 </div>
-
-                <div className="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    id="useNodeRoles"
-                    checked={prototypeSettings.useNodeRoles}
-                    onChange={handleUseNodeRolesChange}
-                    disabled={!prototypeSettings.enableMultiNode}
-                    className="h-4 w-4 border-gray-300 rounded focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={{
-                      accentColor: prototypeSettings.themeColor,
-                      '--tw-ring-color': prototypeSettings.themeColor
-                    } as React.CSSProperties}
-                  />
-                  <label htmlFor="useNodeRoles" className={`text-sm ${!prototypeSettings.enableMultiNode ? 'text-gray-400' : 'text-gray-700'}`}>
-                    Use node roles (application and database nodes)
-                  </label>
-                </div>
               </div>
             </div>
 
@@ -210,23 +184,6 @@ const PrototypeSettings: React.FC = () => {
                   />
                   <label htmlFor="skipValidation" className="text-sm text-gray-700">
                     Skip required field validation on configuration page
-                  </label>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    id="skipNodeValidation"
-                    checked={prototypeSettings.skipNodeValidation}
-                    onChange={handleSkipNodeValidationChange}
-                    className="h-4 w-4 border-gray-300 rounded focus:ring-2 focus:ring-offset-2"
-                    style={{
-                      accentColor: prototypeSettings.themeColor,
-                      '--tw-ring-color': prototypeSettings.themeColor
-                    } as React.CSSProperties}
-                  />
-                  <label htmlFor="skipNodeValidation" className="text-sm text-gray-700">
-                    Allow proceeding without all required hosts
                   </label>
                 </div>
 

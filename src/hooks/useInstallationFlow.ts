@@ -118,18 +118,11 @@ export const useInstallationFlow = () => {
     setHostsComplete(true);
     setHasHostFailures(hasFailures);
     
-    // For role-based installations, hasFailures indicates whether all required nodes are met
-    // (inverted logic: hasFailures = true means not all nodes are met)
-    if (prototypeSettings.useNodeRoles && prototypeSettings.enableMultiNode) {
-      setAllRequiredNodesMet(!hasFailures);
-    } else {
-      setAllRequiredNodesMet(true); // For non-role-based installations, always consider requirements met
-    }
+    setAllRequiredNodesMet(true);
     
     console.log('handleHostsComplete called:', { 
       hasFailures, 
-      enableMultiNode: prototypeSettings.enableMultiNode,
-      skipNodeValidation: prototypeSettings.skipNodeValidation 
+      enableMultiNode: prototypeSettings.enableMultiNode
     });
     
     // Auto-proceed conditions - ONLY for single-node successful installations
@@ -145,7 +138,7 @@ export const useInstallationFlow = () => {
         startInfrastructureInstallation();
       }, 100);
     } else {
-      // For multi-node installations (regardless of skipNodeValidation) or failed single-node installations, 
+      // For multi-node installations or failed single-node installations, 
       // keep status as 'running' until user manually proceeds
       // Don't auto-proceed - let user manually click Next when ready
       console.log('Multi-node or failed installation - waiting for manual action');

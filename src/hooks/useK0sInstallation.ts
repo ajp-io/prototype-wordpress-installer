@@ -46,7 +46,7 @@ const baseNodeMetrics = {
 export const useK0sInstallation = (onComplete: (hasFailures?: boolean) => void) => {
   const { config, prototypeSettings } = useConfig();
   const isMultiNode = prototypeSettings.enableMultiNode;
-  const useNodeRoles = prototypeSettings.useNodeRoles && isMultiNode;
+  const useNodeRoles = false; // Simplified - no more node roles
   
   const [phase, setPhase] = useState<'preflight' | 'installing'>('preflight');
   const [status, setStatus] = useState<K0sInstallStatus>({
@@ -93,21 +93,10 @@ export const useK0sInstallation = (onComplete: (hasFailures?: boolean) => void) 
   }, [phase]);
 
   useEffect(() => {
-    const requiredNodes = useNodeRoles ? REQUIRED_NODES_WITH_ROLES : 
-                         isMultiNode ? REQUIRED_NODES : SINGLE_NODE;
-    
-    const allRequiredNodesMet = useNodeRoles ? 
-      (joinedNodes.application >= requiredNodes.application && joinedNodes.database >= requiredNodes.database) :
-      true;
-    
     if (status.phase === 'ready') {
-      if (useNodeRoles) {
-        onComplete(hasPreflightFailures || !allRequiredNodesMet);
-      } else {
-        onComplete(hasPreflightFailures);
-      }
+      onComplete(hasPreflightFailures);
     }
-  }, [status.phase, hasPreflightFailures, joinedNodes, useNodeRoles]);
+  }, [status.phase, hasPreflightFailures]);
 
   const startPreflightChecks = async () => {
     try {
