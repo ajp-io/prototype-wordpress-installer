@@ -96,7 +96,8 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
 
   const handleNextClick = () => {
     if (currentStep === 'hosts') {
-      // Mark hosts as completed when user clicks Next
+      // Mark hosts as completed when user clicks Next and proceed to infrastructure
+      updateStepStatus('hosts', { status: 'completed' });
       startInfrastructureInstallation();
     } else if (currentStep === 'infrastructure') {
       startPreflightChecks();

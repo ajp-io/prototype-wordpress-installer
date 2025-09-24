@@ -126,8 +126,10 @@ export const useInstallationFlow = () => {
       setAllRequiredNodesMet(true); // For non-role-based installations, always consider requirements met
     }
     
-    // For single-node successful installations, auto-proceed to infrastructure
-    if (!hasFailures && !prototypeSettings.enableMultiNode) {
+    // Auto-proceed conditions:
+    // 1. Single-node successful installations
+    // 2. skipNodeValidation is enabled (regardless of failures)
+    if ((!hasFailures && !prototypeSettings.enableMultiNode) || prototypeSettings.skipNodeValidation) {
       // Mark hosts as completed and auto-proceed to infrastructure
       updateStepStatus('hosts', { status: 'completed' });
       setTimeout(() => {

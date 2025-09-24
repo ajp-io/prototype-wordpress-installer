@@ -35,6 +35,11 @@ export const useInstallationNavigation = ({
     if (isLinuxMode) {
       // For Linux mode, check which step we're on
       if (currentStep === 'hosts') {
+        // If skipNodeValidation is enabled, can proceed as soon as hosts are complete
+        if (prototypeSettings.skipNodeValidation && hostsComplete) {
+          return true;
+        }
+        
         if (prototypeSettings.useNodeRoles && prototypeSettings.enableMultiNode) {
           // For role-based installations, can only proceed when all required nodes are met
           return hostsComplete && allRequiredNodesMet;
@@ -69,6 +74,11 @@ export const useInstallationNavigation = ({
       // For single-node, never show Next button since it auto-proceeds
       // For multi-node, show Next button when complete and no failures
       if (prototypeSettings.enableMultiNode) {
+        // If skipNodeValidation is enabled, show button as soon as hosts are complete
+        if (prototypeSettings.skipNodeValidation && hostsComplete) {
+          return true;
+        }
+        
         if (prototypeSettings.useNodeRoles) {
           // For role-based installations, show button only when all required nodes are met
           return hostsComplete && allRequiredNodesMet;
