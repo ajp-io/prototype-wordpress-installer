@@ -59,7 +59,7 @@ export interface InstallationStatus {
   progress: number;
 }
 
-export type WizardStep = 'welcome' | 'configuration' | 'setup' | 'installation' | 'completion';
+export type WizardStep = 'login' | 'configuration' | 'setup' | 'installation' | 'completion';
 
 export interface ImagePushStatus {
   image: string;

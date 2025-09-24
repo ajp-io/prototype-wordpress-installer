@@ -6,8 +6,8 @@ export type WizardMode = 'install' | 'upgrade';
 interface WizardText {
   title: string;
   subtitle: string;
-  welcomeTitle: string;
-  welcomeDescription: string;
+  loginTitle: string;
+  loginDescription: string;
   setupTitle: string;
   setupDescription: string;
   configurationTitle: string;
@@ -18,7 +18,7 @@ interface WizardText {
   installationDescription: string;
   completionTitle: string;
   completionDescription: string;
-  welcomeButtonText: string;
+  loginButtonText: string;
   nextButtonText: string;
   nextButtonText: string;
 }
@@ -27,8 +27,8 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
   install: {
     title: 'WordPress Enterprise',
     subtitle: isDryRun ? 'Dry Run' : isConfigureOnly ? 'Configuration' : 'Installation Wizard',
-    welcomeTitle: 'Welcome to WordPress Enterprise',
-    welcomeDescription: isDryRun 
+    loginTitle: 'Welcome to WordPress Enterprise',
+    loginDescription: isDryRun 
       ? 'This wizard will help you prepare and validate your WordPress Enterprise configuration.'
       : isConfigureOnly 
         ? `This wizard will guide you through configuring WordPress Enterprise for your ${isEmbedded ? 'Linux machine' : 'Kubernetes cluster'}.`
@@ -43,14 +43,14 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
     installationDescription: 'Install the WordPress Enterprise components.',
     completionTitle: isDryRun ? 'Configuration Complete' : 'Installation Complete!',
     completionDescription: isDryRun ? 'Your configuration is ready to use.' : 'WordPress Enterprise has been installed successfully.',
-    welcomeButtonText: isDryRun ? 'Start Configuration' : 'Continue',
+    loginButtonText: isDryRun ? 'Start Configuration' : 'Continue',
     nextButtonText: isDryRun ? 'Next: Review Commands' : 'Next: Install',
   },
   upgrade: {
     title: 'WordPress Enterprise',
     subtitle: 'Upgrade Wizard',
-    welcomeTitle: 'Welcome to WordPress Enterprise',
-    welcomeDescription: `This wizard will guide you through upgrading WordPress Enterprise on your ${isEmbedded ? 'Linux machine' : 'Kubernetes cluster'}.`,
+    loginTitle: 'Welcome to WordPress Enterprise',
+    loginDescription: `This wizard will guide you through upgrading WordPress Enterprise on your ${isEmbedded ? 'Linux machine' : 'Kubernetes cluster'}.`,
     setupTitle: 'Setup',
     setupDescription: 'Setup the environment settings for your upgrade.',
     configurationTitle: 'Upgrade Configuration',
@@ -61,7 +61,7 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
     installationDescription: 'Please wait while we upgrade WordPress Enterprise.',
     completionTitle: 'Upgrade Complete!',
     completionDescription: 'WordPress Enterprise has been successfully upgraded.',
-    welcomeButtonText: 'Start Upgrade',
+    loginButtonText: 'Start Upgrade',
     nextButtonText: 'Next: Upgrade',
   },
 });
