@@ -82,12 +82,24 @@ const HostsDetail: React.FC<HostsDetailProps> = ({
     const hasFailures = hosts.some(h => h.phase === 'failed');
     const isSuccessful = hosts.some(h => h.phase === 'ready') && !hasFailures;
 
+    console.log('HostsDetail: Checking completion status', {
+      allHostsReady,
+      hasFailures,
+      isSuccessful,
+      isRevisiting,
+      isMultiNode,
+      hosts: hosts.map(h => ({ name: h.name, phase: h.phase }))
+    });
+
     if (allHostsReady && !isRevisiting) {
+      console.log('HostsDetail: All hosts ready, calling onComplete', { hasFailures });
       // For single-node installations, auto-proceed if successful
       if (!isMultiNode && isSuccessful) {
+        console.log('HostsDetail: Single-node success, auto-proceeding');
         // Immediately proceed for single-node success
         onComplete?.(false);
       } else {
+        console.log('HostsDetail: Multi-node or failed, calling onComplete with hasFailures');
         // For multi-node or failed installations, just call onComplete
         onComplete?.(hasFailures);
       }
