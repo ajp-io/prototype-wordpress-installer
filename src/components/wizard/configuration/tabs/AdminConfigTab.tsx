@@ -11,7 +11,7 @@ interface AdminConfigTabProps {
   skipValidation: boolean;
   isReadOnly?: boolean;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFileChange: (file: File) => void;
   onFileRemove: () => void;
 }
 
@@ -28,6 +28,13 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
 
   const handleFileSelect = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      onFileChange(file);
+    }
   };
 
   const handleFileRemove = () => {
@@ -96,7 +103,7 @@ const AdminConfigTab: React.FC<AdminConfigTabProps> = ({
           <input
             type="file"
             ref={fileInputRef}
-            onChange={onFileChange}
+            onChange={handleFileInputChange}
             className="hidden"
             disabled={isReadOnly}
           />
