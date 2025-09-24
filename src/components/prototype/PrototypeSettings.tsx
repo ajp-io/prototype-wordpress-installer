@@ -51,6 +51,10 @@ const PrototypeSettings: React.FC = () => {
     updatePrototypeSettings({ skipHostPreflights: e.target.checked });
   };
 
+  const handleBlockOnAppPreflightsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updatePrototypeSettings({ blockOnAppPreflights: e.target.checked });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm border-b border-gray-200">
