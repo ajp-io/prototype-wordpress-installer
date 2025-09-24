@@ -41,6 +41,7 @@ const ConsolidatedInstallationStep: React.FC<ConsolidatedInstallationStepProps> 
     startInfrastructureInstallation,
     startPreflightChecks,
     startApplicationInstallation,
+    updateStepStatus,
   } = useInstallationFlow();
 
   const { allLogs, showLogs, addToAllLogs, toggleLogs } = useInstallationLogs();
