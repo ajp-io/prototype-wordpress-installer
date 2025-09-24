@@ -46,6 +46,16 @@ export const useConfigForm = ({
     }
   };
 
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, clearError?: (field: string) => void) => {
+    const { id, checked } = e.target;
+    updateConfig({ [id]: checked });
+    
+    // Clear the error for this field if clearError function is provided
+    if (clearError) {
+      clearError(id);
+    }
+  };
+
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>, clearError?: (field: string) => void) => {
     const { name, value } = e.target;
     updateConfig({ [name]: value });
@@ -56,7 +66,7 @@ export const useConfigForm = ({
     }
   };
 
-  const handleFileChange = (file: File, revalidateCurrentTab: () => void) => {
+  const handleFileChange = (file: File) => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -65,11 +75,6 @@ export const useConfigForm = ({
           licenseKey: content as string,
           licenseFileName: file.name
         });
-        
-        // Re-validate the current tab after a brief delay to allow state to update
-        setTimeout(() => {
-          revalidateCurrentTab();
-        }, 0);
       };
       reader.readAsText(file);
     }
