@@ -11,7 +11,6 @@ interface UseConfigFormProps {
   setCurrentConfigStep: (step: TabName) => void;
   configSteps: TabName[];
   markTabAsVisited: (tab: TabName) => void;
-  revalidateCurrentTab: () => void;
 }
 
 export const useConfigForm = ({ 
@@ -21,8 +20,7 @@ export const useConfigForm = ({
   currentConfigStep,
   setCurrentConfigStep,
   configSteps,
-  markTabAsVisited,
-  revalidateCurrentTab
+  markTabAsVisited
 }: UseConfigFormProps) => {
   const { config, updateConfig, prototypeSettings } = useConfig();
   const { mode } = useWizardMode();
@@ -48,16 +46,6 @@ export const useConfigForm = ({
     }
   };
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, clearError?: (field: string) => void) => {
-    const { id, checked } = e.target;
-    updateConfig({ [id]: checked });
-    
-    // Clear the error for this field if clearError function is provided
-    if (clearError) {
-      clearError(id);
-    }
-  };
-
   const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>, clearError?: (field: string) => void) => {
     const { name, value } = e.target;
     updateConfig({ [name]: value });
@@ -66,16 +54,6 @@ export const useConfigForm = ({
     if (clearError) {
       clearError(name);
     }
-    
-    // Re-validate the current tab after a brief delay to allow state to update
-    setTimeout(() => {
-      revalidateCurrentTab();
-    }, 0);
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
         const content = event.target?.result;
@@ -83,11 +61,6 @@ export const useConfigForm = ({
           licenseKey: content as string,
           licenseFileName: file.name
         });
-        
-        // Re-validate the current tab after a brief delay to allow state to update
-        setTimeout(() => {
-          revalidateCurrentTab();
-        }, 0);
       };
       reader.readAsText(file);
     }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useConfig } from '../../../../contexts/ConfigContext';
 import { ValidationErrors, TabName, validateAllTabs, findFirstTabWithErrors, validateClusterTab, validateNetworkTab, validateAdminTab, validateDatabaseTab, validateMonitoringTab, validateLoggingTab, validateBackupTab, validateSecurityTab, validatePerformanceTab, validateIntegrationsTab, validateNotificationsTab, validateCustomizationTab } from '../utils/validationUtils';
 
@@ -263,6 +263,14 @@ export const useConfigValidation = (currentConfigStep: TabName) => {
   const markTabAsVisited = (tab: TabName) => {
     setVisitedTabs(prev => new Set([...prev, tab]));
   };
+
+  // Auto-revalidate current tab when config changes
+  useEffect(() => {
+    // Only revalidate if the tab has been visited or all tabs have been validated
+    if (visitedTabs.has(currentConfigStep) || allTabsValidated) {
+      revalidateCurrentTab();
+    }
+  }, [config, currentConfigStep]);
 
   const isTabComplete = (tab: TabName): boolean => {
     // Only show as complete if:
