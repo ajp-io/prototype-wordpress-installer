@@ -74,7 +74,7 @@ const PrototypeSettings: React.FC = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Card>
           <div className="space-y-6">
-            <div>
+            <div className="border-t border-gray-200 pt-6">
               <h2 className="text-lg font-medium text-gray-900 mb-4">General Settings</h2>
               <div className="space-y-4">
                 <div className="space-y-2">
