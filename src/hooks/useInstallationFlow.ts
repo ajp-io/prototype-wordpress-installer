@@ -268,5 +268,6 @@ export const useInstallationFlow = () => {
     startInfrastructureInstallation,
     startPreflightChecks,
     startApplicationInstallation,
+    updateStepStatus,
   };
 };
