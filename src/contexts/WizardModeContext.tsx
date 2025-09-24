@@ -43,7 +43,7 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
     installationDescription: 'Install the WordPress Enterprise components.',
     completionTitle: isDryRun ? 'Configuration Complete' : 'Installation Complete!',
     completionDescription: isDryRun ? 'Your configuration is ready to use.' : 'WordPress Enterprise has been installed successfully.',
-    loginButtonText: isDryRun ? 'Start Configuration' : 'Continue',
+    loginButtonText: isDryRun ? 'Start Configuration' : 'Log In',
     nextButtonText: isDryRun ? 'Next: Review Commands' : 'Next: Install',
   },
   upgrade: {
@@ -61,7 +61,7 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
     installationDescription: 'Please wait while we upgrade WordPress Enterprise.',
     completionTitle: 'Upgrade Complete!',
     completionDescription: 'WordPress Enterprise has been successfully upgraded.',
-    loginButtonText: 'Start Upgrade',
+    loginButtonText: 'Log In',
     nextButtonText: 'Next: Upgrade',
   },
 });
