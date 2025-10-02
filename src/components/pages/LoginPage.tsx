@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Card from '../common/Card';
 import Button from '../common/Button';
 import Input from '../common/Input';
@@ -8,7 +7,6 @@ import { ChevronRight, Lock, Server, Settings, Download, CheckCircle } from 'luc
 import { useConfig } from '../../contexts/ConfigContext';
 
 const LoginPage: React.FC = () => {
-  const navigate = useNavigate();
   const { prototypeSettings } = useConfig();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -21,7 +19,9 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = () => {
     if (password.trim() !== '') {
-      navigate('/');
+      // Set authentication state and trigger re-render
+      localStorage.setItem('wordpress-authenticated', 'true');
+      window.location.reload();
     } else {
       setError('Password is required');
     }

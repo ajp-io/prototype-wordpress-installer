@@ -8,9 +8,13 @@ import { useWizardMode } from '../../contexts/WizardModeContext';
 import { useConfig } from '../../contexts/ConfigContext';
 import Card from '../common/Card';
 import Button from '../common/Button';
-import { Terminal, Copy, ClipboardCheck, ArrowRight } from 'lucide-react';
+import { Terminal, Copy, ClipboardCheck, ArrowRight, LogOut } from 'lucide-react';
 
-const DryRun: React.FC = () => {
+interface DryRunProps {
+  onLogout: () => void;
+}
+
+const DryRun: React.FC<DryRunProps> = ({ onLogout }) => {
   const [currentStep, setCurrentStep] = useState<WizardStep>('configuration');
   const { text } = useWizardMode();
   const { prototypeSettings } = useConfig();
@@ -171,6 +175,14 @@ const DryRun: React.FC = () => {
                 <p className="text-sm text-gray-500">{text.subtitle}</p>
               </div>
             </div>
+            <button
+              onClick={onLogout}
+              className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+              title="Logout"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       </header>

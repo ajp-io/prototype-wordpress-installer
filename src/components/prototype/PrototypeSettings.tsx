@@ -74,10 +74,10 @@ const PrototypeSettings: React.FC = () => {
             <div className="flex space-x-3">
               <Button
                 variant="outline"
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/')}
                 icon={<ExternalLink className="w-4 h-4" />}
               >
-                View Login Page
+                Go to App
               </Button>
             </div>
           </div>

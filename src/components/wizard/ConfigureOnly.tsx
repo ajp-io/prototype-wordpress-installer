@@ -4,8 +4,13 @@ import ConfigurationStep from './configuration/ConfigurationStep';
 import { WizardStep } from '../../types';
 import { WordPressLogo } from '../common/Logo';
 import { useWizardMode } from '../../contexts/WizardModeContext';
+import { LogOut } from 'lucide-react';
 
-const ConfigureOnly: React.FC = () => {
+interface ConfigureOnlyProps {
+  onLogout: () => void;
+}
+
+const ConfigureOnly: React.FC<ConfigureOnlyProps> = ({ onLogout }) => {
   const [currentStep, setCurrentStep] = useState<WizardStep>('configuration');
   const { text } = useWizardMode();
 
@@ -38,6 +43,14 @@ const ConfigureOnly: React.FC = () => {
                 <p className="text-sm text-gray-500">{text.subtitle}</p>
               </div>
             </div>
+            <button
+              onClick={onLogout}
+              className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+              title="Logout"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       </header>

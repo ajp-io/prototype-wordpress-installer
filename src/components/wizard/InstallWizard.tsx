@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import StepNavigation from './StepNavigation';
 import ConfigurationStep from './configuration/ConfigurationStep';
 import SetupStep from './SetupStep';
@@ -10,15 +9,14 @@ import { WordPressLogo } from '../common/Logo';
 import { useWizardMode } from '../../contexts/WizardModeContext';
 import { LogOut } from 'lucide-react';
 
-const InstallWizard: React.FC = () => {
+interface InstallWizardProps {
+  onLogout: () => void;
+}
+
+const InstallWizard: React.FC<InstallWizardProps> = ({ onLogout }) => {
   const [currentStep, setCurrentStep] = useState<WizardStep>('configuration');
   const { text } = useWizardMode();
-  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // In a real app, you'd clear session/tokens here
-    navigate('/login');
-  };
   const goToNextStep = () => {
     const steps: WizardStep[] = ['configuration', 'setup', 'installation', 'completion'];
     const currentIndex = steps.indexOf(currentStep);
@@ -63,7 +61,7 @@ const InstallWizard: React.FC = () => {
               </div>
             </div>
             <button
-              onClick={handleLogout}
+              onClick={onLogout}
               className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
               title="View Login Page"
             >
