@@ -129,11 +129,6 @@ const LoginPage: React.FC = () => {
               </div>
 
               <div className="pt-4 border-t border-gray-200">
-                <p className="text-xs text-gray-500">
-                  The entire process typically takes 10-15 minutes to complete.
-                </p>
-              </div>
-            </div>
           </Card>
         </div>
       </div>
