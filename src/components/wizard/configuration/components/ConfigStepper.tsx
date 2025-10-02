@@ -113,7 +113,7 @@ const ConfigStepper: React.FC<ConfigStepperProps> = ({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     {isRequired && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                         Required
                       </span>
                     )}
