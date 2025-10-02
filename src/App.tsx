@@ -24,6 +24,8 @@ const useAuth = () => {
   const logout = () => {
     localStorage.removeItem('wordpress-authenticated');
     setIsAuthenticated(false);
+    // Force a page reload to ensure we go back to login
+    window.location.reload();
   };
 
   return { isAuthenticated, login, logout };
