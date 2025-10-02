@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import StepNavigation from './StepNavigation';
-import LoginStep from './WelcomeStep';
 import ConfigurationStep from './configuration/ConfigurationStep';
 import SetupStep from './SetupStep';
 import { WizardStep } from '../../types';
@@ -9,10 +8,14 @@ import { useWizardMode } from '../../contexts/WizardModeContext';
 import { useConfig } from '../../contexts/ConfigContext';
 import Card from '../common/Card';
 import Button from '../common/Button';
-import { Terminal, Copy, ClipboardCheck, ArrowRight } from 'lucide-react';
+import { Terminal, Copy, ClipboardCheck, ArrowRight, LogOut } from 'lucide-react';
 
-const DryRun: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState<WizardStep>('login');
+interface DryRunProps {
+  onLogout: () => void;
+}
+
+const DryRun: React.FC<DryRunProps> = ({ onLogout }) => {
+  const [currentStep, setCurrentStep] = useState<WizardStep>('configuration');
   const { text } = useWizardMode();
   const { prototypeSettings } = useConfig();
   const [copied, setCopied] = useState<Record<string, boolean>>({});
@@ -35,9 +38,6 @@ const DryRun: React.FC = () => {
 
   const goToNextStep = () => {
     switch (currentStep) {
-      case 'login':
-        setCurrentStep('configuration');
-        break;
       case 'configuration':
         setCurrentStep('setup');
         break;
@@ -51,9 +51,6 @@ const DryRun: React.FC = () => {
 
   const goToPreviousStep = () => {
     switch (currentStep) {
-      case 'configuration':
-        setCurrentStep('login');
-        break;
       case 'setup':
         setCurrentStep('configuration');
         break;
@@ -155,10 +152,8 @@ const DryRun: React.FC = () => {
 
   const renderStep = () => {
     switch (currentStep) {
-      case 'login':
-        return <LoginStep onNext={goToNextStep} />;
       case 'configuration':
-        return <ConfigurationStep onNext={goToNextStep} onBack={goToPreviousStep} />;
+        return <ConfigurationStep onNext={goToNextStep} onBack={() => {}} />;
       case 'setup':
         return <SetupStep onNext={goToNextStep} onBack={goToPreviousStep} />;
       case 'completion':
@@ -180,6 +175,14 @@ const DryRun: React.FC = () => {
                 <p className="text-sm text-gray-500">{text.subtitle}</p>
               </div>
             </div>
+            <button
+              onClick={onLogout}
+              className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+              title="Logout"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       </header>

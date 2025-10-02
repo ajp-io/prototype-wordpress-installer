@@ -1,11 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../common/Card';
 import Select from '../common/Select';
+import Button from '../common/Button';
 import { WordPressLogo } from '../common/Logo';
 import { useConfig } from '../../contexts/ConfigContext';
+import { ExternalLink } from 'lucide-react';
 
 const PrototypeSettings: React.FC = () => {
   const { prototypeSettings, updatePrototypeSettings } = useConfig();
+  const navigate = useNavigate();
 
   const handleSkipValidationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updatePrototypeSettings({ skipValidation: e.target.checked });
@@ -66,6 +70,15 @@ const PrototypeSettings: React.FC = () => {
                 <h1 className="text-xl font-semibold text-gray-900">Prototype Settings</h1>
                 <p className="text-sm text-gray-500">Configure prototype behavior</p>
               </div>
+            </div>
+            <div className="flex space-x-3">
+              <Button
+                variant="outline"
+                onClick={() => navigate('/')}
+                icon={<ExternalLink className="w-4 h-4" />}
+              >
+                Go to App
+              </Button>
             </div>
           </div>
         </div>

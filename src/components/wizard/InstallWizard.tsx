@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import StepNavigation from './StepNavigation';
-import LoginStep from './WelcomeStep';
 import ConfigurationStep from './configuration/ConfigurationStep';
 import SetupStep from './SetupStep';
 import ConsolidatedInstallationStep from './ConsolidatedInstallationStep';
@@ -8,13 +7,18 @@ import CompletionStep from './CompletionStep';
 import { WizardStep } from '../../types';
 import { WordPressLogo } from '../common/Logo';
 import { useWizardMode } from '../../contexts/WizardModeContext';
+import { LogOut } from 'lucide-react';
 
-const InstallWizard: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState<WizardStep>('login');
+interface InstallWizardProps {
+  onLogout: () => void;
+}
+
+const InstallWizard: React.FC<InstallWizardProps> = ({ onLogout }) => {
+  const [currentStep, setCurrentStep] = useState<WizardStep>('configuration');
   const { text } = useWizardMode();
 
   const goToNextStep = () => {
-    const steps: WizardStep[] = ['login', 'configuration', 'setup', 'installation', 'completion'];
+    const steps: WizardStep[] = ['configuration', 'setup', 'installation', 'completion'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1]);
@@ -22,7 +26,7 @@ const InstallWizard: React.FC = () => {
   };
 
   const goToPreviousStep = () => {
-    const steps: WizardStep[] = ['login', 'configuration', 'setup', 'installation', 'completion'];
+    const steps: WizardStep[] = ['configuration', 'setup', 'installation', 'completion'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1]);
@@ -31,10 +35,8 @@ const InstallWizard: React.FC = () => {
 
   const renderStep = () => {
     switch (currentStep) {
-      case 'login':
-        return <LoginStep onNext={goToNextStep} />;
       case 'configuration':
-        return <ConfigurationStep onNext={goToNextStep} onBack={goToPreviousStep} />;
+        return <ConfigurationStep onNext={goToNextStep} onBack={() => {}} />;
       case 'setup':
         return <SetupStep onNext={goToNextStep} onBack={goToPreviousStep} />;
       case 'installation':
@@ -58,6 +60,14 @@ const InstallWizard: React.FC = () => {
                 <p className="text-sm text-gray-500">{text.subtitle}</p>
               </div>
             </div>
+            <button
+              onClick={onLogout}
+              className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+              title="View Login Page"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       </header>

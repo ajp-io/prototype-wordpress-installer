@@ -6,8 +6,6 @@ export type WizardMode = 'install' | 'upgrade';
 interface WizardText {
   title: string;
   subtitle: string;
-  loginTitle: string;
-  loginDescription: string;
   setupTitle: string;
   setupDescription: string;
   configurationTitle: string;
@@ -18,7 +16,6 @@ interface WizardText {
   installationDescription: string;
   completionTitle: string;
   completionDescription: string;
-  loginButtonText: string;
   nextButtonText: string;
   nextButtonText: string;
 }
@@ -27,12 +24,6 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
   install: {
     title: 'WordPress Enterprise',
     subtitle: isDryRun ? 'Dry Run' : isConfigureOnly ? 'Configuration' : 'Installation Wizard',
-    loginTitle: 'Welcome to WordPress Enterprise',
-    loginDescription: isDryRun 
-      ? 'This wizard will help you prepare and validate your WordPress Enterprise configuration.'
-      : isConfigureOnly 
-        ? `This wizard will guide you through configuring WordPress Enterprise for your ${isEmbedded ? 'Linux machine' : 'Kubernetes cluster'}.`
-        : `This wizard will guide you through installing WordPress Enterprise on your ${isEmbedded ? 'Linux machine' : 'Kubernetes cluster'}.`,
     setupTitle: 'Setup',
     setupDescription: 'Setup the environment settings for your installation.',
     configurationTitle: 'Configuration',
@@ -43,7 +34,6 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
     installationDescription: 'Install the WordPress Enterprise components.',
     completionTitle: isDryRun ? 'Configuration Complete' : 'Installation Complete!',
     completionDescription: isDryRun ? 'Your configuration is ready to use.' : 'WordPress Enterprise has been installed successfully.',
-    loginButtonText: isDryRun ? 'Start Configuration' : 'Log In',
     nextButtonText: isDryRun ? 'Next: Review Commands' : 'Next: Install',
   },
   upgrade: {
@@ -61,7 +51,6 @@ const getTextVariations = (isEmbedded: boolean, isConfigureOnly: boolean = false
     installationDescription: 'Please wait while we upgrade WordPress Enterprise.',
     completionTitle: 'Upgrade Complete!',
     completionDescription: 'WordPress Enterprise has been successfully upgraded.',
-    loginButtonText: 'Log In',
     nextButtonText: 'Next: Upgrade',
   },
 });
