@@ -1,33 +1,26 @@
 import React, { useState } from 'react';
 import StepNavigation from './StepNavigation';
-import LoginStep from './WelcomeStep';
 import ConfigurationStep from './configuration/ConfigurationStep';
 import { WizardStep } from '../../types';
 import { WordPressLogo } from '../common/Logo';
 import { useWizardMode } from '../../contexts/WizardModeContext';
 
 const ConfigureOnly: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState<WizardStep>('login');
+  const [currentStep, setCurrentStep] = useState<WizardStep>('configuration');
   const { text } = useWizardMode();
 
   const goToNextStep = () => {
-    if (currentStep === 'login') {
-      setCurrentStep('configuration');
-    }
+    // No next step in configure-only mode
   };
 
   const goToPreviousStep = () => {
-    if (currentStep === 'configuration') {
-      setCurrentStep('login');
-    }
+    // No previous step in configure-only mode
   };
 
   const renderStep = () => {
     switch (currentStep) {
-      case 'login':
-        return <LoginStep onNext={goToNextStep} />;
       case 'configuration':
-        return <ConfigurationStep onNext={() => {}} onBack={goToPreviousStep} />;
+        return <ConfigurationStep onNext={() => {}} onBack={() => {}} />;
       default:
         return null;
     }

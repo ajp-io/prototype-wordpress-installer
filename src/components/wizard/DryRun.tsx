@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import StepNavigation from './StepNavigation';
-import LoginStep from './WelcomeStep';
 import ConfigurationStep from './configuration/ConfigurationStep';
 import SetupStep from './SetupStep';
 import { WizardStep } from '../../types';
@@ -12,7 +11,7 @@ import Button from '../common/Button';
 import { Terminal, Copy, ClipboardCheck, ArrowRight } from 'lucide-react';
 
 const DryRun: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState<WizardStep>('login');
+  const [currentStep, setCurrentStep] = useState<WizardStep>('configuration');
   const { text } = useWizardMode();
   const { prototypeSettings } = useConfig();
   const [copied, setCopied] = useState<Record<string, boolean>>({});
@@ -35,9 +34,6 @@ const DryRun: React.FC = () => {
 
   const goToNextStep = () => {
     switch (currentStep) {
-      case 'login':
-        setCurrentStep('configuration');
-        break;
       case 'configuration':
         setCurrentStep('setup');
         break;
@@ -51,9 +47,6 @@ const DryRun: React.FC = () => {
 
   const goToPreviousStep = () => {
     switch (currentStep) {
-      case 'configuration':
-        setCurrentStep('login');
-        break;
       case 'setup':
         setCurrentStep('configuration');
         break;
@@ -155,10 +148,8 @@ const DryRun: React.FC = () => {
 
   const renderStep = () => {
     switch (currentStep) {
-      case 'login':
-        return <LoginStep onNext={goToNextStep} />;
       case 'configuration':
-        return <ConfigurationStep onNext={goToNextStep} onBack={goToPreviousStep} />;
+        return <ConfigurationStep onNext={goToNextStep} onBack={() => {}} />;
       case 'setup':
         return <SetupStep onNext={goToNextStep} onBack={goToPreviousStep} />;
       case 'completion':

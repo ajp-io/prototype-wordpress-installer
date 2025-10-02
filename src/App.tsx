@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ConfigProvider } from './contexts/ConfigContext';
 import { WizardModeProvider } from './contexts/WizardModeContext';
+import LoginPage from './components/pages/LoginPage';
 import InstallWizard from './components/wizard/InstallWizard';
 import ConfigureOnly from './components/wizard/ConfigureOnly';
 import DryRun from './components/wizard/DryRun';
@@ -15,6 +16,7 @@ function App() {
       <BrowserRouter>
         <ConfigProvider>
           <Routes>
+            <Route path="/login" element={<LoginPage />} />
             <Route 
               path="/" 
               element={

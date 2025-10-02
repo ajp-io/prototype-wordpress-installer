@@ -1,6 +1,6 @@
 import React from 'react';
 import { WizardStep } from '../../types';
-import { CheckCircle, LogIn, Server, Download, Settings, Terminal } from 'lucide-react';
+import { CheckCircle, Server, Download, Settings, Terminal } from 'lucide-react';
 import { useWizardMode } from '../../contexts/WizardModeContext';
 import { useConfig } from '../../contexts/ConfigContext';
 
@@ -22,14 +22,12 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
   const getSteps = () => {
     if (configureOnly) {
       return [
-        { id: 'login', name: 'Log In', icon: LogIn },
         { id: 'configuration', name: 'Configure', icon: Server }
       ];
     }
     
     if (dryRun) {
       return [
-        { id: 'login', name: 'Log In', icon: LogIn },
         { id: 'configuration', name: 'Configure', icon: Server },
         { id: 'setup', name: 'Set Up', icon: Settings },
         { id: 'completion', name: 'Commands', icon: Terminal }
@@ -37,7 +35,6 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
     }
 
     return [
-      { id: 'login', name: 'Log In', icon: LogIn },
       { id: 'configuration', name: 'Configure', icon: Server },
       { id: 'setup', name: 'Set Up', icon: Settings },
       { id: 'installation', name: mode === 'upgrade' ? 'Upgrade' : 'Install', icon: Download },
