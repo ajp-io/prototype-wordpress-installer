@@ -105,7 +105,7 @@ const LoginPage: React.FC = () => {
           <Card className="order-1 lg:order-2" title="What's Next">
             <div className="space-y-6">
               <p className="text-gray-600 text-sm">
-                After logging in, you'll complete these steps to set up WordPress Enterprise:
+                After logging in, you'll complete these steps to install WordPress Enterprise:
               </p>
               
               <div className="space-y-4">
