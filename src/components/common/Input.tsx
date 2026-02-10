@@ -69,9 +69,9 @@ const Input: React.FC<InputProps> = ({
           >
             <HelpCircle className="w-3.5 h-3.5 text-gray-400 hover:text-gray-600 cursor-help transition-colors" />
             {showTooltip && (
-              <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 text-xs font-normal text-white bg-gray-900 rounded-md shadow-lg whitespace-nowrap z-50">
+              <span className="absolute bottom-full left-0 mb-2 px-3 py-1.5 text-xs font-normal text-white bg-gray-900 rounded-md shadow-lg whitespace-nowrap z-50">
                 {tooltipText}
-                <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900" />
+                <span className="absolute top-full left-1.5 border-4 border-transparent border-t-gray-900" />
               </span>
             )}
           </span>
