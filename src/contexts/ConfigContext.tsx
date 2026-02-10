@@ -22,7 +22,6 @@ export interface ClusterConfig {
   noProxy?: string;
   networkInterface?: string;
   networkCIDR?: string;
-  adminConsolePort?: number;
   databaseConfig?: {
     host: string;
     port: number;
@@ -83,7 +82,6 @@ const defaultConfig: ClusterConfig = {
   adminEmail: '',
   databaseType: 'internal' as 'internal' | 'external',
   usePrivateRegistry: false,
-  adminConsolePort: 8080,
   description: '',
   environment: 'production',
   deploymentMode: 'standard',

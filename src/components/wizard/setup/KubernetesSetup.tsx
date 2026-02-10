@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Input from '../../common/Input';
 import RegistryChoice from './RegistryChoice';
 import RegistrySettings from './RegistrySettings';
@@ -12,7 +12,6 @@ interface KubernetesSetupProps {
     httpProxy?: string;
     httpsProxy?: string;
     noProxy?: string;
-    adminConsolePort?: number;
   };
   prototypeSettings: {
     isAirgap?: boolean;
@@ -36,70 +35,98 @@ const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
   connectionError,
   validationErrors = {},
   isUpgrade
-}) => (
-  <div className="space-y-6">
-    <Input
-      id="adminConsolePort"
-      label="Admin Console Port"
-      type="number"
-      value={config.adminConsolePort?.toString() || '8080'}
-      onChange={onInputChange}
-      placeholder="8080"
-      helpText="Port for the WordPress admin console"
-      defaultValue="8080"
-    />
+}) => {
+  const isAirgap = prototypeSettings.isAirgap;
 
-    {!prototypeSettings.isAirgap && (
-      <>
-        <Input
-          id="httpProxy"
-          label="HTTP Proxy"
-          value={config.httpProxy || ''}
-          onChange={onInputChange}
-          placeholder="http://proxy.example.com:3128"
-          helpText="HTTP proxy server URL (optional)"
-        />
+  useEffect(() => {
+    if (isAirgap && !config.usePrivateRegistry) {
+      onRegistryChange(true);
+    }
+  }, [isAirgap]);
 
-        <Input
-          id="httpsProxy"
-          label="HTTPS Proxy"
-          value={config.httpsProxy || ''}
-          onChange={onInputChange}
-          placeholder="https://proxy.example.com:3128"
-          helpText="HTTPS proxy server URL (optional)"
-        />
+  return (
+    <div className="space-y-6">
+      {!isAirgap && (
+        <div className="space-y-4">
+          <h2 className="text-lg font-medium text-gray-900">Proxy Configuration</h2>
+          <div className="space-y-4">
+            <Input
+              id="httpProxy"
+              label="HTTP Proxy"
+              value={config.httpProxy || ''}
+              onChange={onInputChange}
+              placeholder="http://proxy.example.com:3128"
+              helpText="HTTP proxy server URL (optional)"
+            />
 
-        <Input
-          id="noProxy"
-          label="Proxy Bypass List"
-          value={config.noProxy || ''}
-          onChange={onInputChange}
-          placeholder="localhost,127.0.0.1,.example.com"
-          helpText="Comma-separated list of hosts to bypass the proxy"
-          defaultValue="localhost,127.0.0.1"
-        />
-      </>
-    )}
+            <Input
+              id="httpsProxy"
+              label="HTTPS Proxy"
+              value={config.httpsProxy || ''}
+              onChange={onInputChange}
+              placeholder="https://proxy.example.com:3128"
+              helpText="HTTPS proxy server URL (optional)"
+            />
 
-    <RegistryChoice
-      usePrivateRegistry={config.usePrivateRegistry}
-      onRegistryChange={onRegistryChange}
-    />
+            <Input
+              id="noProxy"
+              label="Proxy Bypass List"
+              value={config.noProxy || ''}
+              onChange={onInputChange}
+              placeholder="localhost,127.0.0.1,.example.com"
+              helpText="Comma-separated list of hosts to bypass the proxy"
+              defaultValue="localhost,127.0.0.1"
+            />
+          </div>
+        </div>
+      )}
 
-    {config.usePrivateRegistry && (
-      <RegistrySettings
-        registryUrl={config.registryUrl || ''}
-        registryUsername={config.registryUsername || ''}
-        registryPassword={config.registryPassword || ''}
-        onInputChange={onInputChange}
-        onTestConnection={onTestConnection}
-        connectionStatus={connectionStatus}
-        connectionError={connectionError}
-        validationErrors={validationErrors}
-        isUpgrade={isUpgrade}
-      />
-    )}
-  </div>
-);
+      <div className="space-y-4">
+        <h2 className="text-lg font-medium text-gray-900">Image Registry</h2>
+
+        {isAirgap ? (
+          <>
+            <p className="text-sm text-gray-600">
+              A private container registry is required for air-gapped installations.
+              Provide the credentials for your registry below.
+            </p>
+            <RegistrySettings
+              registryUrl={config.registryUrl || ''}
+              registryUsername={config.registryUsername || ''}
+              registryPassword={config.registryPassword || ''}
+              onInputChange={onInputChange}
+              onTestConnection={onTestConnection}
+              connectionStatus={connectionStatus}
+              connectionError={connectionError}
+              validationErrors={validationErrors}
+              isUpgrade={isUpgrade}
+            />
+          </>
+        ) : (
+          <>
+            <RegistryChoice
+              usePrivateRegistry={config.usePrivateRegistry}
+              onRegistryChange={onRegistryChange}
+            />
+
+            {config.usePrivateRegistry && (
+              <RegistrySettings
+                registryUrl={config.registryUrl || ''}
+                registryUsername={config.registryUsername || ''}
+                registryPassword={config.registryPassword || ''}
+                onInputChange={onInputChange}
+                onTestConnection={onTestConnection}
+                connectionStatus={connectionStatus}
+                connectionError={connectionError}
+                validationErrors={validationErrors}
+                isUpgrade={isUpgrade}
+              />
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default KubernetesSetup;

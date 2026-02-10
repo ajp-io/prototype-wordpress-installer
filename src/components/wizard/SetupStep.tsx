@@ -60,8 +60,6 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
     
     if (id === 'networkCIDR' && !value) {
       updateConfig({ networkCIDR: '10.244.0.0/16' });
-    } else if (id === 'adminConsolePort') {
-      updateConfig({ adminConsolePort: parseInt(value) || 8080 });
     } else {
       updateConfig({ [id]: value });
     }
