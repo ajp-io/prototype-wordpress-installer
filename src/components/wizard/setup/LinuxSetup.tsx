@@ -59,7 +59,7 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
         label="Data Directory"
         value={config.dataDirectory || '/var/lib/wordpress'}
         onChange={onInputChange}
-        helpText="Directory where application data is stored"
+        helpText="Directory where application data is stored. To change, rerun the install command with the --data-dir flag."
         readOnly
       />
     </div>
