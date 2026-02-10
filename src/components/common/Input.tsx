@@ -1,5 +1,5 @@
-import React from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import React, { useState } from 'react';
+import { Eye, EyeOff, HelpCircle } from 'lucide-react';
 import { useConfig } from '../../contexts/ConfigContext';
 
 interface InputProps {
@@ -16,6 +16,7 @@ interface InputProps {
   readOnly?: boolean;
   error?: string;
   helpText?: string;
+  tooltipText?: string;
   defaultValue?: string | null;
   className?: string;
   labelClassName?: string;
@@ -36,13 +37,15 @@ const Input: React.FC<InputProps> = ({
   readOnly = false,
   error,
   helpText,
+  tooltipText,
   defaultValue,
   className = '',
   labelClassName = '',
   icon,
 }) => {
   const { prototypeSettings } = useConfig();
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const themeColor = prototypeSettings.themeColor;
 
   const isPasswordField = type === 'password';
@@ -54,10 +57,25 @@ const Input: React.FC<InputProps> = ({
 
   return (
     <div className="mb-4">
-      <label htmlFor={id} className={`block text-sm font-medium text-gray-700 mb-1 ${labelClassName}`}>
+      <label htmlFor={id} className={`flex items-center text-sm font-medium text-gray-700 mb-1 ${labelClassName}`}>
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
         {recommended && !required && <span className="ml-1 font-normal" style={{ color: themeColor }}>(Recommended)</span>}
+        {tooltipText && (
+          <span
+            className="relative ml-1.5 inline-flex"
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+          >
+            <HelpCircle className="w-3.5 h-3.5 text-gray-400 hover:text-gray-600 cursor-help transition-colors" />
+            {showTooltip && (
+              <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 text-xs font-normal text-white bg-gray-900 rounded-md shadow-lg whitespace-nowrap z-50">
+                {tooltipText}
+                <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900" />
+              </span>
+            )}
+          </span>
+        )}
       </label>
       <div className={`relative ${className || 'w-80'}`}>
         {icon && (
