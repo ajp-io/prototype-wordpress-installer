@@ -31,6 +31,10 @@ const PrototypeSettings: React.FC = () => {
     updatePrototypeSettings({ failRegistryAuth: e.target.checked });
   };
 
+  const handleAirgapChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    updatePrototypeSettings({ isAirgap: e.target.value === 'airgap' });
+  };
+
   const handleClusterModeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     updatePrototypeSettings({ clusterMode: e.target.value as 'existing' | 'embedded' });
   };
@@ -125,6 +129,18 @@ const PrototypeSettings: React.FC = () => {
 
             <div className="border-t border-gray-200 pt-6">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Installation Mode & Target</h2>
+              <Select
+                id="installationType"
+                label="Installation Type"
+                value={prototypeSettings.isAirgap ? 'airgap' : 'online'}
+                onChange={handleAirgapChange}
+                options={[
+                  { value: 'online', label: 'Online' },
+                  { value: 'airgap', label: 'Air Gap' }
+                ]}
+                helpText="Online installations pull images from the internet. Air gap installations use a pre-loaded bundle with no network access."
+              />
+
               <Select
                 id="clusterMode"
                 label="Target Environment"

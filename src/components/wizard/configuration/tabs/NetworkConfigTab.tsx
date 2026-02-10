@@ -9,6 +9,7 @@ interface NetworkConfigTabProps {
   skipValidation: boolean;
   themeColor: string;
   isReadOnly?: boolean;
+  isAirgap?: boolean;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -19,6 +20,7 @@ const NetworkConfigTab: React.FC<NetworkConfigTabProps> = ({
   skipValidation,
   themeColor,
   isReadOnly = false,
+  isAirgap = false,
   onInputChange,
   onCheckboxChange
 }) => {
@@ -44,25 +46,29 @@ const NetworkConfigTab: React.FC<NetworkConfigTabProps> = ({
         readOnly={isReadOnly}
       />
 
-      <Input
-        id="httpProxy"
-        label="HTTP Proxy"
-        value={config.httpProxy || ''}
-        onChange={onInputChange}
-        placeholder="http://proxy.example.com:3128"
-        helpText="HTTP proxy server URL"
-        readOnly={isReadOnly}
-      />
+      {!isAirgap && (
+        <>
+          <Input
+            id="httpProxy"
+            label="HTTP Proxy"
+            value={config.httpProxy || ''}
+            onChange={onInputChange}
+            placeholder="http://proxy.example.com:3128"
+            helpText="HTTP proxy server URL"
+            readOnly={isReadOnly}
+          />
 
-      <Input
-        id="httpsProxy"
-        label="HTTPS Proxy"
-        value={config.httpsProxy || ''}
-        onChange={onInputChange}
-        placeholder="https://proxy.example.com:3128"
-        helpText="HTTPS proxy server URL"
-        readOnly={isReadOnly}
-      />
+          <Input
+            id="httpsProxy"
+            label="HTTPS Proxy"
+            value={config.httpsProxy || ''}
+            onChange={onInputChange}
+            placeholder="https://proxy.example.com:3128"
+            helpText="HTTPS proxy server URL"
+            readOnly={isReadOnly}
+          />
+        </>
+      )}
 
       <div className="flex items-center space-x-3">
         <input

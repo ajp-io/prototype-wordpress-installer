@@ -55,6 +55,7 @@ interface PrototypeSettings {
     description: string;
   }>;
   enableManyConfigGroups: boolean;
+  isAirgap: boolean;
 }
 
 interface ConfigContextType {
@@ -107,7 +108,8 @@ const defaultPrototypeSettings: PrototypeSettings = {
     { name: 'wlan0', description: 'Wireless Interface' },
     { name: 'docker0', description: 'Docker Bridge Interface' }
   ],
-  enableManyConfigGroups: false
+  enableManyConfigGroups: false,
+  isAirgap: false
 };
 
 const PROTOTYPE_SETTINGS_KEY = 'wordpress-prototype-settings';

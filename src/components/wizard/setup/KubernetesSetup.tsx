@@ -14,6 +14,9 @@ interface KubernetesSetupProps {
     noProxy?: string;
     adminConsolePort?: number;
   };
+  prototypeSettings: {
+    isAirgap?: boolean;
+  };
   onRegistryChange: (usePrivate: boolean) => void;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onTestConnection: () => void;
@@ -25,6 +28,7 @@ interface KubernetesSetupProps {
 
 const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
   config,
+  prototypeSettings,
   onRegistryChange,
   onInputChange,
   onTestConnection,
@@ -45,33 +49,37 @@ const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
       defaultValue="8080"
     />
 
-    <Input
-      id="httpProxy"
-      label="HTTP Proxy"
-      value={config.httpProxy || ''}
-      onChange={onInputChange}
-      placeholder="http://proxy.example.com:3128"
-      helpText="HTTP proxy server URL (optional)"
-    />
+    {!prototypeSettings.isAirgap && (
+      <>
+        <Input
+          id="httpProxy"
+          label="HTTP Proxy"
+          value={config.httpProxy || ''}
+          onChange={onInputChange}
+          placeholder="http://proxy.example.com:3128"
+          helpText="HTTP proxy server URL (optional)"
+        />
 
-    <Input
-      id="httpsProxy"
-      label="HTTPS Proxy"
-      value={config.httpsProxy || ''}
-      onChange={onInputChange}
-      placeholder="https://proxy.example.com:3128"
-      helpText="HTTPS proxy server URL (optional)"
-    />
+        <Input
+          id="httpsProxy"
+          label="HTTPS Proxy"
+          value={config.httpsProxy || ''}
+          onChange={onInputChange}
+          placeholder="https://proxy.example.com:3128"
+          helpText="HTTPS proxy server URL (optional)"
+        />
 
-    <Input
-      id="noProxy"
-      label="Proxy Bypass List"
-      value={config.noProxy || ''}
-      onChange={onInputChange}
-      placeholder="localhost,127.0.0.1,.example.com"
-      helpText="Comma-separated list of hosts to bypass the proxy"
-      defaultValue="localhost,127.0.0.1"
-    />
+        <Input
+          id="noProxy"
+          label="Proxy Bypass List"
+          value={config.noProxy || ''}
+          onChange={onInputChange}
+          placeholder="localhost,127.0.0.1,.example.com"
+          helpText="Comma-separated list of hosts to bypass the proxy"
+          defaultValue="localhost,127.0.0.1"
+        />
+      </>
+    )}
 
     <RegistryChoice
       usePrivateRegistry={config.usePrivateRegistry}

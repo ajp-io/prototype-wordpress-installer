@@ -148,6 +148,7 @@ const SetupStep: React.FC<SetupStepProps> = ({ onNext, onBack }) => {
         ) : (
           <KubernetesSetup
             config={config}
+            prototypeSettings={prototypeSettings}
             onRegistryChange={handleRegistryChange}
             onInputChange={handleInputChange}
             onTestConnection={testConnection}

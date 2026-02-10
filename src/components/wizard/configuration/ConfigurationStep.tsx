@@ -251,6 +251,7 @@ const ConfigurationStep: React.FC<ConfigurationStepProps> = ({ onNext, onBack, c
         return (
           <NetworkConfigTab
             {...commonProps}
+            isAirgap={prototypeSettings.isAirgap}
             onInputChange={(e) => handleInputChange(e, clearError)}
             onCheckboxChange={(e) => handleCheckboxChange(e, clearError)}
           />

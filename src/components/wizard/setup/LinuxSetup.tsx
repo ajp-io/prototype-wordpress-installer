@@ -23,6 +23,7 @@ interface LinuxSetupProps {
       name: string;
       description: string;
     }>;
+    isAirgap?: boolean;
   };
   showAdvanced: boolean;
   onShowAdvancedChange: (show: boolean) => void;
@@ -65,38 +66,40 @@ const LinuxSetup: React.FC<LinuxSetupProps> = ({
       />
     </div>
 
-    <div className="space-y-4">
-      <h2 className="text-lg font-medium text-gray-900">Proxy Configuration</h2>
+    {!prototypeSettings.isAirgap && (
       <div className="space-y-4">
-        <Input
-          id="httpProxy"
-          label="HTTP Proxy"
-          value={config.httpProxy || ''}
-          onChange={onInputChange}
-          placeholder="http://proxy.example.com:3128"
-          helpText="HTTP proxy server URL"
-        />
+        <h2 className="text-lg font-medium text-gray-900">Proxy Configuration</h2>
+        <div className="space-y-4">
+          <Input
+            id="httpProxy"
+            label="HTTP Proxy"
+            value={config.httpProxy || ''}
+            onChange={onInputChange}
+            placeholder="http://proxy.example.com:3128"
+            helpText="HTTP proxy server URL"
+          />
 
-        <Input
-          id="httpsProxy"
-          label="HTTPS Proxy"
-          value={config.httpsProxy || ''}
-          onChange={onInputChange}
-          placeholder="https://proxy.example.com:3128"
-          helpText="HTTPS proxy server URL"
-        />
+          <Input
+            id="httpsProxy"
+            label="HTTPS Proxy"
+            value={config.httpsProxy || ''}
+            onChange={onInputChange}
+            placeholder="https://proxy.example.com:3128"
+            helpText="HTTPS proxy server URL"
+          />
 
-        <Input
-          id="noProxy"
-          label="Proxy Bypass List"
-          value={config.noProxy || ''}
-          onChange={onInputChange}
-          placeholder="localhost,127.0.0.1,.example.com"
-          helpText="Comma-separated list of hosts to bypass the proxy"
-          defaultValue="localhost,127.0.0.1"
-        />
+          <Input
+            id="noProxy"
+            label="Proxy Bypass List"
+            value={config.noProxy || ''}
+            onChange={onInputChange}
+            placeholder="localhost,127.0.0.1,.example.com"
+            helpText="Comma-separated list of hosts to bypass the proxy"
+            defaultValue="localhost,127.0.0.1"
+          />
+        </div>
       </div>
-    </div>
+    )}
 
     <div className="pt-4">
       <button
