@@ -87,7 +87,7 @@ const KubernetesSetup: React.FC<KubernetesSetupProps> = ({
         {isAirgap ? (
           <>
             <p className="text-sm text-gray-600">
-              A private container registry is required for air-gapped installations.
+              A container registry is required for air-gapped installations.
               Provide the credentials for your registry below.
             </p>
             <RegistrySettings
