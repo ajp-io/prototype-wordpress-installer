@@ -18,12 +18,14 @@ const LoginPage: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    if (password.trim() !== '') {
+    if (password.trim() === '') {
+      setError('Password is required');
+    } else if (password === 'wrong') {
+      setError('Invalid password. Please try again.');
+    } else {
       // Set authentication state and trigger re-render
       localStorage.setItem('wordpress-authenticated', 'true');
       window.location.reload();
-    } else {
-      setError('Password is required');
     }
   };
 
